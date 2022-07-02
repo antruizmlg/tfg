@@ -4,3 +4,6 @@ class Estado:
 
     def sucesores(self):
         pass
+
+    def antecesores(self):
+        pass
