@@ -1,7 +1,8 @@
-class funcionDeValor:
-    def __init__(self, estados, valores):
+class Politica:
+    def __init__(self, estados, valores, politicas):
         self.estados = estados
         self.valores = valores
+        self.politicas = politicas
 
     def indiceEstado(self, estado):
         i = 0 # Iniciamos el índice a 0
@@ -22,3 +23,11 @@ class funcionDeValor:
     def getValor(self, estado):
         indice = self.indiceEstado(estado)
         return self.valores[indice]
+
+    def setPolitica(self, estado, nuevaPolitica):
+        indice = self.indiceEstado(estado)
+        self.politicas[indice] = nuevaPolitica
+
+    def getPolitica(self, estado):
+        indice = self.indiceEstado(estado)
+        return self.politicas[indice]   
