@@ -1,5 +1,5 @@
 class Politica:
-    def __init__(self, estados, politicas):
+    def __init__(self, estados, politicas, costes):
         self.estados = estados
         self.politicas = politicas
 
@@ -21,4 +21,4 @@ class Politica:
 
     def getPolitica(self, estado):
         indice = self.indiceEstado(estado)
-        return self.politicas[indice]   
+        return self.politicas[indice]  
