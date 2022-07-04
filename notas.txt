@@ -10,3 +10,5 @@ El algoritmo empieza con el estado inicial y gradualmente expande el grafo cubie
 La cubierta se divide en dos conjuntos:
 F -> Estados fringe -> Son los que tienen al menos estado sucesor que no se encuentra en la cubierta.
 I -> Estados interior -> Todos sus sucesores se encuentran en la cubierta.
+
+El grafo solución, que es un subgrafo del grafo cubierta, contiene la mejor política sobre la cubierta actual.
