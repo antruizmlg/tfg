@@ -9,6 +9,19 @@ También construye el grafo solución asociado a esa nueva política greedy sobr
 El algoritmo empieza con el estado inicial y gradualmente expande el grafo cubierta añadiendo nuevos estados.
 La cubierta se divide en dos conjuntos:
 F -> Estados fringe -> Son los que tienen al menos estado sucesor que no se encuentra en la cubierta.
-I -> Estados interior -> Todos sus sucesores se encuentran en la cubierta.
+I -> Estados interno -> Todos sus sucesores se encuentran en la cubierta.
 
 El grafo solución, que es un subgrafo del grafo cubierta, contiene la mejor política sobre la cubierta actual.
+
+LAO empieza a trabajar, y el grafo cubierta solo contiene el estado inicial. En las siguientes iteraciones, LAO escoge de forma arbitraria un estado
+fringe que se encuentre también en el grafo solución y lo expande añadiendo todos los sucesores bajo todas las posibles acciones al grafo cubierta,
+excepto los que ya están en el grafo cubierta. Una vez que se expande, el estado fringe pasa a ser un estado interno. Después, LAO actualiza el valor
+del estado expandido así como de cualquier estado en el grafo cubierta desde el cual se pueda alcanzar el estado expandido mediante una política greedy.
+Este conjunto de estados se llama Z, y es el conjunto de todos los estados en la cubierta cuyos valores han podido cambiar a causa de haber expandido
+la cubierta. 
+
+El heurístico inicializa los valores de los sucesores del estado que se acaba de expandir. El método de iteración de políticas propaga esos valores en
+los estados del grafo cubierta con la posibilidad de que afecta a la política greedy actual. 
+
+Finalmente, LAO reconstruye el grafo solución, el cual pudo haber cambiado ya que la función de valor V se actualizó en el punto anterior. Luego el algoritmo
+procede a la siguiente iteración y finaliza cuando el grafo solución no contiene más estados fringe que no sean objetivos.
