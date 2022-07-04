@@ -1,0 +1,12 @@
+G(s0)VI -> Grafo solución -> Grafo de transición de una política greedy según la función de valor actual.
+Cubierta -> Conjunto que contiene todos los estados que han formado parte del grafo solución en el pasado. Es un superconjunto del conjunto de nodos del 
+grafo solución.
+G(s0) -> Grafo cubierta -> Grafo que contiene todos los estados de la cubierta con sus conexiones.
+
+Cuando se actualizan los valores asociados a los estados que están en la cubierta, LAO* construye una nueva política greedy empezando por el estado inicial.
+También construye el grafo solución asociado a esa nueva política greedy sobre los estados de la cubierta.
+
+El algoritmo empieza con el estado inicial y gradualmente expande el grafo cubierta añadiendo nuevos estados.
+La cubierta se divide en dos conjuntos:
+F -> Estados fringe -> Son los que tienen al menos estado sucesor que no se encuentra en la cubierta.
+I -> Estados interior -> Todos sus sucesores se encuentran en la cubierta.
