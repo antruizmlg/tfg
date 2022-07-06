@@ -3,7 +3,7 @@ class Politica:
         self.politica = politica
 
     def setPolitica(self, estado, nuevaPolitica):
-        self.politica[estado.id] = nuevaPolitica
+        self.politica[estado] = nuevaPolitica
 
     def getPolitica(self, estado):
-        return self.politica[estado.id] 
+        return self.politica[estado] 

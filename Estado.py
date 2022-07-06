@@ -10,3 +10,6 @@ class Estado:
 
     def antecesores(self):
         pass
+
+    def __hash__(self):
+        return hash(self.id)

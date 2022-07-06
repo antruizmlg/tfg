@@ -11,8 +11,8 @@ class Hiperarista:
         else: # Si el nodo origen está
             dictDestino = {} # Inicializamos la lista de nodos destino y de probabilidades para cada nodo destino.
             for e in listaEstados: # Para cada elemento en la lista de estados.
-                if e in self.destino.keys(): # Si el elemento está en la arista.
-                    dictDestino[e] = self.destino[e] # Lo añadimos al diccionario con su respectiva probabilidad.
+                if e.id in self.destino.keys(): # Si el elemento está en la arista.
+                    dictDestino[e.id] = self.destino[e.id] # Lo añadimos al diccionario con su respectiva probabilidad.
         if len(dictDestino) > 0: # Si queda algún nodo destino, devolvemos el hiperarista.
             return Hiperarista(self.source, dictDestino, self.accion, self.coste)
         else:

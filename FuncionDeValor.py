@@ -3,7 +3,7 @@ class FuncionDeValor:
         self.dv = dictValores
 
     def setValor(self, estado, nuevoValor):
-        self.dv[estado.id] = nuevoValor
+        self.dv[estado] = nuevoValor
 
     def getValor(self, estado):
-        return self.dv[estado.id]
+        return self.dv[estado]
