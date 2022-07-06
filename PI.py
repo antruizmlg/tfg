@@ -10,7 +10,7 @@ class PI:
 
             self.policy_evaluation() # Modificamos la función de valor mediante evaluación de la política
 
-            # self.policy_improvement() # Obtenemos la mejor política con la nueva función de valor
+            self.policy_improvement() # Obtenemos la mejor política con la nueva función de valor
 
             if all(old_policy.politicas[s] == self.politica.politicas[s] for s in old_policy.estados): # Si la nueva política coincide con la anterior, hemos llegado a una convergencia.
                 break

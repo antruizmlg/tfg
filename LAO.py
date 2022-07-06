@@ -1,4 +1,5 @@
 from Hipergrafo import *
+from PI import *
 
 class LAO:
     def __init__(self, hipergrafo, estadoInicial, heuristico, politica):
@@ -21,9 +22,11 @@ class LAO:
                     F.append(estado) # Lo introducimos en el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             G = self.update_envelope_graph(self.hipergrafo, I, F)
-        # PI on Z
+        policy_algorithm = PI(GV, self.politica, V)
+        PI.policy_iterations()
         GV = self.rebuild(G, self.politica)
         s = self.hipergrafo.interseccion(F).obtenerEstadoNoTerminal()
+        return self.politica, V
     
     @staticmethod
     def update_envelope_graph(hipergrafo, I, F):
