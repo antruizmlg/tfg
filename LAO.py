@@ -31,5 +31,3 @@ class LAO:
                 if ha.source in I: # Si el origen de la arista está en el conjunto I (Los nodos F no han sido expandidos por lo que no se tiene en cuenta)
                     listaAristas.append(ha) # Añadimos la arista al conjunto de aristas
         return Hipergrafo(listaNodos, listaAristas)
-
-
