@@ -12,9 +12,9 @@ class LAO:
         V = self.heuristico
         F = [self.eIni]
         I = []
-        G = Hipergrafo([self.eIni], None)
-        GV = Hipergrafo([self.eIni], None)
-        s = self.hipergrafo.interseccion(F).obtenerEstadoNoTerminal()
+        G = Hipergrafo([self.eIni], [])
+        GV = Hipergrafo([self.eIni], [])
+        s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         while s is not None:
             F.remove(s) # Eliminamos el estado s
             for estado in self.hipergrafo.sucesores(s): # Por cada sucesor de s en el hipergrafo
@@ -23,9 +23,9 @@ class LAO:
             I.append(s) # Introducimos s en el conjunto I
             G = self.update_envelope_graph(self.hipergrafo, I, F)
         policy_algorithm = PI(GV, self.politica, V)
-        PI.policy_iterations()
+        policy_algorithm.policy_iterations()
         GV = self.rebuild(G, self.politica)
-        s = self.hipergrafo.interseccion(F).obtenerEstadoNoTerminal()
+        s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         return self.politica, V
     
     @staticmethod
@@ -48,3 +48,10 @@ class LAO:
                 listaNodos.append(ha.source) # Introducimos el nodo en la lista de nodos.
                 listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
         return Hipergrafo(listaNodos, listaAristas)
+
+    @staticmethod
+    def estado_no_terminal(estados):
+        for e in estados:
+            if not e.esTerminal():
+                return e
+        return None

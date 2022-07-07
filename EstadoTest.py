@@ -4,5 +4,5 @@ class EstadoTest(Estado):
     def __init__(self, id):
         super().__init__(id)
 
-    def esTerminal():
-        return super().id == 's4'
+    def esTerminal(self):
+        return self.id == 's4'
