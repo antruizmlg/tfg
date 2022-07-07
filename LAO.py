@@ -16,21 +16,22 @@ class LAO:
         GV = Hipergrafo([self.eIni], [])
         s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         while s is not None:
-            F.remove(s) # Eliminamos el estado s
             for estado in self.hipergrafo.sucesores(s): # Por cada sucesor de s en el hipergrafo
                 if estado not in I: # Si el sucesor no se encuentra en el conjunto I
                     F.append(estado) # Lo introducimos en el conjunto F
+            F = list(dict.fromkeys(F)) # Eliminamos los elementos repetidos
+            F.remove(s) # Eliminamos el estado s
             I.append(s) # Introducimos s en el conjunto I
             G = self.update_envelope_graph(self.hipergrafo, I, F)
-        policy_algorithm = PI(GV, self.politica, V)
-        policy_algorithm.policy_iterations()
-        GV = self.rebuild(G, self.politica)
-        s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
+            policy_algorithm = PI(GV, self.politica, V)
+            policy_algorithm.policy_iterations()
+            GV = self.rebuild(G, self.politica)
+            s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         return self.politica, V
     
     @staticmethod
     def update_envelope_graph(hipergrafo, I, F):
-        listaNodos = I + F # Unión de las listas I y F. No es necesario eliminar elementos repetidos.
+        listaNodos = I + F # Unión de las listas I y F.
         listaAristas = [] # Inicializo la lista de aristas vacía
         for arista in hipergrafo.hiperaristas: # Para cada arista del hipergrafo original
             ha = arista.aristaConSubconjuntoDeNodos(listaNodos) # Elimino de la arista los estados que no se encuentren en la lista de nodos.
@@ -39,14 +40,16 @@ class LAO:
                     listaAristas.append(ha) # Añadimos la arista al conjunto de aristas
         return Hipergrafo(listaNodos, listaAristas)
 
-    @staticmethod
-    def rebuild(G, politica):
+    def rebuild(self, G, politica):
         listaNodos = [] # Inicializamos la lista de nodos del hipergrafo.
         listaAristas = [] # Inicializamos la lista de aristas del hipergrafo.
         for ha in G.hiperaristas: # Para cada arista
-            if ha.accion == politica.getPolitica(ha.source): # Si la acción de la arista coincide con la dictada por la política
+            if ha.accion == politica.getPolitica(ha.source.id): # Si la acción de la arista coincide con la dictada por la política
                 listaNodos.append(ha.source) # Introducimos el nodo en la lista de nodos.
                 listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
+                for estado in ha.destino.keys():
+                    listaNodos.append(self.hipergrafo.estados[estado])
+        listaNodos = list(dict.fromkeys(listaNodos))
         return Hipergrafo(listaNodos, listaAristas)
 
     @staticmethod

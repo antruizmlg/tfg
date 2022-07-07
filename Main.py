@@ -54,7 +54,7 @@ h8_2 = Hiperarista(s8, {'s8':0.9, 's1':0.1}, 'DERECHA', 0.4)
 h8_3 = Hiperarista(s8, {'s7':0.8, 's1':0.1, 's8':0.1}, 'IZQUIERDA', 0.4)
 h8_4 = Hiperarista(s8, {'s8':0.9, 's7':0.1}, 'ABAJO', 0.2)
 
-hg = Hipergrafo([s1, s2, s3, s4, s5, s6, s7, s8], [h1_1, h1_2, h1_3, h1_4, h2_1, h2_2, h2_3, h2_4, h3_1, h3_2, h3_3, h3_4, 
+hg = Hipergrafo({'s1': s1, 's2': s2, 's3': s3, 's4': s4, 's5': s5, 's6': s6, 's7': s7, 's8': s8}, [h1_1, h1_2, h1_3, h1_4, h2_1, h2_2, h2_3, h2_4, h3_1, h3_2, h3_3, h3_4, 
         h4_1, h4_2, h4_3, h4_4, h5_1, h5_2, h5_3, h5_4, h6_1, h6_2, h6_3, h6_4, h7_1, h7_2, h7_3, h7_4, h8_1, h8_2, h8_3, h8_4])
 
 heuristico = FuncionDeValor({'s1': 3, 's2': 2, 's3': 1, 's4': 0, 's5': 1, 's6': 2, 's7': 3, 's8': 4})
@@ -63,4 +63,4 @@ heuristico = FuncionDeValor({'s1': 3, 's2': 2, 's3': 1, 's4': 0, 's5': 1, 's6': 
 politicaInicial = Politica({'s1': 'ARRIBA', 's2': 'ABAJO', 's3': 'ABAJO', 's4': 'ARRIBA', 's5': 'DERECHA', 's6': 'IZQUIERDA', 's7': 'IZQUIERDA', 's8': 'IZQUIERDA'})
 
 lao_algorithm = LAO(hg, s1, heuristico, politicaInicial)
-lao_algorithm.LAO()
+politica, V = lao_algorithm.LAO()
