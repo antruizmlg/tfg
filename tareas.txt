@@ -1,0 +1,10 @@
+- Implementar iteración de valores
+
+- Chequear vi y pi. Comparar para ver si dan el mismo resultado.
+
+Generador de problemas:
+ - variables: probabilidades, tamaño de reticulo, numero de agujeros generados
+	aleatoriamente (coste considerable).
+ - partir del centro de retículo
+ - destino esquina aleatoria
+ - desarrollar la posibilidad de elegir los agujeros a mano.
