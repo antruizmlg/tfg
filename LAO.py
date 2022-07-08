@@ -53,15 +53,14 @@ class LAO:
         listaNodos = list(dict.fromkeys(listaNodos))
         return Hipergrafo(listaNodos, listaAristas)
 
-    @staticmethod
-    def get_Z(s, GV, G):
+    def get_Z(self, s, GV, G):
         listaNodos = [s] + GV.estados
         listaAristas = GV.hiperaristas
         for ha in G.hiperaristas:
             if ha.source == s:
                 listaAristas.append(ha)
                 for estado in ha.destino.keys():
-                    listaNodos.append(estado)
+                    listaNodos.append(self.hipergrafo.estados[estado])
         listaNodos = list(dict.fromkeys(listaNodos))
         return Hipergrafo(listaNodos, listaAristas)
 
