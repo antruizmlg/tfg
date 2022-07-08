@@ -22,11 +22,11 @@ class PI:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
             for ha in self.hipergrafo.hiperaristas: # Para cada hiperarista del hipergrafo.
-                if self.politica.getPolitica(ha.source.id) == ha.accion: # Si la acción asociada al hiperarista coincide con la que dicta la política para ese estado
-                    sum = 0
+                if self.politica.getPolitica(ha.source.id) == ha.accion: # Si la acción asociada al hiperarista coincide con la que dictada por la política para ese estado
+                    sum = ha.coste
                     for estado in ha.destino.keys(): # Para cada estado destino
                         sum += ha.destino[estado] * oldV.getValor(estado) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
-                    self.V.setValor(estado, ha.coste + sum) # Modificamos el nuevo valor del estado actual.
+                    self.V.setValor(ha.source.id, round(sum, 3)) # Modificamos el nuevo valor del estado actual.
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
                 break
@@ -38,10 +38,9 @@ class PI:
 
         for ha in self.hipergrafo.hiperaristas: # Para cada arista en el conjunto de aristas del grafo.
             i = estados.index(ha.source.id) # Obtenemos el índice en la lista de estados
-            sum = 0 
+            valor_ha = ha.coste
             for e in ha.destino.keys():
-                sum += ha.destino[e] * self.V.getValor(e)
-            valor_ha = ha.coste + sum # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
+                valor_ha += ha.destino[e] * self.V.getValor(e) # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
             if valor_ha < minimo_coste_actual[i]: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
                 minimo_coste_actual[i] = valor_ha # Actualizamos el menor valor
                 mejor_accion_actual[i] = ha.accion # Actualizamos la mejor política

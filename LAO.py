@@ -23,8 +23,9 @@ class LAO:
             F.remove(s) # Eliminamos el estado s
             I.append(s) # Introducimos s en el conjunto I
             G = self.update_envelope_graph(self.hipergrafo, I, F)
-            policy_algorithm = PI(GV, self.politica, V)
-            policy_algorithm.policy_iterations()
+            Z = self.get_Z(s, GV, G) # Construimos el conjunto Z
+            policy_algorithm = PI(Z, self.politica, V) 
+            policy_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
             GV = self.rebuild(G, self.politica)
             s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         return self.politica, V
@@ -49,6 +50,18 @@ class LAO:
                 listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
                 for estado in ha.destino.keys():
                     listaNodos.append(self.hipergrafo.estados[estado])
+        listaNodos = list(dict.fromkeys(listaNodos))
+        return Hipergrafo(listaNodos, listaAristas)
+
+    @staticmethod
+    def get_Z(s, GV, G):
+        listaNodos = [s] + GV.estados
+        listaAristas = GV.hiperaristas
+        for ha in G.hiperaristas:
+            if ha.source == s:
+                listaAristas.append(ha)
+                for estado in ha.destino.keys():
+                    listaNodos.append(estado)
         listaNodos = list(dict.fromkeys(listaNodos))
         return Hipergrafo(listaNodos, listaAristas)
 
