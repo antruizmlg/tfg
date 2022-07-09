@@ -1,12 +1,14 @@
 from Hipergrafo import *
 from PI import *
+from VI import *
 
 class LAO:
-    def __init__(self, hipergrafo, estadoInicial, heuristico, politica):
+    def __init__(self, hipergrafo, estadoInicial, heuristico, politica, algorithm):
         self.hipergrafo = hipergrafo
         self.eIni = estadoInicial
         self.heuristico = heuristico
         self.politica = politica
+        self.algorithm = algorithm
 
     def LAO(self):
         V = self.heuristico
@@ -24,8 +26,12 @@ class LAO:
             I.append(s) # Introducimos s en el conjunto I
             G = self.update_envelope_graph(self.hipergrafo, I, F)
             Z = self.get_Z(s, GV, G) # Construimos el conjunto Z
-            policy_algorithm = PI(Z, self.politica, V) 
-            policy_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
+            if self.algorithm == 'PI':
+                policy_algorithm = PI(Z, self.politica, V) 
+                policy_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
+            else:
+                policy_algorithm = VI(Z, self.politica, V) 
+                policy_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
             GV = self.rebuild(G, self.politica)
             s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         return self.politica, V

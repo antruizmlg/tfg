@@ -33,7 +33,7 @@ class PI:
 
     def policy_improvement(self):
         estados = list(self.politica.politica.keys()) # Inicializamos una lista con todos los estados
-        minimo_coste_actual = [999999 for e in estados] # Inicializamos una lista que almacenará el menor coste encontrado para cada estado en un momento determinado
+        minimo_coste_actual = [float('inf') for e in estados] # Inicializamos una lista que almacenará el menor coste encontrado para cada estado en un momento determinado
         mejor_accion_actual = list(self.politica.politica.values())  # Inicializamos una lista que almacenará la mejor política encontrada para cada estado en un momento determinado
 
         for ha in self.hipergrafo.hiperaristas: # Para cada arista en el conjunto de aristas del grafo.
