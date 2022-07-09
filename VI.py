@@ -19,7 +19,7 @@ class VI:
                 for e in ha.destino.keys():
                     valor_ha += ha.destino[e] * oldV.getValor(e) # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
                 if valor_ha < self.V.getValor(ha.source.id): # Si ese valor (coste) es menor que el menor encontrado hasta el momento
-                    self.V.setValor(ha.source.id, valor_ha) # Actualizamos el menor valor
+                    self.V.setValor(ha.source.id, round(valor_ha, 3)) # Actualizamos el menor valor
                     self.politica.setPolitica(ha.source.id, ha.accion) # Actualizamos la mejor política
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
