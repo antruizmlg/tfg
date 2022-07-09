@@ -43,7 +43,4 @@ class PI:
                 valor_ha += ha.destino[e] * self.V.getValor(e) # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
             if valor_ha < minimo_coste_actual[i]: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
                 minimo_coste_actual[i] = valor_ha # Actualizamos el menor valor
-                mejor_accion_actual[i] = ha.accion # Actualizamos la mejor política
-
-        for ind in range(len(estados)): # Recorremos la lista de estado.
-            self.politica.politica[estados[ind]] = mejor_accion_actual[ind]  # Actualizamos la política: para cada estado, almacenamos su mejor acción en el diccionario.
+                self.politica.setPolitica(ha.source.id, ha.accion) # Actualizamos la mejor política

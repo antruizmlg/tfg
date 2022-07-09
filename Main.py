@@ -62,6 +62,6 @@ heuristico = FuncionDeValor({'s1': 3, 's2': 2, 's3': 1, 's4': 0, 's5': 1, 's6': 
 #La política inicial es arbitraria
 politicaInicial = Politica({'s1': 'ABAJO', 's2': 'ABAJO', 's3': 'ABAJO', 's4': 'ARRIBA', 's5': 'DERECHA', 's6': 'IZQUIERDA', 's7': 'IZQUIERDA', 's8': 'IZQUIERDA'})
 
-lao_algorithm = LAO(hg, s1, heuristico, politicaInicial, 'VI')
+lao_algorithm = LAO(hg, s1, heuristico, politicaInicial, 'PI')
 politica, V = lao_algorithm.LAO()
 print(politica.politica)
