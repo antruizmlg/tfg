@@ -7,26 +7,29 @@ import random
 
 class Problema:
     def __init__(self, numFilas, numColumnas, numSumideros, probabilidades):
+
+        self.tablero = [[0 for j in range(numColumnas)] for i in range(numFilas)]
+
         for i in range(numFilas):
             for j in range(numColumnas):
-                id = 's' + i + j
+                id = 's' + str(i) + str(j)
                 self.tablero[i][j] = Estado(id)
 
-        filaFinal = self.generador_aleatorio(numFilas - 1)
-        columnaFinal = self.generador_aleatorio(numColumnas - 1)
+        self.filaFinal = self.generador_aleatorio(numFilas - 1)
+        self.columnaFinal = self.generador_aleatorio(numColumnas - 1)
 
-        self.tablero[filaFinal][columnaFinal].setTerminal()
+        self.tablero[self.filaFinal][self.columnaFinal].setTerminal()
 
         self.sumideros = []
 
         i = 0
         while i < numSumideros:
-            numFila = random.randint(0, numFilas)
-            numCol = random.randint(0, numColumnas)
+            numFila = random.randint(0, numFilas - 1)
+            numCol = random.randint(0, numColumnas - 1)
             if not self.tablero[numFila][numCol].terminal:
                 self.tablero[numFila][numCol].setSumidero()
                 i += 1
-                self.sumideros.append("["+numFila+", "+numCol+"]")
+                self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
         self.acciones = {'ARRIBA': 0.8, 'DERECHA': 0.6, 'IZQUIERDA': 0.6, 'ABAJO': 0.4}
         self.filaInicial = numFilas // 2
@@ -49,47 +52,54 @@ class Problema:
         dicEstados = {}
         probabilidades = {}
         for a in self.acciones.keys():
-            dicEstados[a] = self.sucesorAccion(fila, columna, a)
+            dicEstados[a] = self.sucesor_accion(fila, columna, a)
             probabilidades[dicEstados[a].id] = 0
         
         for a in self.acciones.keys():
             probabilidades[dicEstados[a].id] += self.get_probabilidad_por_transicion(accion, a)
 
         return probabilidades
+
+    def informacion(self):   
+        print("Tamaño de tablero: " + str(len(self.tablero)) + "x" + str(len(self.tablero[0])))
+        for s in self.sumideros:
+                print("Sumidero: "+ s)
+        print("Celda inicial: [" + str(self.filaInicial) + ", " + str(self.columnaInicial) + "]")
+        print("Celda objetivo: [" + str(self.filaFinal) + ", " + str(self.columnaFinal) + "]\n")
         
     def get_probabilidad_por_transicion(self, a1, a2):
         if a1 == 'ARRIBA' and a2 == 'ARRIBA':
-            return self.probabilidad[0][0]
+            return self.probabilidades[0][0]
         if a1 == 'ARRIBA' and a2 == 'DERECHA':
-            return self.probabilidad[0][1]
+            return self.probabilidades[0][1]
         if a1 == 'ARRIBA' and a2 == 'IZQUIERDA':
-            return self.probabilidad[0][2]            
-        if a1 == 'ARRIBA' and a2 == 'DEBAJO':
-            return self.probabilidad[0][3]
-        if a1 == 'ARRIBA' and a2 == 'ARRIBA':
-            return self.probabilidad[1][0]
-        if a1 == 'ARRIBA' and a2 == 'DERECHA':
-            return self.probabilidad[1][1]
-        if a1 == 'ARRIBA' and a2 == 'IZQUIERDA':
-            return self.probabilidad[1][2]
-        if a1 == 'ARRIBA' and a2 == 'DEBAJO':
-            return self.probabilidad[1][3]
-        if a1 == 'ARRIBA' and a2 == 'ARRIBA':
-            return self.probabilidad[2][0]
-        if a1 == 'ARRIBA' and a2 == 'DERECHA':
-            return self.probabilidad[2][1]
-        if a1 == 'ARRIBA' and a2 == 'IZQUIERDA':
-            return self.probabilidad[2][2]
-        if a1 == 'ARRIBA' and a2 == 'DEBAJO':
-            return self.probabilidad[2][3]
-        if a1 == 'ARRIBA' and a2 == 'ARRIBA':
-            return self.probabilidad[3][0]
-        if a1 == 'ARRIBA' and a2 == 'DERECHA':
-            return self.probabilidad[3][1]
-        if a1 == 'ARRIBA' and a2 == 'IZQUIERDA':
-            return self.probabilidad[3][2]
-        if a1 == 'ARRIBA' and a2 == 'DEBAJO':
-            return self.probabilidad[3][3]
+            return self.probabilidades[0][2]            
+        if a1 == 'ARRIBA' and a2 == 'ABAJO':
+            return self.probabilidades[0][3]
+        if a1 == 'DERECHA' and a2 == 'ARRIBA':
+            return self.probabilidades[1][0]
+        if a1 == 'DERECHA' and a2 == 'DERECHA':
+            return self.probabilidades[1][1]
+        if a1 == 'DERECHA' and a2 == 'IZQUIERDA':
+            return self.probabilidades[1][2]
+        if a1 == 'DERECHA' and a2 == 'ABAJO':
+            return self.probabilidades[1][3]
+        if a1 == 'IZQUIERDA' and a2 == 'ARRIBA':
+            return self.probabilidades[2][0]
+        if a1 == 'IZQUIERDA' and a2 == 'DERECHA':
+            return self.probabilidades[2][1]
+        if a1 == 'IZQUIERDA' and a2 == 'IZQUIERDA':
+            return self.probabilidades[2][2]
+        if a1 == 'IZQUIERDA' and a2 == 'ABAJO':
+            return self.probabilidades[2][3]
+        if a1 == 'ABAJO' and a2 == 'ARRIBA':
+            return self.probabilidades[3][0]
+        if a1 == 'ABAJO' and a2 == 'DERECHA':
+            return self.probabilidades[3][1]
+        if a1 == 'ABAJO' and a2 == 'IZQUIERDA':
+            return self.probabilidades[3][2]
+        if a1 == 'ABAJO' and a2 == 'ABAJO':
+            return self.probabilidades[3][3]
 
     def sucesor_accion(self, fila, columna, accion):
         if accion == 'ARRIBA':
@@ -107,7 +117,7 @@ class Problema:
                 return self.tablero[fila][columna]
             else:
                 return self.tablero[fila][columna+1]    
-        if accion == 'DEBAJO':
+        if accion == 'ABAJO':
             if fila + 1 >= len(self.tablero):
                 return self.tablero[fila][columna]
             else:
