@@ -27,11 +27,11 @@ class LAO:
             G = self.update_envelope_graph(self.hipergrafo, I, F)
             Z = self.get_Z(s, GV, G) # Construimos el conjunto Z
             if self.algorithm == 'PI':
-                policy_algorithm = PI(Z, self.politica, V) 
-                policy_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
+                pi_algorithm = PI(Z, self.politica, V) 
+                pi_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
             else:
-                policy_algorithm = VI(Z, self.politica, V) 
-                policy_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
+                vi_algorithm = VI(Z, self.politica, V) 
+                vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
             GV = self.rebuild(G, self.politica)
             s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
         return self.politica, V

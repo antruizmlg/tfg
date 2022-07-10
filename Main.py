@@ -1,18 +1,18 @@
-from EstadoTest import *
 from Hiperarista import *
 from Hipergrafo import *
 from LAO import *
 from FuncionDeValor import *
 from Politica import *
+from Estado import *
 
-s1 = EstadoTest('s1')
-s2 = EstadoTest('s2')
-s3 = EstadoTest('s3')
-s4 = EstadoTest('s4')
-s5 = EstadoTest('s5')
-s6 = EstadoTest('s6')
-s7 = EstadoTest('s7')
-s8 = EstadoTest('s8')
+s1 = Estado('s1')
+s2 = Estado('s2')
+s3 = Estado('s3')
+s4 = Estado('s4')
+s5 = Estado('s5')
+s6 = Estado('s6')
+s7 = Estado('s7')
+s8 = Estado('s8')
 
 h1_1 = Hiperarista(s1, {'s2':0.8, 's1':0.2}, 'ARRIBA', 0.6)
 h1_2 = Hiperarista(s1, {'s1':0.8, 's2':0.1, 's8': 0.1}, 'IZQUIERDA', 0.4)
