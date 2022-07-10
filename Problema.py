@@ -17,6 +17,8 @@ class Problema:
 
         self.tablero[filaFinal][columnaFinal].setTerminal()
 
+        self.sumideros = []
+
         i = 0
         while i < numSumideros:
             numFila = random.randint(0, numFilas)
@@ -24,6 +26,7 @@ class Problema:
             if not self.tablero[numFila][numCol].terminal:
                 self.tablero[numFila][numCol].setSumidero()
                 i += 1
+                self.sumideros.append("["+numFila+", "+numCol+"]")
 
         self.acciones = {'ARRIBA': 0.8, 'DERECHA': 0.6, 'IZQUIERDA': 0.6, 'ABAJO': 0.4}
         self.filaInicial = numFilas // 2
@@ -43,12 +46,17 @@ class Problema:
         return hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def getProbabilidades(self, fila, columna, accion):
-        listaEstados = {}
+        dicEstados = {}
+        probabilidades = {}
         for a in self.acciones.keys():
-            listaEstados[a] = self.sucesorAccion(fila, columna, a)
-            
+            dicEstados[a] = self.sucesorAccion(fila, columna, a)
+            probabilidades[dicEstados[a].id] = 0
         
+        for a in self.acciones.keys():
+            probabilidades[dicEstados[a].id] += self.get_probabilidad_por_transicion(accion, a)
 
+        return probabilidades
+        
     def get_probabilidad_por_transicion(self, a1, a2):
         if a1 == 'ARRIBA' and a2 == 'ARRIBA':
             return self.probabilidad[0][0]
