@@ -49,14 +49,11 @@ class Problema:
         return hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def getProbabilidades(self, fila, columna, accion):
-        dicEstados = {}
+        sucesores = self.get_sucesores(fila, columna)
         probabilidades = {}
-        for a in self.acciones.keys():
-            dicEstados[a] = self.sucesor_accion(fila, columna, a)
-            probabilidades[dicEstados[a].id] = 0
         
         for a in self.acciones.keys():
-            probabilidades[dicEstados[a].id] += self.get_probabilidad_por_transicion(accion, a)
+            probabilidades[sucesores[a].id] += self.get_probabilidad_por_transicion(accion, a)
 
         return probabilidades
 
@@ -101,27 +98,25 @@ class Problema:
         if a1 == 'ABAJO' and a2 == 'ABAJO':
             return self.probabilidades[3][3]
 
-    def sucesor_accion(self, fila, columna, accion):
-        if accion == 'ARRIBA':
-            if fila - 1 < 0:
-                return self.tablero[fila][columna]
-            else:
-                return self.tablero[fila-1][columna]
-        if accion == 'IZQUIERDA':
-            if columna - 1 < 0:
-                return self.tablero[fila][columna]
-            else:
-                return self.tablero[columna - 1][columna]
-        if accion == 'DERECHA':
-            if columna + 1 >= len(self.tablero[0]):
-                return self.tablero[fila][columna]
-            else:
-                return self.tablero[fila][columna+1]    
-        if accion == 'ABAJO':
-            if fila + 1 >= len(self.tablero):
-                return self.tablero[fila][columna]
-            else:
-                return self.tablero[fila+1][columna]
+    def get_sucesores(self, fila, columna):
+        sucesores = {}
+        if fila - 1 >= 0:
+            sucesores['ARRIBA'] = self.tablero[fila-1][columna]
+        else:
+            sucesores['ARRIBA'] = self.tablero[fila][columna]
+        if fila + 1 < len(self.tablero):
+            sucesores['ABAJO'] = self.tablero[fila+1][columna]
+        else:
+            sucesores['ARRIBA'] = self.tablero[fila][columna]
+        if columna - 1 >= 0:
+            sucesores['IZQUIERDA'] = self.tablero[fila][columna-1]
+        else:
+            sucesores['IZQUIERDA'] = self.tablero[fila][columna]
+        if columna + 1 < len(self.tablero[0]):
+            sucesores['DERECHA'] = self.tablero[fila][columna+1]
+        else:
+            sucesores['DERECHA'] = self.tablero[fila][columna]
+        return sucesores
 
     def get_politica_heuristico(self):
         politica = {}
