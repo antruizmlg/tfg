@@ -52,6 +52,9 @@ class Problema:
         sucesores = self.get_sucesores(fila, columna)
         probabilidades = {}
         
+        for suc in sucesores.values():
+            probabilidades[suc.id] = 0
+        
         for a in self.acciones.keys():
             probabilidades[sucesores[a].id] += self.get_probabilidad_por_transicion(accion, a)
 
@@ -107,7 +110,7 @@ class Problema:
         if fila + 1 < len(self.tablero):
             sucesores['ABAJO'] = self.tablero[fila+1][columna]
         else:
-            sucesores['ARRIBA'] = self.tablero[fila][columna]
+            sucesores['ABAJO'] = self.tablero[fila][columna]
         if columna - 1 >= 0:
             sucesores['IZQUIERDA'] = self.tablero[fila][columna-1]
         else:
