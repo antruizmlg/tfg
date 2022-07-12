@@ -29,7 +29,7 @@ class LAO:
             else:
                 vi_algorithm = VI(envelope_graph, self.p, self.V) 
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
-            bpsg = self.rebuild(envelope_graph)
+            bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         return self.p, self.V
 
@@ -41,9 +41,9 @@ class LAO:
         F.remove(s) # Eliminamos el estado s
         return F
 
-    def rebuild(self, envelope_graph):
+    def rebuild(self, envelope_graph, bpsg):
         bpsg_states = {} # Inicializamos el diccionario de estados a vacío
-        for s in envelope_graph.estados.keys(): # Para cada estado del grafo "envelope"
+        for s in bpsg.estados.keys(): # Para cada estado del grafo "envelope"
             if self.p.get_politica(s) is not None:
                 for ha in envelope_graph.estados[s]: # Para cada hiperarista (asociado a una acción) del estado
                     if ha.accion == self.p.politica[s]: # Si la acción asociada a la hiperarista es la mejor acción según la política greedy actual

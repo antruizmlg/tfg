@@ -12,7 +12,7 @@ class Problema:
 
         for i in range(numFilas):
             for j in range(numColumnas):
-                id = 's' + str(i) + str(j)
+                id = 's' + str(i) + "_" + str(j)
                 self.tablero[i][j] = Estado(id)
 
         self.filaFinal = self.generador_posicion_final(numFilas - 1)
