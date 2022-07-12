@@ -4,28 +4,28 @@ from VI import *
 from copy import *
 
 class LAO:
-    def __init__(self, estado_por_id, hipergrafo, estadoInicial, heuristico, politica, algorithm):
-        self.estado_por_id = estado_por_id
-        self.hipergrafo = hipergrafo
-        self.eIni = estadoInicial
-        self.heuristico = heuristico
-        self.politica = politica
+    def __init__(self, est_id, hg, ini_state, h, pi, algorithm):
+        self.estado_por_id = est_id
+        self.hg = hg
+        self.s0 = ini_state.id
+        self.h = h
+        self.pi = pi
         self.algorithm = algorithm
 
     def LAO(self):
-        V = self.heuristico
-        F = [self.eIni]
+        V = self.h
+        F = [self.s0]
         I = []
-        envelope_graph = Hipergrafo([self.eIni], [])
+        envelope_graph = Hipergrafo([self.s0], [])
         bpsg = deepcopy(envelope_graph)
         s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         while s is not None:
-            F = self.update_fringe_states(F, I, s)
+            F = self.update_fringe_set(F, I, s)
             I.append(s) # Introducimos s en el conjunto I
-            envelope_graph = self.update_envelope_graph(self.hipergrafo, I, F)
+            envelope_graph = self.update_envelope_graph(self.hg, I, F)
             Z = self.get_Z() # Construimos el conjunto Z
             if self.algorithm == 'PI':
-                pi_algorithm = PI(Z, self.politica, V) 
+                pi_algorithm = PI(Z, self.pi, V) 
                 pi_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
             else:
                 vi_algorithm = VI(Z, self.politica, V) 
@@ -34,8 +34,8 @@ class LAO:
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         return self.politica, V
 
-    def update_fringe_state(self, F, I, s):
-        for estado in self.hipergrafo.sucesores(s): # Por cada sucesor de s en el hipergrafo
+    def update_fringe_set(self, F, I, s):
+        for estado in self.hg.sucesores(s): # Por cada sucesor de s en el hipergrafo
             if estado not in I: # Si el sucesor no se encuentra en el conjunto I
                 F.append(estado) # Lo introducimos en el conjunto F
         F = list(dict.fromkeys(F)) # Eliminamos los elementos repetidos
@@ -50,7 +50,7 @@ class LAO:
                 listaNodos.append(ha.source) # Introducimos el nodo en la lista de nodos.
                 listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
                 for estado in ha.destino.keys():
-                    listaNodos.append(self.hipergrafo.estados[estado])
+                    listaNodos.append(self.hg.estados[estado])
         listaNodos = list(dict.fromkeys(listaNodos))
         return Hipergrafo(listaNodos, listaAristas)
 
@@ -58,10 +58,10 @@ class LAO:
         return None
     
     @staticmethod
-    def update_envelope_graph(hipergrafo, I, F):
+    def update_envelope_graph(hg, I, F):
         listaNodos = I + F # Unión de las listas I y F.
         listaAristas = [] # Inicializo la lista de aristas vacía
-        for arista in hipergrafo.hiperaristas: # Para cada arista del hipergrafo original
+        for arista in hg.hiperaristas: # Para cada arista del hipergrafo original
             ha = arista.aristaConSubconjuntoDeNodos(listaNodos) # Elimino de la arista los estados que no se encuentren en la lista de nodos.
             if ha is not None: # Si la arista no ha sido descartada al considerar solo los estados en la lista de nodos.
                 if ha.source in I: # Si el origen de la arista está en el conjunto I (Los nodos F no han sido expandidos por lo que no se tiene en cuenta)
