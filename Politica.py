@@ -2,8 +2,8 @@ class Politica:
     def __init__(self, politica):
         self.politica = politica
 
-    def setPolitica(self, estado, nuevaPolitica):
+    def set_politica(self, estado, nuevaPolitica):
         self.politica[estado] = nuevaPolitica
 
-    def getPolitica(self, estado):
+    def get_politica(self, estado):
         return self.politica[estado] 

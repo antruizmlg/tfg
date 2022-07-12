@@ -1,46 +1,45 @@
 from copy import *
 
 class PI:
-    def __init__(self, hipergrafo, politica, V):
-        self.hipergrafo = hipergrafo
-        self.politica = politica
+    def __init__(self, hg, p, V):
+        self.hg = hg
+        self.p = p
         self.V = V
     
     def policy_iterations(self):
         while True:
-            old_policy = deepcopy(self.politica) # Hacemos una copia de la política actual
+            old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
 
             self.policy_evaluation() # Modificamos la función de valor mediante evaluación de la política
 
             self.policy_improvement() # Obtenemos la mejor política con la nueva función de valor
 
-            if all(old_policy.politica[s] == self.politica.politica[s] for s in old_policy.politica.keys()): # Si la nueva política coincide con la anterior, hemos llegado a una convergencia.
+            if all(old_policy.p[s] == self.p.p[s] for s in old_policy.p.keys()): # Si la nueva política coincide con la anterior, hemos llegado a una convergencia.
                 break
 
     def policy_evaluation(self):
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
-            for ha in self.hipergrafo.hiperaristas: # Para cada hiperarista del hipergrafo.
-                if self.politica.getPolitica(ha.source.id) == ha.accion: # Si la acción asociada al hiperarista coincide con la que dictada por la política para ese estado
-                    sum = ha.coste
-                    for estado in ha.destino.keys(): # Para cada estado destino
-                        sum += ha.destino[estado] * oldV.getValor(estado) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
-                    self.V.setValor(ha.source.id, round(sum, 3)) # Modificamos el nuevo valor del estado actual.
+            for s in self.hg.estados.keys(): # Para cada estado
+                for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
+                    if self.p.get_politica(s) == ha.accion: # Si la acción dictada por la política coincide con la asociada al hiperarista, esta es la acción que debemos evaluar
+                        nv = ha.coste
+                        for st in ha.destino.keys(): # Para cada estado destino
+                            nv += ha.destino[st] * oldV.get_valor(st) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
+                        self.V.set_valor(s, round(nv, 3)) # Modificamos el nuevo valor del estado actual.
+                        break
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
                 break
 
     def policy_improvement(self):
-        estados = list(self.politica.politica.keys()) # Inicializamos una lista con todos los estados
-        minimo_coste_actual = [float('inf') for e in estados] # Inicializamos una lista que almacenará el menor coste encontrado para cada estado en un momento determinado
-        mejor_accion_actual = list(self.politica.politica.values())  # Inicializamos una lista que almacenará la mejor política encontrada para cada estado en un momento determinado
-
-        for ha in self.hipergrafo.hiperaristas: # Para cada arista en el conjunto de aristas del grafo.
-            i = estados.index(ha.source.id) # Obtenemos el índice en la lista de estados
-            valor_ha = ha.coste
-            for e in ha.destino.keys():
-                valor_ha += ha.destino[e] * self.V.getValor(e) # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
-            if valor_ha < minimo_coste_actual[i]: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
-                minimo_coste_actual[i] = valor_ha # Actualizamos el menor valor
-                self.politica.setPolitica(ha.source.id, ha.accion) # Actualizamos la mejor política
+        for s in self.hg.keys(): # Para cada estado del grafo.
+            min_coste = float('inf')
+            for ha in self.hg[s]: # Para cada hiperarista asociada a ese estado.
+                coste_accion = ha.coste
+                for e in ha.destino.keys(): # Para cada estado alcanzable mediante la acción
+                    coste_accion += ha.destino[e] * self.V.get_valor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
+                if coste_accion < min_coste: # Si el coste de la acción es menor que el minimo encontrado hasta el momento
+                    mejor_accion = ha.accion # Actualizamos la mejor acción hasta el momento
+            self.p.set_politica(s, mejor_accion) # Actualizamos la política con la mejor acción

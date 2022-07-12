@@ -1,26 +1,27 @@
 from copy import *
 
 class VI:
-    def __init__(self, hipergrafo, politica, V):
-        self.hipergrafo = hipergrafo
-        self.politica = politica
+    def __init__(self, hg, p, V):
+        self.hg = hg
+        self.p = p
         self.V = V
 
     def value_iteration(self):
-        estados = list(self.politica.politica.keys()) # Inicializamos una lista con todos los estados
-        mejor_accion_actual = list(self.politica.politica.values())  # Inicializamos una lista que almacenará la mejor política encontrada para cada estado en un momento determinado
-
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
-            for ha in self.hipergrafo.hiperaristas: # Para cada arista en el conjunto de aristas del grafo.
-                i = estados.index(ha.source.id) # Obtenemos el índice en la lista de estados
-                valor_ha = ha.coste
-                for e in ha.destino.keys():
-                    valor_ha += ha.destino[e] * oldV.getValor(e) # Calculamos el valor de realizar la acción de la hiperarista desde ese estado.
-                if valor_ha < self.V.getValor(ha.source.id): # Si ese valor (coste) es menor que el menor encontrado hasta el momento
-                    self.V.setValor(ha.source.id, round(valor_ha, 3)) # Actualizamos el menor valor
-                    self.politica.setPolitica(ha.source.id, ha.accion) # Actualizamos la mejor política
+            for s in self.hg.estados.keys(): # Para cada estado en el hipergrafo
+                menor_coste = self.V.get_valor(s)
+                mejor_accion = self.p.get_politica(s)
+                for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
+                    coste_accion = ha.coste
+                    for e in ha.destino.keys(): # Para cada estado destino del hiperarista
+                        coste_accion += ha.destino[e] * oldV.getValor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
+                    if coste_accion < menor_coste: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
+                        menor_coste = coste_accion # Actualizamos el menor coste
+                        mejor_accion = ha.accion
+                self.V.set_valor(s, menor_coste)
+                self.p.set_politica(s, mejor_accion)
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
                 break
