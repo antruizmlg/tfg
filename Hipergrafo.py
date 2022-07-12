@@ -7,4 +7,4 @@ class Hipergrafo:
         list_sucesores = [] # Inicializamos la lista de sucesores
         for ha in list_ha: # Para cada hiperarista de la lista
             list_sucesores += ha.destino.keys() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
-        list(dict.fromkeys(list_sucesores)) # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
+        return list(dict.fromkeys(list_sucesores)) # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos

@@ -21,13 +21,13 @@ class LAO:
         while s is not None:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
-            envelope_graph = self.update_envelope_graph(self, envelope_graph, I, s)
+            envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
             Z = self.get_Z() # Construimos el conjunto Z
             if self.algorithm == 'PI':
-                pi_algorithm = PI(Z, self.p, self.V) 
+                pi_algorithm = PI(envelope_graph, self.p, self.V) 
                 pi_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
             else:
-                vi_algorithm = VI(Z, self.p, self.V) 
+                vi_algorithm = VI(envelope_graph, self.p, self.V) 
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
             bpsg = self.rebuild(envelope_graph, self.p)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))

@@ -48,7 +48,7 @@ class Problema:
                     ha_list.append(Hiperarista(state, self.get_probs(i, j, a), a, self.acciones[a]))
                 estados_hg[state.id] = ha_list
         hg = Hipergrafo(estados_hg)
-        politica, heuristico = self.get_politica_and_heuristico()
+        politica, heuristico = self.get_politica_y_heuristico()
         return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def get_probs(self, fila, columna, accion):

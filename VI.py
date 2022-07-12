@@ -16,7 +16,7 @@ class VI:
                 for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
                     coste_accion = ha.coste
                     for e in ha.destino.keys(): # Para cada estado destino del hiperarista
-                        coste_accion += ha.destino[e] * oldV.getValor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
+                        coste_accion += ha.destino[e] * oldV.get_valor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
                     if coste_accion < menor_coste: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
                         menor_coste = coste_accion # Actualizamos el menor coste
                         mejor_accion = ha.accion

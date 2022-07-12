@@ -16,8 +16,11 @@ class Estado:
     def h(self):
         if self.sumidero:
             return 10
-        else:
-            return 0
+        else: 
+            if not self.esTerminal():
+                return 1
+            else:
+                return 0
 
     def __hash__(self):
         return hash(self.id)

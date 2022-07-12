@@ -14,7 +14,7 @@ class PI:
 
             self.policy_improvement() # Obtenemos la mejor política con la nueva función de valor
 
-            if all(old_policy.p[s] == self.p.p[s] for s in old_policy.p.keys()): # Si la nueva política coincide con la anterior, hemos llegado a una convergencia.
+            if all(old_policy.politica[s] == self.p.politica[s] for s in old_policy.politica.keys()): # Si la nueva política coincide con la anterior, hemos llegado a una convergencia.
                 break
 
     def policy_evaluation(self):
@@ -34,9 +34,9 @@ class PI:
                 break
 
     def policy_improvement(self):
-        for s in self.hg.keys(): # Para cada estado del grafo.
+        for s in self.hg.estados.keys(): # Para cada estado del grafo.
             min_coste = float('inf')
-            for ha in self.hg[s]: # Para cada hiperarista asociada a ese estado.
+            for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado.
                 coste_accion = ha.coste
                 for e in ha.destino.keys(): # Para cada estado alcanzable mediante la acción
                     coste_accion += ha.destino[e] * self.V.get_valor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
