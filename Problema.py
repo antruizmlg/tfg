@@ -15,8 +15,8 @@ class Problema:
                 id = 's' + str(i) + str(j)
                 self.tablero[i][j] = Estado(id)
 
-        self.filaFinal = self.generador_aleatorio(numFilas - 1)
-        self.columnaFinal = self.generador_aleatorio(numColumnas - 1)
+        self.filaFinal = self.generador_posicion_final(numFilas - 1)
+        self.columnaFinal = self.generador_posicion_final(numColumnas - 1)
 
         self.tablero[self.filaFinal][self.columnaFinal].setTerminal()
 
@@ -36,19 +36,22 @@ class Problema:
         self.columnaInicial = numColumnas // 2
         self.probabilidades = probabilidades
 
-    def generar_Problema(self):
-        listaNodos = {}
-        listaHiperaristas = []
+    def generar_problema(self):
+        estado_por_id = {}
+        estados_hg = {}
+        ha_list = []
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[i])):
-                listaNodos[self.tablero[i][j].id] = self.tablero[i][j]
+                state = self.tablero[i][j]
+                estado_por_id[state.id] = state
                 for a in self.acciones.keys():
-                    listaHiperaristas.append(Hiperarista(self.tablero[i][j], self.getProbabilidades(i, j, a), a, self.acciones[a]))
-        hg = Hipergrafo(listaNodos, listaHiperaristas)
-        politica, heuristico = self.get_politica_heuristico()
-        return hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
+                    ha_list.append(Hiperarista(state, self.get_probs(i, j, a), a, self.acciones[a]))
+                estados_hg[state.id] = ha_list
+        hg = Hipergrafo(estados_hg)
+        politica, heuristico = self.get_politica_and_heuristico()
+        return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
-    def getProbabilidades(self, fila, columna, accion):
+    def get_probs(self, fila, columna, accion):
         sucesores = self.get_sucesores(fila, columna)
         probabilidades = {}
         
@@ -60,7 +63,7 @@ class Problema:
 
         return probabilidades
 
-    def informacion(self):   
+    def print_info(self):   
         print("Tamaño de tablero: " + str(len(self.tablero)) + "x" + str(len(self.tablero[0])))
         for s in self.sumideros:
                 print("Sumidero: "+ s)
@@ -121,18 +124,19 @@ class Problema:
             sucesores['DERECHA'] = self.tablero[fila][columna]
         return sucesores
 
-    def get_politica_heuristico(self):
+    def get_politica_y_heuristico(self):
         politica = {}
         heuristico = {}
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[i])):
-                politica[self.tablero[i][j].id] = 'ARRIBA' # POLITICA ARBITRARIA
-                heuristico[self.tablero[i][j].id] = self.tablero[i][j].h()
+                state = self.tablero[i][j]
+                politica[state.id] = 'ARRIBA' # POLITICA ARBITRARIA
+                heuristico[state.id] = state.h()
         return Politica(politica), FuncionDeValor(heuristico)
 
     @staticmethod
-    def generador_aleatorio(numero):
+    def generador_posicion_final(p):
         if random.randint(0, 1) == 0:
             return 0
         else:
-            return numero
+            return p

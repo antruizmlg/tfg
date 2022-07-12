@@ -1,12 +1,10 @@
 class Hipergrafo:
-    def __init__(self, estados, hiperaristas):
+    def __init__(self, estados):
         self.estados = estados
-        self.hiperaristas = hiperaristas
 
-    def sucesores(self, estado):
-        sucesores = [] # Inicializamos la lista de sucesores
-        for a in self.hiperaristas: # Por cada hiperarista del hipergrafo.
-            if a.source == estado: # Si el origen de la hiperarista coincide con el estado
-                for elem in a.destino.keys():
-                    sucesores.append(self.estados[elem]) # Introducimos en la lista de sucesores todos los nodos destinos del hiperarista.
-        return list(dict.fromkeys(sucesores)) # Devolvemos la lista de sucesores sin elementos repetidos
+    def sucesores(self, s):
+        list_ha = self.estados[s] # Obtenemos la lista de hiperaristas cuyo origen es el estado s.
+        list_sucesores = [] # Inicializamos la lista de sucesores
+        for ha in list_ha: # Para cada hiperarista de la lista
+            list_sucesores += ha.destino.keys() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
+        list(dict.fromkeys(list_sucesores)) # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos

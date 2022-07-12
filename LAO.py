@@ -1,9 +1,11 @@
 from Hipergrafo import *
 from PI import *
 from VI import *
+from copy import *
 
 class LAO:
-    def __init__(self, hipergrafo, estadoInicial, heuristico, politica, algorithm):
+    def __init__(self, estado_por_id, hipergrafo, estadoInicial, heuristico, politica, algorithm):
+        self.estado_por_id = estado_por_id
         self.hipergrafo = hipergrafo
         self.eIni = estadoInicial
         self.heuristico = heuristico
@@ -14,27 +16,46 @@ class LAO:
         V = self.heuristico
         F = [self.eIni]
         I = []
-        G = Hipergrafo([self.eIni], [])
-        GV = Hipergrafo([self.eIni], [])
-        s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
+        envelope_graph = Hipergrafo([self.eIni], [])
+        bpsg = deepcopy(envelope_graph)
+        s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         while s is not None:
-            for estado in self.hipergrafo.sucesores(s): # Por cada sucesor de s en el hipergrafo
-                if estado not in I: # Si el sucesor no se encuentra en el conjunto I
-                    F.append(estado) # Lo introducimos en el conjunto F
-            F = list(dict.fromkeys(F)) # Eliminamos los elementos repetidos
-            F.remove(s) # Eliminamos el estado s
+            F = self.update_fringe_states(F, I, s)
             I.append(s) # Introducimos s en el conjunto I
-            G = self.update_envelope_graph(self.hipergrafo, I, F)
-            Z = self.get_Z(s, GV, G) # Construimos el conjunto Z
+            envelope_graph = self.update_envelope_graph(self.hipergrafo, I, F)
+            Z = self.get_Z() # Construimos el conjunto Z
             if self.algorithm == 'PI':
                 pi_algorithm = PI(Z, self.politica, V) 
                 pi_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
             else:
                 vi_algorithm = VI(Z, self.politica, V) 
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
-            GV = self.rebuild(G, self.politica)
-            s = self.estado_no_terminal(list(set(GV.estados) & set(F)))
+            bpsg = self.rebuild(envelope_graph, self.politica)
+            s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         return self.politica, V
+
+    def update_fringe_state(self, F, I, s):
+        for estado in self.hipergrafo.sucesores(s): # Por cada sucesor de s en el hipergrafo
+            if estado not in I: # Si el sucesor no se encuentra en el conjunto I
+                F.append(estado) # Lo introducimos en el conjunto F
+        F = list(dict.fromkeys(F)) # Eliminamos los elementos repetidos
+        F.remove(s) # Eliminamos el estado s
+        return F
+
+    def rebuild(self, envelope_graph, politica):
+        listaNodos = [] # Inicializamos la lista de nodos del hipergrafo.
+        listaAristas = [] # Inicializamos la lista de aristas del hipergrafo.
+        for ha in envelope_graph.hiperaristas: # Para cada arista
+            if ha.accion == politica.getPolitica(ha.source.id): # Si la acción de la arista coincide con la dictada por la política
+                listaNodos.append(ha.source) # Introducimos el nodo en la lista de nodos.
+                listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
+                for estado in ha.destino.keys():
+                    listaNodos.append(self.hipergrafo.estados[estado])
+        listaNodos = list(dict.fromkeys(listaNodos))
+        return Hipergrafo(listaNodos, listaAristas)
+
+    def get_Z(self):
+        return None
     
     @staticmethod
     def update_envelope_graph(hipergrafo, I, F):
@@ -47,32 +68,9 @@ class LAO:
                     listaAristas.append(ha) # Añadimos la arista al conjunto de aristas
         return Hipergrafo(listaNodos, listaAristas)
 
-    def rebuild(self, G, politica):
-        listaNodos = [] # Inicializamos la lista de nodos del hipergrafo.
-        listaAristas = [] # Inicializamos la lista de aristas del hipergrafo.
-        for ha in G.hiperaristas: # Para cada arista
-            if ha.accion == politica.getPolitica(ha.source.id): # Si la acción de la arista coincide con la dictada por la política
-                listaNodos.append(ha.source) # Introducimos el nodo en la lista de nodos.
-                listaAristas.append(ha) # Introducimos la arista en la lista de aristas.
-                for estado in ha.destino.keys():
-                    listaNodos.append(self.hipergrafo.estados[estado])
-        listaNodos = list(dict.fromkeys(listaNodos))
-        return Hipergrafo(listaNodos, listaAristas)
-
-    def get_Z(self, s, GV, G):
-        listaNodos = [s] + GV.estados
-        listaAristas = GV.hiperaristas
-        for ha in G.hiperaristas:
-            if ha.source == s:
-                listaAristas.append(ha)
-                for estado in ha.destino.keys():
-                    listaNodos.append(self.hipergrafo.estados[estado])
-        listaNodos = list(dict.fromkeys(listaNodos))
-        return Hipergrafo(listaNodos, listaAristas)
-
     @staticmethod
-    def estado_no_terminal(estados):
-        for e in estados:
+    def get_estado_no_terminal(l):
+        for e in l:
             if not e.esTerminal():
                 return e
         return None
