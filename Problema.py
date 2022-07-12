@@ -45,8 +45,9 @@ class Problema:
                 state = self.tablero[i][j]
                 estado_por_id[state.id] = state
                 for a in self.acciones.keys():
-                    ha_list.append(Hiperarista(state, self.get_probs(i, j, a), a, self.acciones[a]))
+                    ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
                 estados_hg[state.id] = ha_list
+                ha_list = []
         hg = Hipergrafo(estados_hg)
         politica, heuristico = self.get_politica_y_heuristico()
         return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica

@@ -15,7 +15,7 @@ estado_por_id, hg, s0, h, pi = p.generar_problema()
 
 p.print_info()
 
-lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, 'PI')
+lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, 'VI')
 p, V = lao_algorithm.LAO()
 
 print(p.politica)
