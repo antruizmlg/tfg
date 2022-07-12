@@ -29,7 +29,7 @@ class LAO:
             else:
                 vi_algorithm = VI(envelope_graph, self.p, self.V) 
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
-            bpsg = self.rebuild(envelope_graph, self.p)
+            bpsg = self.rebuild(envelope_graph)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         return self.p, self.V
 
@@ -41,13 +41,17 @@ class LAO:
         F.remove(s) # Eliminamos el estado s
         return F
 
-    def rebuild(self, envelope_graph, p):
+    def rebuild(self, envelope_graph):
         bpsg_states = {} # Inicializamos el diccionario de estados a vacío
         for s in envelope_graph.estados.keys(): # Para cada estado del grafo "envelope"
-            for ha in envelope_graph.estados[s]: # Para cada hiperarista (asociado a una acción) del estado
-                if ha.accion == p.politica[s]: # Si la acción asociada a la hiperarista es la mejor acción según la política greedy actual
-                    bpsg_states[s] = [ha] # Añadimos al diccionario una asociación con el estado y el hiperarista que refiere a su mejor acción según la política greedy
-                    break
+            if self.p.get_politica(s) is not None:
+                for ha in envelope_graph.estados[s]: # Para cada hiperarista (asociado a una acción) del estado
+                    if ha.accion == self.p.politica[s]: # Si la acción asociada a la hiperarista es la mejor acción según la política greedy actual
+                        bpsg_states[s] = [ha] # Añadimos al diccionario una asociación con el estado y el hiperarista que refiere a su mejor acción según la política greedy
+                        for st in ha.destino.keys():
+                            if st not in bpsg_states.keys():
+                                bpsg_states[st] = []
+                        break
         return Hipergrafo(bpsg_states)
 
     def get_Z(self):
