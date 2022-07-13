@@ -59,7 +59,7 @@ class LAO:
 
     def get_estado_no_terminal(self, l):
         for e in l:
-            if not self.ep_id[e].esTerminal():
+            if not self.ep_id[e].terminal:
                 return e
         return None
     

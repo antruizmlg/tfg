@@ -10,12 +10,9 @@ class Estado:
     def setSumidero(self):
         self.sumidero = True
 
-    def esTerminal(self):
-        return self.terminal
-
     def h(self):
         if self.sumidero:
-            return 10
+            return 1000
         else: 
             return 0
 
