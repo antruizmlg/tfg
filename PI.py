@@ -42,4 +42,5 @@ class PI:
                     coste_accion += ha.destino[e] * self.V.get_valor(e) # Sumamos la probabilidad de alcanzar el estado por el valor del estado.
                 if coste_accion < min_coste: # Si el coste de la acción es menor que el minimo encontrado hasta el momento
                     mejor_accion = ha.accion # Actualizamos la mejor acción hasta el momento
+                    min_coste = coste_accion # Actualizamos el mínimo coste encontrado hasta el momento
             self.p.set_politica(s, mejor_accion) # Actualizamos la política con la mejor acción

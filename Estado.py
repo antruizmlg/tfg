@@ -12,7 +12,7 @@ class Estado:
 
     def h(self):
         if self.sumidero:
-            return 1000
+            return 10
         else: 
             return 0
 
