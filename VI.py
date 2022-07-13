@@ -20,7 +20,7 @@ class VI:
                     if coste_accion < menor_coste: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
                         menor_coste = coste_accion # Actualizamos el menor coste
                         mejor_accion = ha.accion
-                self.V.set_valor(s, menor_coste)
+                self.V.set_valor(s, round(menor_coste, 2))
                 self.p.set_politica(s, mejor_accion)
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):

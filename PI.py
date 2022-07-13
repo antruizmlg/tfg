@@ -27,7 +27,7 @@ class PI:
                         nv = ha.coste
                         for st in ha.destino.keys(): # Para cada estado destino
                             nv += ha.destino[st] * oldV.get_valor(st) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
-                        self.V.set_valor(s, round(nv, 3)) # Modificamos el nuevo valor del estado actual.
+                        self.V.set_valor(s, round(nv, 2)) # Modificamos el nuevo valor del estado actual.
                         break
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):

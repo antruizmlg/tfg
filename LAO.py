@@ -43,7 +43,7 @@ class LAO:
 
     def rebuild(self, envelope_graph, bpsg):
         bpsg_states = {} # Inicializamos el diccionario de estados a vacío
-        for s in bpsg.estados.keys(): # Para cada estado del grafo "envelope"
+        for s in bpsg.estados.keys(): # Para cada estado del grafo solución
             if self.p.get_politica(s) is not None:
                 for ha in envelope_graph.estados[s]: # Para cada hiperarista (asociado a una acción) del estado
                     if ha.accion == self.p.politica[s]: # Si la acción asociada a la hiperarista es la mejor acción según la política greedy actual

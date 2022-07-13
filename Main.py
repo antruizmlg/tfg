@@ -6,8 +6,8 @@ probabilidades_transicion = [[0.8, 0.1, 0.1, 0], # MOVERSE ARRIBA
                              [0.1, 0, 0.8, 0.1], # MOVERSE A LA IZQUIERDA
                              [0, 0.1, 0.1, 0.8]] # MOVERSE ABAJO
 
-numFilas = 10
-numCol = 10
+numFilas = 20
+numCol = 20
 numSumideros = 0
 
 p = Problema(numFilas, numCol, numSumideros, probabilidades_transicion)
