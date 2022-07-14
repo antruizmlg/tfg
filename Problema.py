@@ -20,20 +20,21 @@ class Problema:
 
         self.tablero[self.filaFinal][self.columnaFinal].setTerminal()
 
+        self.filaInicial = numFilas // 2
+        self.columnaInicial = numColumnas // 2
+
         self.sumideros = []
 
         i = 0
         while i < numSumideros:
             numFila = random.randint(0, numFilas - 1)
             numCol = random.randint(0, numColumnas - 1)
-            if not self.tablero[numFila][numCol].terminal:
+            if not self.tablero[numFila][numCol].sumidero and not self.tablero[numFila][numCol].terminal and not (numFila == self.filaInicial and numCol == self.columnaInicial):
                 self.tablero[numFila][numCol].setSumidero()
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
         self.acciones = {'ARRIBA': 0.8, 'DERECHA': 0.6, 'IZQUIERDA': 0.6, 'ABAJO': 0.4}
-        self.filaInicial = numFilas // 2
-        self.columnaInicial = numColumnas // 2
         self.probabilidades = probabilidades
 
     def generar_problema(self):

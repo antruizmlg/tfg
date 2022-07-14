@@ -24,10 +24,10 @@ class LAO:
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
             Z = self.get_Z() # Construimos el conjunto Z
             if self.algorithm == 'PI':
-                pi_algorithm = PI(envelope_graph, self.p, self.V) 
-                pi_algorithm.policy_iterations() # Iteración de políticas sobre el conjunto Z
+                pi_algorithm = PI(envelope_graph, self.p, self.V, self.ep_id) 
+                pi_algorithm.policy_iteration() # Iteración de políticas sobre el conjunto Z
             else:
-                vi_algorithm = VI(envelope_graph, self.p, self.V) 
+                vi_algorithm = VI(envelope_graph, self.p, self.V, self.ep_id) 
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
             bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
