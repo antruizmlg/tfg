@@ -6,4 +6,4 @@ class Politica:
         self.politica[estado] = nuevaPolitica
 
     def get_politica(self, estado):
-        return self.politica[estado] 
+        return self.politica[estado]

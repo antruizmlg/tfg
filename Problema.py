@@ -62,6 +62,7 @@ class Problema:
     def get_probs(self, fila, columna, accion):
         sucesores = self.get_sucesores(fila, columna)
         probabilidades = {}
+        probs_sol = {}
         
         for suc in sucesores.values():
             probabilidades[suc.id] = 0
@@ -69,7 +70,12 @@ class Problema:
         for a in self.acciones.keys():
             probabilidades[sucesores[a].id] += self.get_probabilidad_por_transicion(accion, a)
 
-        return probabilidades
+        for suc in probabilidades.keys():
+            prob = probabilidades[suc]
+            if prob > 0:
+                probs_sol[suc] = prob # Si la probabilidad de alcanzar un estado desde otro estado es 0, no se considera como sucesor.
+
+        return probs_sol
 
     def print_info(self):   
         print("Tamaño de tablero: " + str(len(self.tablero)) + "x" + str(len(self.tablero[0])))

@@ -12,7 +12,6 @@ class VI:
 
             for s in self.hg.estados.keys(): # Para cada estado en el hipergrafo             
                 menor_coste = float('inf')
-                mejor_accion = self.p.get_politica(s)
                 for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
                     coste_accion = ha.coste
                     for e in ha.destino.keys(): # Para cada estado destino del hiperarista
