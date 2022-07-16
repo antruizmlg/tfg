@@ -34,7 +34,7 @@ class Problema:
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
-        self.acciones = {'ARRIBA': 0.8, 'DERECHA': 0.6, 'IZQUIERDA': 0.6, 'ABAJO': 0.4}
+        self.acciones = {'ARRIBA': 1, 'DERECHA': 1, 'IZQUIERDA': 1, 'ABAJO': 1}
         self.probabilidades = probabilidades
 
     def generar_problema(self):
@@ -56,7 +56,7 @@ class Problema:
                 estados_hg[state.id] = ha_list
                 ha_list = []
         hg = Hipergrafo(estados_hg)
-        politica, heuristico = self.get_politica_y_heuristico()
+        politica, heuristico = self.get_p_and_h()
         return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def get_probs(self, fila, columna, accion):
@@ -132,7 +132,7 @@ class Problema:
             sucesores['DERECHA'] = self.tablero[fila][columna]
         return sucesores
 
-    def get_politica_y_heuristico(self):
+    def get_p_and_h(self):
         politica = {}
         heuristico = {}
         for i in range(len(self.tablero)):
