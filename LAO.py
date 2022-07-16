@@ -22,7 +22,7 @@ class LAO:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
-            Z = Hipergrafo(self.get_Z(envelope_graph, s, {})) # Construimos el conjunto Z
+            Z = Hipergrafo(self.get_Z(envelope_graph, s, {s: []})) # Construimos el conjunto Z
             if self.algorithm == 'PI':
                 pi_algorithm = PI(Z, self.p, self.V) 
                 pi_algorithm.policy_iteration() # Iteración de políticas sobre el conjunto Z
@@ -61,7 +61,7 @@ class LAO:
                 if p is not None:
                     for ha in envelope_graph.estados[st]:
                         if ha.accion == p and s in ha.destino.keys():
-                            estados[st] = ha
+                            estados[st] = [ha]
                             if not s == st:
                                 estados = self.get_Z(envelope_graph, st, estados)
         return estados
