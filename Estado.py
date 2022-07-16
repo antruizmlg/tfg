@@ -11,9 +11,6 @@ class Estado:
         self.sumidero = True
 
     def h(self):
-        if self.sumidero:
-            return 10
-        else: 
             return 0
 
     def __hash__(self):

@@ -1,11 +1,10 @@
 from copy import *
 
 class PI:
-    def __init__(self, hg, p, V, ep_id):
+    def __init__(self, hg, p, V):
         self.hg = hg
         self.p = p
         self.V = V
-        self.ep_id = ep_id
     
     def policy_iteration(self):
         while True:
@@ -23,14 +22,13 @@ class PI:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
             for s in self.hg.estados.keys(): # Para cada estado
-                if not self.ep_id[s].sumidero: # Si el estado no es un sumidero
-                    for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
-                        if self.p.get_politica(s) == ha.accion: # Si la acción dictada por la política coincide con la asociada al hiperarista, esta es la acción que debemos evaluar
-                            nv = ha.coste
-                            for st in ha.destino.keys(): # Para cada estado destino
-                                nv += ha.destino[st] * oldV.get_valor(st) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
-                            self.V.set_valor(s, round(nv, 2)) # Modificamos el nuevo valor del estado actual.
-                            break
+                for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
+                    if self.p.get_politica(s) == ha.accion: # Si la acción dictada por la política coincide con la asociada al hiperarista, esta es la acción que debemos evaluar
+                        nv = ha.coste
+                        for st in ha.destino.keys(): # Para cada estado destino
+                            nv += ha.destino[st] * oldV.get_valor(st) # Sumamos la probabilidad de alcanzar ese estado desde el actual por el valor de ese estado
+                        self.V.set_valor(s, round(nv, 2)) # Modificamos el nuevo valor del estado actual.
+                        break
 
             if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
                 break

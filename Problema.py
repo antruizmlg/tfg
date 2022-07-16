@@ -41,12 +41,18 @@ class Problema:
         estado_por_id = {}
         estados_hg = {}
         ha_list = []
+        sumidero_state = Estado('s_ss')
+        sumidero_state.setTerminal()
+        estado_por_id[sumidero_state.id] = sumidero_state
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
                 estado_por_id[state.id] = state
-                for a in self.acciones.keys():
-                    ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
+                if not state.sumidero:
+                    for a in self.acciones.keys():
+                        ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
+                else:
+                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'ARRIBA', 30))
                 estados_hg[state.id] = ha_list
                 ha_list = []
         hg = Hipergrafo(estados_hg)
@@ -134,6 +140,8 @@ class Problema:
                 state = self.tablero[i][j]
                 politica[state.id] = None
                 heuristico[state.id] = state.h()
+        politica['s_ss'] = None
+        heuristico['s_ss'] = 0
         return Politica(politica), FuncionDeValor(heuristico)
 
     @staticmethod
