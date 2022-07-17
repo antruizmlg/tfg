@@ -101,6 +101,8 @@ class Problema:
                         print('IZ', end = ' ')
                     if p.get_politica(self.tablero[i][j].id) == 'ABAJO':
                         print('AB', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) is None:
+                        print('##', end = ' ')
             print("")
         print("------------------------------------------------------------------------")
         

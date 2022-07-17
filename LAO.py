@@ -29,10 +29,9 @@ class LAO:
                 pi_algorithm.policy_iteration() # Iteración de políticas sobre el conjunto Z
             else:
                 vi_algorithm = VI(Z, self.p, self.V) 
-                vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
+                vi_algorithm.value_iteration() # Iteración de valores sobre el conjunto Z
             bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
-            self.problem.print_tablero(self.p)
         return self.p, self.V
 
     def update_fringe_set(self, F, I, s):
@@ -63,7 +62,7 @@ class LAO:
                 if p is not None:
                     for ha in envelope_graph.estados[st]:
                         if ha.accion == p and s in ha.destino.keys():
-                            estados[st] = [ha]
+                            estados[st] = envelope_graph.estados[st]
                             if not s == st:
                                 estados = self.get_Z(envelope_graph, st, estados)
         return estados
