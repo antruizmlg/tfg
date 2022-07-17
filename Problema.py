@@ -83,6 +83,26 @@ class Problema:
                 print("Sumidero: "+ s)
         print("Celda inicial: [" + str(self.filaInicial) + ", " + str(self.columnaInicial) + "]")
         print("Celda objetivo: [" + str(self.filaFinal) + ", " + str(self.columnaFinal) + "]\n")
+
+    def print_tablero(self, p):
+        print("------------------------------------------------------------------------")
+        for i in range(len(self.tablero)):
+            for j in range(len(self.tablero[0])):
+                if self.tablero[i][j].terminal:
+                    print('TT', end = ' ')
+                elif self.tablero[i][j].sumidero:
+                    print('SS', end = ' ')
+                else:
+                    if p.get_politica(self.tablero[i][j].id) == 'ARRIBA':
+                        print('AR', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'DERECHA':
+                        print('DE', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'IZQUIERDA':
+                        print('IZ', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'ABAJO':
+                        print('AB', end = ' ')
+            print("")
+        print("------------------------------------------------------------------------")
         
     def get_probabilidad_por_transicion(self, a1, a2):
         if a1 == 'ARRIBA' and a2 == 'ARRIBA':

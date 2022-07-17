@@ -4,12 +4,13 @@ from VI import *
 from copy import *
 
 class LAO:
-    def __init__(self, est_id, hg, ini_state, h, pi, algorithm):
+    def __init__(self, est_id, hg, ini_state, h, pi, p, algorithm):
         self.ep_id = est_id
         self.hg = hg
         self.s0 = ini_state.id
         self.V = h
         self.p = pi
+        self.problem = p
         self.algorithm = algorithm
 
     def LAO(self):
@@ -31,6 +32,7 @@ class LAO:
                 vi_algorithm.value_iteration() # Iteración de políticas sobre el conjunto Z
             bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
+            self.problem.print_tablero(self.p)
         return self.p, self.V
 
     def update_fringe_set(self, F, I, s):
