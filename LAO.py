@@ -2,6 +2,7 @@ from Hipergrafo import *
 from PI import *
 from VI import *
 from copy import *
+import time
 
 class LAO:
     def __init__(self, est_id, hg, ini_state, h, pi, p, algorithm):
@@ -16,20 +17,22 @@ class LAO:
     def LAO(self):
         F = [self.s0]
         I = []
+
         envelope_graph = Hipergrafo({self.s0: []})
         bpsg = deepcopy(envelope_graph)
+
+        if self.algorithm == 'PI':
+            algorithm = PI(self.p, self.V) 
+        else:
+            algorithm = VI(self.p, self.V)
+
         s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         while s is not None:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
-            Z = Hipergrafo(self.get_Z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el conjunto Z
-            if self.algorithm == 'PI':
-                pi_algorithm = PI(Z, self.p, self.V) 
-                pi_algorithm.policy_iteration() # Iteración de políticas sobre el conjunto Z
-            else:
-                vi_algorithm = VI(Z, self.p, self.V) 
-                vi_algorithm.value_iteration() # Iteración de valores sobre el conjunto Z
+            Z = Hipergrafo(self.get_Z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
+            algorithm.run(Z)
             bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         return self.p, self.V

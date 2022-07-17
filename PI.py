@@ -1,12 +1,14 @@
 from copy import *
 
 class PI:
-    def __init__(self, hg, p, V):
-        self.hg = hg
+    def __init__(self, p, V):
+        self.hg = None
         self.p = p
         self.V = V
     
-    def policy_iteration(self):
+    def run(self, hg):
+        self.hg = hg
+        
         while True:
             old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
 

@@ -1,16 +1,18 @@
 from copy import *
 
 class VI:
-    def __init__(self, hg, p, V):
-        self.hg = hg
+    def __init__(self, p, V):
+        self.hg = None
         self.p = p
         self.V = V
 
-    def value_iteration(self):
+    def run(self, hg):
+        self.hg = hg
+
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
-            for s in self.hg.estados.keys(): # Para cada estado en el hipergrafo             
+            for s in self.hg.estados.keys(): # Para cada estado en el hipergrafo
                 menor_coste = float('inf')
                 for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
                     coste_accion = ha.coste
