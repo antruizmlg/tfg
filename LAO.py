@@ -26,6 +26,8 @@ class LAO:
         else:
             algorithm = VI(self.p, self.V)
 
+        sum = 0
+
         s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
         while s is not None:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F

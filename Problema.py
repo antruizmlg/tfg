@@ -38,26 +38,26 @@ class Problema:
         self.probabilidades = probabilidades
 
     def generar_problema(self):
-        estado_por_id = {}
-        estados_hg = {}
-        ha_list = []
+        state_id = {}
+        states_hg = {}
+        dic_actions = {}
         sumidero_state = Estado('s_ss')
         sumidero_state.setTerminal()
-        estado_por_id[sumidero_state.id] = sumidero_state
+        state_id[sumidero_state.id] = sumidero_state
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
-                estado_por_id[state.id] = state
+                state_id[state.id] = state
                 if not state.sumidero:
                     for a in self.acciones.keys():
-                        ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
+                        dic_actions[a] = Hiperarista(self.get_probs(i, j, a), self.acciones[a])
+                    states_hg[state.id] = dic_actions
+                    dic_actions = {}
                 else:
-                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'ARRIBA', 30))
-                estados_hg[state.id] = ha_list
-                ha_list = []
-        hg = Hipergrafo(estados_hg)
+                    states_hg[state.id] = {'ARRIBA': Hiperarista({sumidero_state.id: 1}, 30)}
+        hg = Hipergrafo(states_hg)
         politica, heuristico = self.get_p_and_h()
-        return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
+        return state_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def get_probs(self, fila, columna, accion):
         sucesores = self.get_sucesores(fila, columna)

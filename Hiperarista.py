@@ -1,5 +1,4 @@
 class Hiperarista:
-    def __init__(self, dest, accion, coste):
-        self.destino = dest
-        self.accion = accion
+    def __init__(self, probs, coste):
+        self.probs = probs
         self.coste = coste
