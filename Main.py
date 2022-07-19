@@ -7,8 +7,8 @@ probabilidades_transicion = [[0.8, 0.1, 0.1, 0], # MOVERSE ARRIBA
                              [0.1, 0, 0.8, 0.1], # MOVERSE A LA IZQUIERDA
                              [0, 0.1, 0.1, 0.8]] # MOVERSE ABAJO
 
-numFilas = 5
-numCol = 5
+numFilas = 20
+numCol = 20
 numSumideros = 0
 
 p = Problema(numFilas, numCol, numSumideros, probabilidades_transicion)
@@ -25,3 +25,5 @@ t_f = time.time()
 
 print("RESULTADO: ")
 p.print_tablero(pi)
+
+print("Tiempo usado: "+str(t_f - t_i))
