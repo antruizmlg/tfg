@@ -52,7 +52,7 @@ class Problema:
                     for a in self.acciones.keys():
                         ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
                 else:
-                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'ARRIBA', 30))
+                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'ARRIBA', len(self.tablero)*2))
                 estados_hg[state.id] = ha_list
                 ha_list = []
         hg = Hipergrafo(estados_hg)
