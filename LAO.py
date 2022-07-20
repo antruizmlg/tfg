@@ -26,15 +26,15 @@ class LAO:
         else:
             algorithm = VI(self.p, self.V)
 
-        s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
+        s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
         while s is not None:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
-            Z = Hipergrafo(self.get_Z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
+            Z = Hipergrafo(self.get_z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
             algorithm.run(Z)
             bpsg = self.rebuild(envelope_graph, bpsg)
-            s = self.get_estado_no_terminal(list(set(bpsg.estados) & set(F)))
+            s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
         return self.p, self.V
 
     def update_fringe_set(self, F, I, s):
@@ -58,7 +58,7 @@ class LAO:
                         break
         return Hipergrafo(bpsg_states)
 
-    def get_Z(self, envelope_graph, s, estados):
+    def get_z(self, envelope_graph, s, estados):
         for st in envelope_graph.estados.keys():
             if not st in estados.keys():
                 p = self.p.politica[st]
@@ -67,10 +67,10 @@ class LAO:
                         if ha.accion == p and s in ha.destino.keys():
                             estados[st] = envelope_graph.estados[st]
                             if not s == st:
-                                estados = self.get_Z(envelope_graph, st, estados)
+                                estados = self.get_z(envelope_graph, st, estados)
         return estados
 
-    def get_estado_no_terminal(self, l):
+    def no_terminal_state(self, l):
         for e in l:
             if not self.ep_id[e].terminal:
                 return e
