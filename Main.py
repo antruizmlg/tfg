@@ -7,8 +7,8 @@ probabilidades_transicion = [[0.8, 0.2, 0, 0], # MOVERSE ARRIBA
                              [0, 0, 0.8, 0.2], # MOVERSE A LA IZQUIERDA
                              [0, 0.2, 0, 0.8]] # MOVERSE ABAJO
 
-numFilas = 20
-numCol = 20
+numFilas = 100
+numCol = 100
 numSumideros = 0
 
 p = Problema(numFilas, numCol, numSumideros, probabilidades_transicion)
@@ -18,8 +18,8 @@ p.print_info()
 
 t_i = time.time()
 
-lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, p, 'VI')
-pf, V = lao_algorithm.LAO()
+VI_algorithm = VI(pi, h, estado_por_id)
+VI_algorithm.run(hg)
 
 t_f = time.time()
 
