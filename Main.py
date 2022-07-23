@@ -2,10 +2,10 @@ from Problema import *
 from LAO import *
 import time
 
-probabilidades_transicion = [[0.8, 0.1, 0.1, 0], # MOVERSE ARRIBA
-                             [0.1, 0.8, 0, 0.1], # MOVERSE A LA DERECHA
-                             [0.1, 0, 0.8, 0.1], # MOVERSE A LA IZQUIERDA
-                             [0, 0.1, 0.1, 0.8]] # MOVERSE ABAJO
+probabilidades_transicion = [[0.8, 0.2, 0, 0], # MOVERSE ARRIBA
+                             [0, 0.8, 0.2, 0], # MOVERSE A LA DERECHA
+                             [0, 0, 0.8, 0.2], # MOVERSE A LA IZQUIERDA
+                             [0, 0.2, 0, 0.8]] # MOVERSE ABAJO
 
 numFilas = 20
 numCol = 20
