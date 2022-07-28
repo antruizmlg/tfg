@@ -24,22 +24,17 @@ class LAO:
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V) 
         else:
-            algorithm = VI(self.p, self.V)
+            algorithm = VI(self.p, self.V, self.ep_id)
 
-        total_time = 0
         s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
         while s is not None:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
             Z = Hipergrafo(self.get_z(bpsg, envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
-            t_i = time.time()
             algorithm.run(Z)
-            t_f = time.time()
-            total_time += t_f - t_i
             bpsg = self.rebuild(envelope_graph, bpsg)
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
-        print("VI time: "+str(total_time))
         return self.p, self.V
 
     def update_fringe_set(self, F, I, s):

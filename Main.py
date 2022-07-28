@@ -27,3 +27,17 @@ print("RESULTADO: ")
 p.print_tablero(pi)
 
 print("Tiempo usado: " + str(t_f - t_i))
+
+estado_por_id, hg, s0, h, pi = p.generar_problema()
+
+t_i = time.time()
+
+VI_algorithm = VI(pi, h, estado_por_id)
+VI_algorithm.run(hg)
+
+t_f = time.time()
+
+print("RESULTADO: ")
+p.print_tablero(pi)
+
+print("Tiempo usado: " + str(t_f - t_i))
