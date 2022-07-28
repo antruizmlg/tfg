@@ -2,11 +2,17 @@ from Problema import *
 from LAO import *
 import time
 
-probabilidades_transicion = [[0.8, 0.2, 0, 0], # MOVERSE ARRIBA
-                             [0.2, 0.8, 0, 0], # MOVERSE A LA DERECHA
-                             [0, 0, 0.8, 0.2], # MOVERSE A LA IZQUIERDA
-                             [0, 0.2, 0, 0.8]] # MOVERSE ABAJO
+probabilidades_transicion = {}
 
+probabilidades_transicion['N'] = {'N': 0.8, 'NE': 0.1, 'NO': 0.1}
+probabilidades_transicion['S'] = {'S': 0.8, 'SE': 0.1, 'SO': 0.1}
+probabilidades_transicion['E'] = {'E': 0.8, 'NE': 0.1, 'SE': 0.1}
+probabilidades_transicion['O'] = {'O': 0.8, 'NO': 0.1, 'SO': 0.1}
+probabilidades_transicion['NE'] = {'NE': 0.8, 'N': 0.1, 'E': 0.1}
+probabilidades_transicion['NO'] = {'NO': 0.8, 'N': 0.1, 'O': 0.1}
+probabilidades_transicion['SE'] = {'SE': 0.8, 'S': 0.1, 'E': 0.1}
+probabilidades_transicion['SO'] = {'SO': 0.8, 'S': 0.1, 'O': 0.1}
+ 
 numFilas = 20
 numCol = 20
 numSumideros = 0

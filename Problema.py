@@ -34,7 +34,7 @@ class Problema:
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
-        self.acciones = {'ARRIBA': 1, 'DERECHA': 1, 'IZQUIERDA': 1, 'ABAJO': 1}
+        self.acciones = {'NE': 1, 'N': 1, 'NO': 1, 'O': 1, 'SO': 1, 'S': 1, 'SE': 1, 'E': 1}
         self.probabilidades = probabilidades
 
     def generar_problema(self):
@@ -45,14 +45,14 @@ class Problema:
         sumidero_state.setTerminal()
         estado_por_id[sumidero_state.id] = sumidero_state
         for i in range(len(self.tablero)):
-            for j in range(len(self.tablero[i])):
+            for j in range(len(self.tablero[0])):
                 state = self.tablero[i][j]
                 estado_por_id[state.id] = state
                 if not state.sumidero:
                     for a in self.acciones.keys():
                         ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
                 else:
-                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'ARRIBA', len(self.tablero)*3))
+                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'N', len(self.tablero)*3))
                 estados_hg[state.id] = ha_list
                 ha_list = []
         hg = Hipergrafo(estados_hg)
@@ -60,22 +60,39 @@ class Problema:
         return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def get_probs(self, fila, columna, accion):
-        sucesores = self.get_sucesores(fila, columna)
-        probabilidades = {}
-        probs_sol = {}
-        
-        for suc in sucesores.values():
-            probabilidades[suc.id] = 0
-        
-        for a in self.acciones.keys():
-            probabilidades[sucesores[a].id] += self.get_probabilidad_por_transicion(accion, a)
+        probs = {}
 
-        for suc in probabilidades.keys():
-            prob = probabilidades[suc]
-            if prob > 0:
-                probs_sol[suc] = prob # Si la probabilidad de alcanzar un estado desde otro estado es 0, no se considera como sucesor.
+        for a in self.probabilidades[accion].keys():
+            suc = self.successor(fila, columna, a)
+            if suc in probs.keys():
+                probs[suc.id] += self.probabilidades[accion][a]
+            else:
+                probs[suc.id] = self.probabilidades[accion][a]
+        return probs
 
-        return probs_sol
+    def successor(self, fila, columna, accion):
+        if accion == 'N':
+            return self.get_successor_state(fila, columna, fila - 1, columna)
+        if accion == 'S':
+            return self.get_successor_state(fila, columna, fila + 1, columna)
+        if accion == 'E':
+            return self.get_successor_state(fila, columna, fila, columna + 1)            
+        if accion == 'O':
+            return self.get_successor_state(fila, columna, fila, columna - 1)
+        if accion == 'NE':
+            return self.get_successor_state(fila, columna, fila - 1, columna + 1)
+        if accion == 'NO':
+            return self.get_successor_state(fila, columna, fila - 1, columna - 1)
+        if accion == 'SE':
+            return self.get_successor_state(fila, columna, fila + 1, columna + 1)
+        if accion == 'SO':
+            return self.get_successor_state(fila, columna, fila + 1, columna - 1)
+
+    def get_successor_state(self, of, oc, nf, nc):
+        if nf >= 0 and nf < len(self.tablero) and nc >= 0 and nc < len(self.tablero[0]):
+            return self.tablero[nf][nc]
+        else:
+            return self.tablero[of][oc]
 
     def print_info(self):   
         print("Tamaño de tablero: " + str(len(self.tablero)) + "x" + str(len(self.tablero[0])))
@@ -91,74 +108,28 @@ class Problema:
                 if self.tablero[i][j].terminal:
                     print('TT', end = ' ')
                 elif self.tablero[i][j].sumidero:
-                    print('SS', end = ' ')
+                    print('..', end = ' ')
                 else:
-                    if p.get_politica(self.tablero[i][j].id) == 'ARRIBA':
-                        print('AR', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'DERECHA':
-                        print('DE', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'IZQUIERDA':
-                        print('IZ', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'ABAJO':
-                        print('AB', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'N':
+                        print('NN', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'S':
+                        print('SS', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'E':
+                        print('EE', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'O':
+                        print('OO', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'NE':
+                        print('NE', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'NO':
+                        print('NO', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'SE':
+                        print('SE', end = ' ')
+                    if p.get_politica(self.tablero[i][j].id) == 'SO':
+                        print('SO', end = ' ')
                     if p.get_politica(self.tablero[i][j].id) is None:
                         print('##', end = ' ')
             print("")
         print("------------------------------------------------------------------------")
-        
-    def get_probabilidad_por_transicion(self, a1, a2):
-        if a1 == 'ARRIBA' and a2 == 'ARRIBA':
-            return self.probabilidades[0][0]
-        if a1 == 'ARRIBA' and a2 == 'DERECHA':
-            return self.probabilidades[0][1]
-        if a1 == 'ARRIBA' and a2 == 'IZQUIERDA':
-            return self.probabilidades[0][2]            
-        if a1 == 'ARRIBA' and a2 == 'ABAJO':
-            return self.probabilidades[0][3]
-        if a1 == 'DERECHA' and a2 == 'ARRIBA':
-            return self.probabilidades[1][0]
-        if a1 == 'DERECHA' and a2 == 'DERECHA':
-            return self.probabilidades[1][1]
-        if a1 == 'DERECHA' and a2 == 'IZQUIERDA':
-            return self.probabilidades[1][2]
-        if a1 == 'DERECHA' and a2 == 'ABAJO':
-            return self.probabilidades[1][3]
-        if a1 == 'IZQUIERDA' and a2 == 'ARRIBA':
-            return self.probabilidades[2][0]
-        if a1 == 'IZQUIERDA' and a2 == 'DERECHA':
-            return self.probabilidades[2][1]
-        if a1 == 'IZQUIERDA' and a2 == 'IZQUIERDA':
-            return self.probabilidades[2][2]
-        if a1 == 'IZQUIERDA' and a2 == 'ABAJO':
-            return self.probabilidades[2][3]
-        if a1 == 'ABAJO' and a2 == 'ARRIBA':
-            return self.probabilidades[3][0]
-        if a1 == 'ABAJO' and a2 == 'DERECHA':
-            return self.probabilidades[3][1]
-        if a1 == 'ABAJO' and a2 == 'IZQUIERDA':
-            return self.probabilidades[3][2]
-        if a1 == 'ABAJO' and a2 == 'ABAJO':
-            return self.probabilidades[3][3]
-
-    def get_sucesores(self, fila, columna):
-        sucesores = {}
-        if fila - 1 >= 0:
-            sucesores['ARRIBA'] = self.tablero[fila-1][columna]
-        else:
-            sucesores['ARRIBA'] = self.tablero[fila][columna]
-        if fila + 1 < len(self.tablero):
-            sucesores['ABAJO'] = self.tablero[fila+1][columna]
-        else:
-            sucesores['ABAJO'] = self.tablero[fila][columna]
-        if columna - 1 >= 0:
-            sucesores['IZQUIERDA'] = self.tablero[fila][columna-1]
-        else:
-            sucesores['IZQUIERDA'] = self.tablero[fila][columna]
-        if columna + 1 < len(self.tablero[0]):
-            sucesores['DERECHA'] = self.tablero[fila][columna+1]
-        else:
-            sucesores['DERECHA'] = self.tablero[fila][columna]
-        return sucesores
 
     def get_p_and_h(self):
         politica = {}
