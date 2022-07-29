@@ -21,6 +21,8 @@ class LAO:
         envelope_graph = Hipergrafo({self.s0: []})
         bpsg = deepcopy(envelope_graph)
 
+        total_time = 0
+
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V) 
         else:
@@ -32,10 +34,13 @@ class LAO:
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
             Z = Hipergrafo(self.get_z(bpsg, envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
+            t_i = time.time()
             algorithm.run(Z)
-            bpsg = self.rebuild(envelope_graph, bpsg)
+            t_f = time.time()
+            total_time += t_f - t_i
+            bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0))
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
-        return self.p, self.V
+        return self.p, self.V, total_time
 
     def update_fringe_set(self, F, I, s):
         for st in self.hg.sucesores(s): # Por cada sucesor de s en el hipergrafo
@@ -45,18 +50,17 @@ class LAO:
         F.remove(s) # Eliminamos el estado s
         return F
 
-    def rebuild(self, envelope_graph, bpsg):
-        bpsg_states = {} # Inicializamos el diccionario de estados a vacío
-        for s in bpsg.estados.keys(): # Para cada estado del grafo solución
-            if self.p.get_politica(s) is not None:
-                for ha in envelope_graph.estados[s]: # Para cada hiperarista (asociado a una acción) del estado
-                    if ha.accion == self.p.politica[s]: # Si la acción asociada a la hiperarista es la mejor acción según la política greedy actual
-                        bpsg_states[s] = [ha] # Añadimos al diccionario una asociación con el estado y el hiperarista que refiere a su mejor acción según la política greedy
-                        for st in ha.destino.keys():
-                            if st not in bpsg_states.keys():
-                                bpsg_states[st] = []
-                        break
-        return Hipergrafo(bpsg_states)
+    def rebuild(self, envelope_graph, dict, s):
+        best_action = self.p.get_politica(s)
+        if best_action is not None:
+            for ha in envelope_graph.estados[s]:
+                if ha.accion == best_action and s not in dict.keys():
+                    dict[s] = [ha]
+                    for st in ha.destino.keys():
+                        dict = self.rebuild(envelope_graph, dict, st)
+        elif s not in dict.keys():
+                dict[s] = []
+        return dict
 
     def get_z(self, bpsg, envelope_graph, s, estados):
         for st in bpsg.estados.keys():

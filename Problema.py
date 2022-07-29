@@ -64,7 +64,7 @@ class Problema:
 
         for a in self.probabilidades[accion].keys():
             suc = self.successor(fila, columna, a)
-            if suc in probs.keys():
+            if suc.id in probs.keys():
                 probs[suc.id] += self.probabilidades[accion][a]
             else:
                 probs[suc.id] = self.probabilidades[accion][a]
@@ -105,28 +105,29 @@ class Problema:
         print("------------------------------------------------------------------------")
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[0])):
-                if self.tablero[i][j].terminal:
+                state = self.tablero[i][j]
+                if state.terminal:
                     print('TT', end = ' ')
-                elif self.tablero[i][j].sumidero:
+                elif state.sumidero:
                     print('..', end = ' ')
                 else:
-                    if p.get_politica(self.tablero[i][j].id) == 'N':
+                    if p.get_politica(state.id) == 'N':
                         print('NN', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'S':
+                    if p.get_politica(state.id) == 'S':
                         print('SS', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'E':
+                    if p.get_politica(state.id) == 'E':
                         print('EE', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'O':
+                    if p.get_politica(state.id) == 'O':
                         print('OO', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'NE':
+                    if p.get_politica(state.id) == 'NE':
                         print('NE', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'NO':
+                    if p.get_politica(state.id) == 'NO':
                         print('NO', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'SE':
+                    if p.get_politica(state.id) == 'SE':
                         print('SE', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) == 'SO':
+                    if p.get_politica(state.id) == 'SO':
                         print('SO', end = ' ')
-                    if p.get_politica(self.tablero[i][j].id) is None:
+                    if p.get_politica(state.id) is None:
                         print('##', end = ' ')
             print("")
         print("------------------------------------------------------------------------")
