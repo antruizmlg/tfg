@@ -13,8 +13,8 @@ probabilidades_transicion['NO'] = {'NO': 0.8, 'N': 0.1, 'O': 0.1}
 probabilidades_transicion['SE'] = {'SE': 0.8, 'S': 0.1, 'E': 0.1}
 probabilidades_transicion['SO'] = {'SO': 0.8, 'S': 0.1, 'O': 0.1}
  
-numFilas = 7
-numCol = 7
+numFilas = 3
+numCol = 3
 numSumideros = 0
 
 p = Problema(numFilas, numCol, numSumideros, probabilidades_transicion)
@@ -22,20 +22,24 @@ estado_por_id, hg, s0, h, pi = p.generar_problema()
 
 p.print_info()
 
+t_i = time.time()
+
 lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, p, 'VI')
-pf, V, time_lao = lao_algorithm.LAO()
+pf, V = lao_algorithm.LAO()
+
+t_f = time.time()
 
 print("RESULTADO: ")
 p.print_tablero(pi)
 
-print("Tiempo usado (LAO*): " + str(time_lao))
+print("Tiempo usado (LAO*): " + str(t_f - t_i))
 
 estado_por_id, hg, s0, h, pi = p.generar_problema()
 
 t_i = time.time()
 
-VI_algorithm = VI(pi, h, estado_por_id)
-VI_algorithm.run(hg)
+algorithm = PI(pi, h, estado_por_id)
+algorithm.run(hg)
 
 t_f = time.time()
 print("Tiempo usado (VI): " + str(t_f - t_i))

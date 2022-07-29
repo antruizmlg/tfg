@@ -21,8 +21,6 @@ class LAO:
         envelope_graph = Hipergrafo({self.s0: []})
         bpsg = deepcopy(envelope_graph)
 
-        total_time = 0
-
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V) 
         else:
@@ -33,14 +31,11 @@ class LAO:
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
             envelope_graph = self.update_envelope_graph(envelope_graph, I, s)
-            Z = Hipergrafo(self.get_z(bpsg, envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
-            t_i = time.time()
+            Z = Hipergrafo(self.get_z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z
             algorithm.run(Z)
-            t_f = time.time()
-            total_time += t_f - t_i
             bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0))
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
-        return self.p, self.V, total_time
+        return self.p, self.V
 
     def update_fringe_set(self, F, I, s):
         for st in self.hg.sucesores(s): # Por cada sucesor de s en el hipergrafo
@@ -62,14 +57,14 @@ class LAO:
                 dict[s] = []
         return dict
 
-    def get_z(self, bpsg, envelope_graph, s, estados):
-        for st in bpsg.estados.keys():
+    def get_z(self, envelope_graph, s, estados):
+        for st in envelope_graph.estados.keys():
             if not st in estados.keys():
-                for ha in bpsg.estados[st]:
+                for ha in envelope_graph.estados[st]:
                     if s in ha.destino.keys():
                         estados[st] = envelope_graph.estados[st]
                         if not s == st:
-                            estados = self.get_z(bpsg, envelope_graph, st, estados)
+                            estados = self.get_z(envelope_graph, st, estados)
         return estados
 
     def no_terminal_state(self, l):
