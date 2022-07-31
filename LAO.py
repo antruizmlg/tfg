@@ -22,7 +22,7 @@ class LAO:
         bpsg = deepcopy(envelope_graph)
 
         if self.algorithm == 'PI':
-            algorithm = PI(self.p, self.V) 
+            algorithm = PI(self.p, self.V, self.ep_id) 
         else:
             algorithm = VI(self.p, self.V, self.ep_id)
 

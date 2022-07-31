@@ -34,7 +34,7 @@ class Problema:
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
-        self.acciones = {'NE': 1, 'N': 1, 'NO': 1, 'O': 1, 'SO': 1, 'S': 1, 'SE': 1, 'E': 1}
+        self.acciones = {'N': 1, 'S': 1, 'E': 1, 'O': 1}
         self.probabilidades = probabilidades
 
     def generar_problema(self):
@@ -79,14 +79,6 @@ class Problema:
             return self.get_successor_state(fila, columna, fila, columna + 1)            
         if accion == 'O':
             return self.get_successor_state(fila, columna, fila, columna - 1)
-        if accion == 'NE':
-            return self.get_successor_state(fila, columna, fila - 1, columna + 1)
-        if accion == 'NO':
-            return self.get_successor_state(fila, columna, fila - 1, columna - 1)
-        if accion == 'SE':
-            return self.get_successor_state(fila, columna, fila + 1, columna + 1)
-        if accion == 'SO':
-            return self.get_successor_state(fila, columna, fila + 1, columna - 1)
 
     def get_successor_state(self, of, oc, nf, nc):
         if nf >= 0 and nf < len(self.tablero) and nc >= 0 and nc < len(self.tablero[0]):
@@ -119,14 +111,6 @@ class Problema:
                         print('EE', end = ' ')
                     if p.get_politica(state.id) == 'O':
                         print('OO', end = ' ')
-                    if p.get_politica(state.id) == 'NE':
-                        print('NE', end = ' ')
-                    if p.get_politica(state.id) == 'NO':
-                        print('NO', end = ' ')
-                    if p.get_politica(state.id) == 'SE':
-                        print('SE', end = ' ')
-                    if p.get_politica(state.id) == 'SO':
-                        print('SO', end = ' ')
                     if p.get_politica(state.id) is None:
                         print('##', end = ' ')
             print("")
