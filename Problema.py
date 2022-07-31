@@ -15,6 +15,9 @@ class Problema:
                 id = 's' + str(i) + "_" + str(j)
                 self.tablero[i][j] = Estado(id)
 
+        self.ss = Estado('s_ss')
+        self.ss.setTerminal()
+
         self.filaFinal = self.generador_posicion_final(numFilas - 1)
         self.columnaFinal = self.generador_posicion_final(numColumnas - 1)
 
@@ -41,9 +44,7 @@ class Problema:
         estado_por_id = {}
         estados_hg = {}
         ha_list = []
-        sumidero_state = Estado('s_ss')
-        sumidero_state.setTerminal()
-        estado_por_id[sumidero_state.id] = sumidero_state
+        estado_por_id[self.ss.id] = self.ss
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[0])):
                 state = self.tablero[i][j]
@@ -52,7 +53,7 @@ class Problema:
                     for a in self.acciones.keys():
                         ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
                 else:
-                    ha_list.append(Hiperarista({sumidero_state.id: 1}, 'N', len(self.tablero)*3))
+                    ha_list.append(Hiperarista({self.ss.id: 1}, 'N', len(self.tablero)*3))
                 estados_hg[state.id] = ha_list
                 ha_list = []
         hg = Hipergrafo(estados_hg)
@@ -93,7 +94,7 @@ class Problema:
         print("Celda inicial: [" + str(self.filaInicial) + ", " + str(self.columnaInicial) + "]")
         print("Celda objetivo: [" + str(self.filaFinal) + ", " + str(self.columnaFinal) + "]\n")
 
-    def print_tablero(self, p):
+    def print_solution(self, p):
         print("------------------------------------------------------------------------")
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[0])):
@@ -124,8 +125,8 @@ class Problema:
                 state = self.tablero[i][j]
                 politica[state.id] = None
                 heuristico[state.id] = state.h()
-        politica['s_ss'] = None
-        heuristico['s_ss'] = 0
+        politica[self.ss.id] = None
+        heuristico[self.ss.id] = 0
         return Politica(politica), FuncionDeValor(heuristico)
 
     @staticmethod

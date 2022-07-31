@@ -16,17 +16,15 @@ numSumideros = 0
 p = Problema(numFilas, numCol, numSumideros, probabilidades_transicion)
 estado_por_id, hg, s0, h, pi = p.generar_problema()
 
-p.print_info()
-
 t_i = time.time()
 
-lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, p, 'PI')
-pf, V = lao_algorithm.LAO()
+lao_algorithm = LAO(estado_por_id, hg, s0, h, pi, 'VI')
+lao_algorithm.LAO()
 
 t_f = time.time()
 
 print("RESULTADO: ")
-p.print_tablero(pi)
+p.print_solution(pi)
 
 print("Tiempo usado (LAO*): " + str(t_f - t_i))
 
@@ -34,10 +32,10 @@ estado_por_id, hg, s0, h, pi = p.generar_problema()
 
 t_i = time.time()
 
-algorithm = PI(pi, h, estado_por_id)
+algorithm = VI(pi, h, estado_por_id)
 algorithm.run(hg)
 
 t_f = time.time()
-print("Tiempo usado (PI): " + str(t_f - t_i))
+print("Tiempo usado (VI): " + str(t_f - t_i))
 
-p.print_tablero(pi)
+p.print_solution(pi)

@@ -5,13 +5,12 @@ from copy import *
 import time
 
 class LAO:
-    def __init__(self, est_id, hg, ini_state, h, pi, p, algorithm):
+    def __init__(self, est_id, hg, ini_state, h, pi, algorithm):
         self.ep_id = est_id
         self.hg = hg
         self.s0 = ini_state.id
         self.V = h
         self.p = pi
-        self.problem = p
         self.algorithm = algorithm
 
     def LAO(self):
