@@ -1,3 +1,4 @@
+""" esta clase representa un diccionario con asociaciones (estado -> valor)"""
 class FuncionDeValor:    
     def __init__(self, dictValores):
         self.dv = dictValores

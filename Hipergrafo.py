@@ -1,7 +1,11 @@
+""" un hipergrafo está formado por un diccionario que contiene
+    asociaciones (estado -> lista de conectores): se asocia cada estado
+    al conjunto de k-conectores que salen de él"""
 class Hipergrafo:
     def __init__(self, estados):
         self.estados = estados
 
+    """ Método para obtener la lista de estados sucesores de un estado en el hipergrafo"""
     def sucesores(self, s):
         list_ha = self.estados[s] # Obtenemos la lista de hiperaristas cuyo origen es el estado s.
         list_sucesores = [] # Inicializamos la lista de sucesores
