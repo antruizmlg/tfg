@@ -4,14 +4,11 @@ class Estado:
         self.terminal = False
         self.sumidero = False
 
-    def setTerminal(self):
-        self.terminal = True
+    def h_zero(self):
+        return 0
 
-    def setSumidero(self):
-        self.sumidero = True
-
-    def h(self):
-            return 0
+    def h_MD(self, fil, col, fil_obj, col_obj):
+        return abs(fil_obj - fil) + abs(col - col_obj)
 
     def __hash__(self):
         return hash(self.id)

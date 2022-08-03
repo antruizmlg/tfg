@@ -2,11 +2,11 @@ from copy import *
 import random
 
 class PI:
-    def __init__(self, p, V, dict_est):
+    def __init__(self, p, V, dict_state):
         self.hg = None
         self.p = p
         self.V = V
-        self.dict_est = dict_est
+        self.dict_state = dict_state
 
     def run(self, hg):
         self.hg = hg

@@ -16,12 +16,12 @@ class Problema:
                 self.tablero[i][j] = Estado(id)
 
         self.ss = Estado('s_ss')
-        self.ss.setTerminal()
+        self.ss.terminal = True
 
         self.filaFinal = self.generador_posicion_final(numFilas - 1)
         self.columnaFinal = self.generador_posicion_final(numColumnas - 1)
 
-        self.tablero[self.filaFinal][self.columnaFinal].setTerminal()
+        self.tablero[self.filaFinal][self.columnaFinal].terminal = True
 
         self.filaInicial = numFilas // 2
         self.columnaInicial = numColumnas // 2
@@ -33,7 +33,7 @@ class Problema:
             numFila = random.randint(0, numFilas - 1)
             numCol = random.randint(0, numColumnas - 1)
             if not self.tablero[numFila][numCol].sumidero and not self.tablero[numFila][numCol].terminal and not (numFila == self.filaInicial and numCol == self.columnaInicial):
-                self.tablero[numFila][numCol].setSumidero()
+                self.tablero[numFila][numCol].sumidero = True
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
@@ -41,14 +41,14 @@ class Problema:
         self.probabilidades = probabilidades
 
     def generar_problema(self):
-        estado_por_id = {}
+        dict_state = {}
         estados_hg = {}
         ha_list = []
-        estado_por_id[self.ss.id] = self.ss
+        dict_state[self.ss.id] = self.ss
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[0])):
                 state = self.tablero[i][j]
-                estado_por_id[state.id] = state
+                dict_state[state.id] = state
                 if not state.sumidero:
                     for a in self.acciones.keys():
                         ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
@@ -58,7 +58,7 @@ class Problema:
                 ha_list = []
         hg = Hipergrafo(estados_hg)
         politica, heuristico = self.get_p_and_h()
-        return estado_por_id, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
+        return dict_state, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica
 
     def get_probs(self, fila, columna, accion):
         probs = {}
@@ -124,7 +124,7 @@ class Problema:
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
                 politica[state.id] = None
-                heuristico[state.id] = state.h()
+                heuristico[state.id] = state.h_zero()
         politica[self.ss.id] = None
         heuristico[self.ss.id] = 0
         return Politica(politica), FuncionDeValor(heuristico)
