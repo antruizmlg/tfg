@@ -37,7 +37,7 @@ class Problema:
                 i += 1
                 self.sumideros.append("["+str(numFila)+", "+str(numCol)+"]")
 
-        self.acciones = {'N': 1, 'S': 1, 'E': 1, 'O': 1}
+        self.acciones = {'N': 1, 'S': 1, 'E': 1, 'O': 1, '-': 1}
         self.probabilidades = probabilidades
 
     def generar_problema(self):
@@ -51,7 +51,8 @@ class Problema:
                 dict_state[state.id] = state
                 if not state.sumidero:
                     for a in self.acciones.keys():
-                        ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
+                        if not a == '-':
+                            ha_list.append(Hiperarista(self.get_probs(i, j, a), a, self.acciones[a]))
                 else:
                     ha_list.append(Hiperarista({self.ss.id: 1}, 'N', len(self.tablero)*3))
                 estados_hg[state.id] = ha_list
@@ -80,6 +81,8 @@ class Problema:
             return self.get_successor_state(fila, columna, fila, columna + 1)            
         if accion == 'O':
             return self.get_successor_state(fila, columna, fila, columna - 1)
+        if accion == '-':
+            return self.tablero[fila][columna]
 
     def get_successor_state(self, of, oc, nf, nc):
         if nf >= 0 and nf < len(self.tablero) and nc >= 0 and nc < len(self.tablero[0]):

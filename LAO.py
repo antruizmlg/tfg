@@ -18,12 +18,16 @@ class LAO:
         F = [self.s0]
         I = []
 
+        eg_sizes = []
+        sg_sizes = []
+        Z_sizes = []
+
         envelope_graph = Hipergrafo({self.s0: []})
         bpsg = deepcopy(envelope_graph)
 
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V, self.dict_state) 
-        else:
+        if self.algorithm == 'VI':
             algorithm = VI(self.p, self.V, self.dict_state)
 
         s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
@@ -35,7 +39,10 @@ class LAO:
             algorithm.run(Z)
             bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0))
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
-        return self.p, self.V
+            eg_sizes.append(len(envelope_graph.estados))
+            sg_sizes.append(len(bpsg.estados))
+            Z_sizes.append(len(Z.estados))
+        return eg_sizes, sg_sizes, Z_sizes
 
     def update_fringe_set(self, F, I, s):
         for st in self.hg.sucesores(s): # Por cada sucesor de s en el hipergrafo
