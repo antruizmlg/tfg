@@ -11,7 +11,7 @@ class PI:
     def run(self, hg):
         self.hg = hg
 
-        self.generate_arbitrary_policy()
+        self.generate_arbitrary_policy() # Generamos una política arbitraria
         
         while True:
             old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
@@ -28,7 +28,7 @@ class PI:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
             for s in self.hg.estados.keys(): # Para cada estado
-                if not self.dict_est[s].terminal:
+                if not self.dict_state[s].terminal: # Si el estado no es terminal
                     for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
                         if self.p.get_politica(s) == ha.accion: # Si la acción dictada por la política coincide con la asociada al hiperarista, esta es la acción que debemos evaluar
                             nv = ha.coste
@@ -37,12 +37,12 @@ class PI:
                             self.V.set_valor(s, round(nv, 2)) # Modificamos el nuevo valor del estado actual.
                             break
 
-            if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()):
+            if all(oldV.dv[s] == self.V.dv[s] for s in oldV.dv.keys()): # Si llegamos a convergencia, salimos del bucle
                 break
 
     def policy_improvement(self):
         for s in self.hg.estados.keys(): # Para cada estado del grafo.
-            if not self.dict_est[s].terminal:
+            if not self.dict_state[s].terminal:
                 min_coste = float('inf')
                 for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado.
                     coste_accion = ha.coste
@@ -53,6 +53,7 @@ class PI:
                         min_coste = coste_accion # Actualizamos el mínimo coste encontrado hasta el momento
                 self.p.set_politica(s, mejor_accion) # Actualizamos la política con la mejor acción
 
+    """Método que genera una política arbitraria de forma aleatoria"""
     def generate_arbitrary_policy(self):
         for s in self.hg.estados.keys():
             rn = random.randint(0, 3)

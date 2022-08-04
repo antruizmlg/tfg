@@ -5,7 +5,7 @@ from copy import *
 import time
 
 class LAO:
-    def __init__(self, dict_state, hg, ini_state, h, pi, p, algorithm):
+    def __init__(self, dict_state, hg, ini_state, h, pi, algorithm):
         self.dict_state = dict_state # Diccionario con asociaciones (ID de estado -> Objeto estado)
         self.hg = hg # Hipergrafo
         self.s0 = ini_state.id # Estado inicial
