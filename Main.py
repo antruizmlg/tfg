@@ -28,8 +28,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 5
-numCol = 5
+numFilas = 20
+numCol = 20
 numSumideros = 0
 
 def mean(list):
