@@ -1,6 +1,8 @@
 from Problema import *
 from LAO import *
-import time
+
+import matplotlib
+import matplotlib.pyplot as plt
 
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
@@ -30,18 +32,34 @@ numFilas = 5
 numCol = 5
 numSumideros = 0
 
+def mean(list):
+    return sum(list)/len(list)
+
+def resize(it, Z_size):
+    for i in range(len(it) - len(Z_size)):
+        Z_size.append(None)
+    return Z_size
+
+def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label):
+    fig, ax = plt.subplots()
+    ax.plot(X, Y_1, label = 'Sistema 1')
+    ax.plot(X, Y_2, label = 'Sistema 2')
+    ax.plot(X, Y_3, label = 'Sistema 3')
+    ax.legend(loc = 'upper left')
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    plt.show()
+
 def run_algorithm(p, algorithm):
     dict_state, hg, s0, h, pi = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
     p.print_info() # Imprimimos información del problema
 
-    t_i = time.time() # Iniciamos contador
-
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
-        eg_sizes, sg_sizes, Z_sizes = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
+        Z_sizes, Z_percent = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
         vi_algorithm.run(hg)
@@ -49,16 +67,25 @@ def run_algorithm(p, algorithm):
         pi_algorithm = PI(pi, h, dict_state)
         pi_algorithm.run(hg)
 
-    # Finalizamos contador
-    t_f = time.time()
-
-    #Imprimimos resultado
-    print("RESULTADO: ")
-    p.print_solution(pi)
-
-    # Imprimimos tiempo usado
-    print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
+    return Z_sizes, Z_percent
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-run_algorithm(p_1, 'PI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+p_2 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                        # y el sistema transitorio                                                
+p_3 = Problema(numFilas, numCol, numSumideros, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                        # y el sistema transitorio
+
+Z_sizes_1, Z_percent_1 = run_algorithm(p_1, 'LAO*')
+Z_sizes_2, Z_percent_2 = run_algorithm(p_2, 'LAO*')
+Z_sizes_3, Z_percent_3 = run_algorithm(p_3, 'LAO*')
+
+it = []
+for i in range(numFilas*numCol):
+    it.append(i + 1)
+
+Z_percent_1 = resize(it, Z_percent_1)
+Z_percent_2 = resize(it, Z_percent_2)
+Z_percent_3 = resize(it, Z_percent_3)
+
+generate_plot(it, Z_percent_1, Z_percent_2, Z_percent_3, 'Iteración', 'Porcentaje tamaño Z')

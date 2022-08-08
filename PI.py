@@ -10,8 +10,6 @@ class PI:
 
     def run(self, hg):
         self.hg = hg
-
-        self.generate_arbitrary_policy() # Generamos una política arbitraria
         
         while True:
             old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
@@ -52,16 +50,3 @@ class PI:
                         mejor_accion = ha.accion # Actualizamos la mejor acción hasta el momento
                         min_coste = coste_accion # Actualizamos el mínimo coste encontrado hasta el momento
                 self.p.set_politica(s, mejor_accion) # Actualizamos la política con la mejor acción
-
-    """Método que genera una política arbitraria de forma aleatoria"""
-    def generate_arbitrary_policy(self):
-        for s in self.hg.estados.keys():
-            rn = random.randint(0, 3)
-            if rn == 0:
-                self.p.set_politica(s, 'N')
-            elif rn == 1:
-                self.p.set_politica(s, 'S')
-            elif rn == 2:
-                self.p.set_politica(s, 'E')
-            elif rn == 3:
-                self.p.set_politica(s, 'O')
