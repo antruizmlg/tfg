@@ -141,7 +141,7 @@ class Problema:
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
                 politica[state.id] = None 
-                heuristico[state.id] = state.h_zero() 
+                heuristico[state.id] = state.h_zero()
         politica[self.ss.id] = None
         heuristico[self.ss.id] = 0
         return Politica(politica), FuncionDeValor(heuristico)

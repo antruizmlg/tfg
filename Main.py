@@ -47,8 +47,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 5
-numCol = 5
+numFilas = 20
+numCol = 20
 numSumideros = 0
 
 def run_algorithm(p, algorithm):
@@ -86,8 +86,8 @@ it = []
 for i in range(numFilas * numCol):
     it.append(i + 1)
 
-Z_sizes1 = resize(it, Z_sizes1)
-Z_sizes2 = resize(it, Z_sizes2)
-Z_sizes3 = resize(it, Z_sizes3)
+bpsg_size1 = resize(it, bpsg_size1)
+bpsg_size2 = resize(it, bpsg_size2)
+bpsg_size3 = resize(it, bpsg_size3)
 
-generate_plot(it, Z_sizes1, Z_sizes2, Z_sizes3, 'Número de iteración', 'Tamaño del conjunto Z')
+generate_plot(it, bpsg_size1, bpsg_size2, bpsg_size3, 'Iteración', 'Número de estados del grafo solución')
