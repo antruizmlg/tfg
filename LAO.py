@@ -19,9 +19,9 @@ class LAO:
         I = []
 
         # Listas para almacenar el tamaño del grafo explícito, el grafo solución y el hipergrafo Z
-        eg_sizes = []
-        sg_sizes = []
         Z_sizes = []
+        Z_percent = []
+        bpsg_size = []
 
         # Inicialización grafo explícito y grafo solución
         envelope_graph = Hipergrafo({self.s0: []})
@@ -44,13 +44,12 @@ class LAO:
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
             bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0)) # Reconstruimos el "best partian solution graph" 
 
-            # Añadimos los tamaños de los hipergrafos a sus respectivas listas
-            eg_sizes.append(len(envelope_graph.estados))
-            sg_sizes.append(len(bpsg.estados))
             Z_sizes.append(len(Z.estados))
+            Z_percent.append(len(Z.estados)/len(self.hg.estados) * 100)
+            bpsg_size.append(len(bpsg.estados))
 
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
-        return eg_sizes, sg_sizes, Z_sizes # Devolvemos tamaños de los hipergrafos en cada iteración
+        return Z_sizes, Z_percent, bpsg_size # Devolvemos tamaños de los hipergrafos en cada iteración
 
     """ método para acutalizar el conjunto de estados 'fringe' """
     def update_fringe_set(self, F, I, s):

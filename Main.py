@@ -57,12 +57,10 @@ def run_algorithm(p, algorithm):
 
     p.print_info() # Imprimimos información del problema
 
-    t_i = time.time() # Iniciamos contador
-
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
-        eg_sizes, sg_sizes, Z_sizes = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
+        Z_sizes, Z_percent, bpsg_size = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
         vi_algorithm.run(hg)
@@ -70,16 +68,26 @@ def run_algorithm(p, algorithm):
         pi_algorithm = PI(pi, h, dict_state)
         pi_algorithm.run(hg)
 
-    # Finalizamos contador
-    t_f = time.time()
+    return Z_sizes, Z_percent, bpsg_size
 
-    #Imprimimos resultado
-    print("RESULTADO: ")
-    p.print_solution(pi)
-
-    # Imprimimos tiempo usado
-    print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-run_algorithm(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+p_2 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                        # y el sistema transitorio
+p_3 = Problema(numFilas, numCol, numSumideros, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                        # y el sistema transitorio
+
+Z_sizes1, Z_percent1, bpsg_size1 = run_algorithm(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+Z_sizes2, Z_percent2, bpsg_size2 = run_algorithm(p_2, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+Z_sizes3, Z_percent3, bpsg_size3 = run_algorithm(p_3, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+
+it = []
+for i in range(numFilas * numCol):
+    it.append(i + 1)
+
+Z_sizes1 = resize(it, Z_sizes1)
+Z_sizes2 = resize(it, Z_sizes2)
+Z_sizes3 = resize(it, Z_sizes3)
+
+generate_plot(it, Z_sizes1, Z_sizes2, Z_sizes3, 'Número de iteración', 'Tamaño del conjunto Z')
