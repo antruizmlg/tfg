@@ -2,6 +2,27 @@ from Problema import *
 from LAO import *
 import time
 
+import matplotlib
+import matplotlib.pyplot as plt
+
+def mean(list):
+    return sum(list)/len(list)
+
+def resize(it, Z_size):
+    for i in range(len(it) - len(Z_size)):
+        Z_size.append(None)
+    return Z_size
+
+def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label):
+    fig, ax = plt.subplots()
+    ax.plot(X, Y_1, label = 'Sistema 1')
+    ax.plot(X, Y_2, label = 'Sistema 2')
+    ax.plot(X, Y_3, label = 'Sistema 3')
+    ax.legend(loc = 'upper left')
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    plt.show()
+
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
 probs_2 = {}
