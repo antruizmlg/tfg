@@ -4,6 +4,8 @@ from LAO import *
 import matplotlib
 import matplotlib.pyplot as plt
 
+import time
+
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
 probs_2 = {}
@@ -28,8 +30,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 20
-numCol = 20
+numFilas = 5
+numCol = 5
 numSumideros = 0
 
 def mean(list):
@@ -59,7 +61,7 @@ def run_algorithm(p, algorithm):
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
-        Z_sizes, Z_percent = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
+        lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
         vi_algorithm.run(hg)
@@ -67,25 +69,39 @@ def run_algorithm(p, algorithm):
         pi_algorithm = PI(pi, h, dict_state)
         pi_algorithm.run(hg)
 
-    return Z_sizes, Z_percent
+#    return Z_sizes, Z_percent
 
-p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                        # y el sistema transitorio
-p_2 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                        # y el sistema transitorio                                                
-p_3 = Problema(numFilas, numCol, numSumideros, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                        # y el sistema transitorio
+numEstados = []
+Tiempo_S1 = []
+Tiempo_S2 = []
+Tiempo_S3 = []
 
-Z_sizes_1, Z_percent_1 = run_algorithm(p_1, 'LAO*')
-Z_sizes_2, Z_percent_2 = run_algorithm(p_2, 'LAO*')
-Z_sizes_3, Z_percent_3 = run_algorithm(p_3, 'LAO*')
+while numFilas < 55 and numCol < 55:
+    numEstados.append(numFilas * numCol)
 
-it = []
-for i in range(numFilas*numCol):
-    it.append(i + 1)
+    p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                            # y el sistema transitorio
+    p_2 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                            # y el sistema transitorio                                                                                                       
+    p_3 = Problema(numFilas, numCol, numSumideros, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                            # y el sistema transitorio
+    
+    t_i = time.time()
+    run_algorithm(p_1, 'LAO*')
+    t_f = time.time()
+    Tiempo_S1.append(t_f - t_i)
 
-Z_percent_1 = resize(it, Z_percent_1)
-Z_percent_2 = resize(it, Z_percent_2)
-Z_percent_3 = resize(it, Z_percent_3)
+    t_i = time.time()
+    run_algorithm(p_2, 'LAO*')
+    t_f = time.time()
+    Tiempo_S2.append(t_f - t_i)
 
-generate_plot(it, Z_percent_1, Z_percent_2, Z_percent_3, 'Iteración', 'Porcentaje tamaño Z')
+    t_i = time.time()
+    run_algorithm(p_3, 'LAO*')
+    t_f = time.time()
+    Tiempo_S3.append(t_f - t_i)
+
+    numFilas += 5
+    numCol += 5
+
+generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)')
