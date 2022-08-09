@@ -60,7 +60,7 @@ def run_algorithm(p, algorithm):
 
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
+        lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'PI')
         lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
@@ -76,7 +76,7 @@ Tiempo_S1 = []
 Tiempo_S2 = []
 Tiempo_S3 = []
 
-while numFilas < 55 and numCol < 55:
+while numFilas < 30 and numCol < 30:
     numEstados.append(numFilas * numCol)
 
     p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
