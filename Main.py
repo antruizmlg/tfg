@@ -2,6 +2,9 @@ from Problema import *
 from LAO import *
 import time
 
+import matplotlib
+import matplotlib.pyplot as plt
+
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
 probs_2 = {}
@@ -29,6 +32,16 @@ probs_3['O'] = {'O': 0.8, '-': 0.2}
 numFilas = 5
 numCol = 5
 numSumideros = 0
+
+def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label):
+    fig, ax = plt.subplots()
+    ax.plot(X, Y_1, label = 'Sistema 1')
+    ax.plot(X, Y_2, label = 'Sistema 2')
+    ax.plot(X, Y_3, label = 'Sistema 3')
+    ax.legend(loc = 'upper left')
+    ax.set_xlabel(x_label)
+    ax.set_ylabel(y_label)
+    plt.show()
 
 def run_algorithm(p, algorithm):
     dict_state, hg, s0, h, pi = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
