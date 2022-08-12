@@ -50,7 +50,7 @@ def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label, name):
     ax.legend(loc = 'upper left')
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
-    plt.show()
+    plt.savefig(name)
 
 def run_algorithm(p, algorithm):
     dict_state, hg, s0, h, pi = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -76,7 +76,7 @@ Tiempo_S1 = []
 Tiempo_S2 = []
 Tiempo_S3 = []
 
-while numFilas < 10 and numCol < 10:
+while numFilas < 100 and numCol < 100:
     numEstados.append(numFilas * numCol)
 
     p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
@@ -87,30 +87,28 @@ while numFilas < 10 and numCol < 10:
                                                             # y el sistema transitorio
     
     t_i = time.time()
-    run_algorithm(p_1, 'LAO*')
+    run_algorithm(p_1, 'VI')
     t_f = time.time()
     Tiempo_S1.append(t_f - t_i)
 
     t_i = time.time()
-    run_algorithm(p_2, 'LAO*')
+    run_algorithm(p_2, 'VI')
     t_f = time.time()
     Tiempo_S2.append(t_f - t_i)
 
     t_i = time.time()
-    run_algorithm(p_3, 'LAO*')
+    run_algorithm(p_3, 'VI')
     t_f = time.time()
     Tiempo_S3.append(t_f - t_i)
 
     numFilas += 5
     numCol += 5
 
-"""
-f = open('stats_time_lao_vi_hDM.txt', 'a')
-f.write(str(numEstados))
-f.write(str(Tiempo_S1))
-f.write(str(Tiempo_S2))
-f.write(str(Tiempo_S3))
+f = open('stats_vi.txt', 'a')
+f.write(str(numEstados) + "\n")
+f.write(str(Tiempo_S1) + "\n")
+f.write(str(Tiempo_S2) + "\n")
+f.write(str(Tiempo_S3) + "\n")
 f.close()
-"""
 
-generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)', 'time_lao_vi_hDM.png')
+generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)', 'time_vi.png')
