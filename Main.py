@@ -42,7 +42,7 @@ def resize(it, Z_size):
         Z_size.append(None)
     return Z_size
 
-def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label):
+def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label, name):
     fig, ax = plt.subplots()
     ax.plot(X, Y_1, label = 'Sistema 1')
     ax.plot(X, Y_2, label = 'Sistema 2')
@@ -60,7 +60,7 @@ def run_algorithm(p, algorithm):
 
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'PI')
+        lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
         lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
@@ -76,7 +76,7 @@ Tiempo_S1 = []
 Tiempo_S2 = []
 Tiempo_S3 = []
 
-while numFilas < 30 and numCol < 30:
+while numFilas < 10 and numCol < 10:
     numEstados.append(numFilas * numCol)
 
     p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
@@ -104,4 +104,13 @@ while numFilas < 30 and numCol < 30:
     numFilas += 5
     numCol += 5
 
-generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)')
+"""
+f = open('stats_time_lao_vi_hDM.txt', 'a')
+f.write(str(numEstados))
+f.write(str(Tiempo_S1))
+f.write(str(Tiempo_S2))
+f.write(str(Tiempo_S3))
+f.close()
+"""
+
+generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)', 'time_lao_vi_hDM.png')
