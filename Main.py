@@ -29,13 +29,15 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 30
-numCol = 30
+numFilas = 10
+numCol = 10
 numSumideros = 0
 
-def run_algorithm(p, algorithm):
-    dict_state, hg, s0, h, pi = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
+def solve_problem(p, algorithm, heuristic = None):
+    dict_state, hg, s0 = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
+
+    pi, h = p.get_initial_policy_and_heuristic(heuristic)
 
     p.print_info() # Imprimimos información del problema
 
@@ -64,4 +66,4 @@ def run_algorithm(p, algorithm):
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-run_algorithm(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

@@ -64,10 +64,8 @@ class Problema:
                 ha_list = []
                 # Vaciamos la lista de k-conectores para el siguiente estado
         hg = Hipergrafo(estados_hg) # Creamos el hipergrafo con el diccionario de estados.
-        politica, heuristico = self.get_p_and_h() # Obtenemos la política inicial y el heurístico
-        return dict_state, hg, self.tablero[self.filaInicial][self.columnaInicial], heuristico, politica 
-        # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial,
-        # el heurístico y la política inicial
+        return dict_state, hg, self.tablero[self.filaInicial][self.columnaInicial]
+        # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
 
     """método que recibe una fila, una columna y una acción, y devuelve un diccionario con asociaciones (estado -> probabilidad) asociada al
     k-conector que sale del estado en la posición (fila, columna) del tablero al realizar la acción 'a' """
@@ -134,14 +132,17 @@ class Problema:
         print("------------------------------------------------------------------------")
 
     """Método para obtener política inicial y heurístico"""
-    def get_p_and_h(self):
+    def get_initial_policy_and_heuristic(self, heuristic):
         politica = {}
         heuristico = {}
         for i in range(len(self.tablero)): 
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
-                politica[state.id] = None 
-                heuristico[state.id] = state.h_MD(i, j, self.filaFinal, self.columnaFinal)
+                politica[state.id] = None
+                if heuristic == 'MD': 
+                    heuristico[state.id] = state.h_MD(i, j, self.filaFinal, self.columnaFinal)
+                else:
+                    heuristico[state.id] = 0
         politica[self.ss.id] = None
         heuristico[self.ss.id] = 0
         return Politica(politica), FuncionDeValor(heuristico)

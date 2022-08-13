@@ -4,10 +4,6 @@ class Estado:
         self.terminal = False
         self.sumidero = False
 
-    """ heurístico cero """
-    def h_zero(self):
-        return 0
-
     """ heurístico distancia Manhattan"""
     def h_MD(self, fil, col, fil_obj, col_obj):
         return abs(fil_obj - fil) + abs(col - col_obj)
