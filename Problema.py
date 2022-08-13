@@ -6,7 +6,7 @@ from FuncionDeValor import *
 import random
 
 class Problema:
-    def __init__(self, numFilas, numColumnas, numSumideros, probabilidades):
+    def __init__(self, numFilas, numColumnas, numSumideros, probabilidades, heuristic = None):
 
         self.tablero = [[0 for j in range(numColumnas)] for i in range(numFilas)] # Tablero con los estados
 
@@ -25,6 +25,8 @@ class Problema:
 
         self.filaInicial = numFilas // 2
         self.columnaInicial = numColumnas // 2 # Establecemos el fila y la columna inicial en la mitad del tablero
+
+        self.heuristic = heuristic
 
         self.sumideros = [] # Lista para almacenar la representación en cadena de carácteres de los sumideros
 
@@ -140,8 +142,11 @@ class Problema:
         for i in range(len(self.tablero)): 
             for j in range(len(self.tablero[i])):
                 state = self.tablero[i][j]
-                politica[state.id] = None 
-                heuristico[state.id] = state.h_zero()
+                politica[state.id] = None
+                if self.heuristic == 'zero':
+                    heuristico[state.id] = state.h_zero()
+                if self.heuristic == 'MD':
+                    heuristico[state.id] = state.h_MD(i, j, self.filaFinal, self.columnaFinal)
         politica[self.ss.id] = None
         heuristico[self.ss.id] = 0
         return Politica(politica), FuncionDeValor(heuristico)

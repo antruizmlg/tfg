@@ -44,9 +44,9 @@ def resize(it, Z_size):
 
 def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label, name):
     fig, ax = plt.subplots()
-    ax.plot(X, Y_1, label = 'Sistema 1')
-    ax.plot(X, Y_2, label = 'Sistema 2')
-    ax.plot(X, Y_3, label = 'Sistema 3')
+    ax.plot(X, Y_1, label = 'LAO* (zero heuristic)')
+    ax.plot(X, Y_2, label = 'LAO* (MD heuristic)')
+    ax.plot(X, Y_3, label = 'VI')
     ax.legend(loc = 'upper left')
     ax.set_xlabel(x_label)
     ax.set_ylabel(y_label)
@@ -76,23 +76,23 @@ Tiempo_S1 = []
 Tiempo_S2 = []
 Tiempo_S3 = []
 
-while numFilas < 100 and numCol < 100:
+while numFilas < 55 and numCol < 55:
     numEstados.append(numFilas * numCol)
 
-    p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_1 = Problema(numFilas, numCol, numSumideros, probs_3, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-    p_2 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_2 = Problema(numFilas, numCol, numSumideros, probs_3, 'MD') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio                                                                                                       
-    p_3 = Problema(numFilas, numCol, numSumideros, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_3 = Problema(numFilas, numCol, numSumideros, probs_3, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
     
     t_i = time.time()
-    run_algorithm(p_1, 'VI')
+    run_algorithm(p_1, 'LAO*')
     t_f = time.time()
     Tiempo_S1.append(t_f - t_i)
 
     t_i = time.time()
-    run_algorithm(p_2, 'VI')
+    run_algorithm(p_2, 'LAO*')
     t_f = time.time()
     Tiempo_S2.append(t_f - t_i)
 
