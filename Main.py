@@ -79,11 +79,11 @@ Tiempo_S3 = []
 while numFilas < 55 and numCol < 55:
     numEstados.append(numFilas * numCol)
 
-    p_1 = Problema(numFilas, numCol, numSumideros, probs_3, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_1 = Problema(numFilas, numCol, numSumideros, probs_1, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-    p_2 = Problema(numFilas, numCol, numSumideros, probs_3, 'MD') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_2 = Problema(numFilas, numCol, numSumideros, probs_1, 'MD') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio                                                                                                       
-    p_3 = Problema(numFilas, numCol, numSumideros, probs_3, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+    p_3 = Problema(numFilas, numCol, numSumideros, probs_1, 'zero') # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
     
     t_i = time.time()
@@ -104,11 +104,11 @@ while numFilas < 55 and numCol < 55:
     numFilas += 5
     numCol += 5
 
-f = open('stats_vi.txt', 'a')
+f = open('stats_time_s1.txt', 'a')
 f.write(str(numEstados) + "\n")
 f.write(str(Tiempo_S1) + "\n")
 f.write(str(Tiempo_S2) + "\n")
 f.write(str(Tiempo_S3) + "\n")
 f.close()
 
-generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)', 'time_vi.png')
+generate_plot(numEstados, Tiempo_S1, Tiempo_S2, Tiempo_S3, 'Número de estados', 'Tiempo requerido (s)', 'time_s1.png')
