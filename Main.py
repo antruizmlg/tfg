@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 probs_1 = {}
 probs_2 = {}
 probs_3 = {}
+probs_4 = {}
 
 """Sistema 1"""
 probs_1['N'] = {'N': 0.8, 'E': 0.1, 'O': 0.1}
@@ -28,9 +29,15 @@ probs_3['S'] = {'S': 0.8, '-': 0.2}
 probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
+"""Sistema 4"""
+probs_4['N'] = {'N': 0.75, 'E': 0.1, 'O': 0.1, 'S': 0.05}
+probs_4['S'] = {'S': 0.75, 'E': 0.1, 'O': 0.1, 'N': 0.05}
+probs_4['E'] = {'E': 0.75, 'N': 0.1, 'S': 0.1, 'O': 0.05}
+probs_4['O'] = {'O': 0.75, 'N': 0.1, 'S': 0.1, 'E': 0.05}
+
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 10
-numCol = 10
+numFilas = 5
+numCol = 5
 numSumideros = 0
 
 def solve_problem(p, algorithm, heuristic = None):
@@ -51,7 +58,7 @@ def solve_problem(p, algorithm, heuristic = None):
         vi_algorithm = VI(pi, h, dict_state)
         vi_algorithm.run(hg)
     elif algorithm == 'PI':
-        pi_algorithm = PI(pi, h, dict_state)
+        pi_algorithm = PI(pi, h, dict_state, p)
         pi_algorithm.run(hg)
 
     # Finalizamos contador
@@ -64,6 +71,6 @@ def solve_problem(p, algorithm, heuristic = None):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problema(numFilas, numCol, numSumideros, probs_4) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'PI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
