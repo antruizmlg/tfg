@@ -18,11 +18,6 @@ class LAO:
         F = [self.s0]
         I = []
 
-        # Listas para almacenar el tamaño del grafo explícito, el grafo solución y el hipergrafo Z
-        eg_sizes = []
-        sg_sizes = []
-        Z_sizes = []
-
         # Inicialización grafo explícito y grafo solución
         envelope_graph = Hipergrafo({self.s0: []})
         bpsg = deepcopy(envelope_graph)
