@@ -33,6 +33,8 @@ class LAO:
         if self.algorithm == 'VI':
             algorithm = VI(self.p, self.V, self.dict_state)
 
+        total_time = 0
+
         s = self.no_terminal_state(list(set(bpsg.estados) & set(F))) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir
             F = self.update_fringe_set(F, I, s) # Actualizamos el conjunto F
@@ -41,15 +43,21 @@ class LAO:
             envelope_graph = self.update_envelope_graph(envelope_graph, s) # Actualizamos grafo explícito
             Z = Hipergrafo(self.get_z(envelope_graph, s, {s:envelope_graph.estados[s]})) # Construimos el hipergrafo Z 
 
-            algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
-            bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0)) # Reconstruimos el "best partian solution graph" 
 
+            ti = time.time()
+            algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
+            tf = time.time()
+            total_time += tf - ti
+
+            bpsg = Hipergrafo(self.rebuild(envelope_graph, {}, self.s0)) # Reconstruimos el "best partian solution graph" 
             # Añadimos los tamaños de los hipergrafos a sus respectivas listas
             eg_sizes.append(len(envelope_graph.estados))
             sg_sizes.append(len(bpsg.estados))
             Z_sizes.append(len(Z.estados))
 
             s = self.no_terminal_state(list(set(bpsg.estados) & set(F)))
+
+        print("Time used in VI: "+str(total_time))
         return eg_sizes, sg_sizes, Z_sizes # Devolvemos tamaños de los hipergrafos en cada iteración
 
     """ método para acutalizar el conjunto de estados 'fringe' """

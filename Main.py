@@ -29,19 +29,9 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 5
-numCol = 5
+numFilas = 30
+numCol = 30
 numSumideros = 0
-
-def generate_plot(X, Y_1, Y_2, Y_3, x_label, y_label):
-    fig, ax = plt.subplots()
-    ax.plot(X, Y_1, label = 'Sistema 1')
-    ax.plot(X, Y_2, label = 'Sistema 2')
-    ax.plot(X, Y_3, label = 'Sistema 3')
-    ax.legend(loc = 'upper left')
-    ax.set_xlabel(x_label)
-    ax.set_ylabel(y_label)
-    plt.show()
 
 def run_algorithm(p, algorithm):
     dict_state, hg, s0, h, pi = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -54,7 +44,7 @@ def run_algorithm(p, algorithm):
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(dict_state, hg, s0, h, pi, 'VI')
-        eg_sizes, sg_sizes, Z_sizes = lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
+        lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h, dict_state)
         vi_algorithm.run(hg)
@@ -72,6 +62,6 @@ def run_algorithm(p, algorithm):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problema(numFilas, numCol, numSumideros, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-run_algorithm(p_1, 'PI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+run_algorithm(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
