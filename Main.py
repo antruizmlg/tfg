@@ -47,8 +47,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 20
-numCol = 20
+numFilas = 10
+numCol = 10
 numSumideros = 0
 
 def run_algorithm(p, algorithm):
@@ -86,8 +86,15 @@ it = []
 for i in range(numFilas * numCol):
     it.append(i + 1)
 
-bpsg_size1 = resize(it, bpsg_size1)
-bpsg_size2 = resize(it, bpsg_size2)
-bpsg_size3 = resize(it, bpsg_size3)
+Z_percent1 = resize(it, Z_percent1)
+Z_percent2 = resize(it, Z_percent2)
+Z_percent3 = resize(it, Z_percent3)
 
-generate_plot(it, bpsg_size1, bpsg_size2, bpsg_size3, 'Iteración', 'Número de estados del grafo solución')
+f = open('stats_Z_percent_h0_100states.txt', 'a')
+f.write(str(it) + "\n")
+f.write(str(Z_percent1) + "\n")
+f.write(str(Z_percent2) + "\n")
+f.write(str(Z_percent3) + "\n")
+f.close()
+
+generate_plot(it, Z_percent1, Z_percent2, Z_percent3, 'Iteración', 'Porcentaje de estados del conjunto Z')
