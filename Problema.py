@@ -63,8 +63,8 @@ class Problema:
                 # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
                 ha_list = []
                 # Vaciamos la lista de k-conectores para el siguiente estado
-        hg = Hipergrafo(estados_hg) # Creamos el hipergrafo con el diccionario de estados.
-        return dict_state, hg, self.tablero[self.filaInicial][self.columnaInicial]
+        hg = Hipergrafo(estados_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
+        return hg, self.tablero[self.filaInicial][self.columnaInicial]
         # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
 
     """método que recibe una fila, una columna y una acción, y devuelve un diccionario con asociaciones (estado -> probabilidad) asociada al
