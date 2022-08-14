@@ -60,5 +60,30 @@ class Hipergrafo:
         return None # Si no hemos encontrado ningún estado no terminal en el conjunto, devolvemos None
     
     """ método para actualizar el hipergrafo explícito añadiendo el estado s"""
-    def update_envelope_graph(self, envelope_graph, s):
-        envelope_graph.estados[s] = self.estados[s]
+    def update_envelope_graph(self, envelope_graph, states):
+        for s in states:
+            envelope_graph.estados[s] = self.estados[s]
+
+    """método que dado un hipergrafo y un conjunto de estados, obtiene la lista de predecesores del conjunto de estados en el hipergrafo"""
+    def predecessor_states(self, states, I):
+        sol = []
+        for s in self.estados.keys():
+            sucesores = self.sucesores(s)
+            for suc in sucesores:
+                if suc in states and s not in I:
+                    sol.append(s)
+                    break
+        return list(dict.fromkeys(sol))
+
+    def build_solution_graph(self, envelope_graph, s, p, estados):
+        for st in envelope_graph.estados.keys(): # Para cada estado en el conjunto de estados del grafo explícito
+            if not st in estados.keys(): # Si el estado no se encuentra ya en el hipergrafo Z
+                for ha in envelope_graph.estados[st]: # Recorremos sus k-conectores buscando el asociado a la mejor acción del estado
+                    if s in ha.destino.keys() and ha.accion == p.get_politica(st): # Si desde ese k-conector se puede alcanzar el estado s
+                        # (significa que el estado st es antecesor directo del estado s) y es el k-conector asociado a la mejor acción para el estado st
+                        estados[st] = ha # Lo añadimos al diccionario de estados del hipergrafo Z
+                        if not s == st: # Si s es distinto a st (para evitar ciclos)
+                            estados = self.build_solution_graph(envelope_graph, st, p, estados) # Llamamos de forma recursiva al método buscando 
+                            # los antecesores de st que siguen la mejor política parcial para añadirlos también al hipergrafo Z
+                        break
+        return estados # Devolvemos el diccionario de estados asociado al hipergrafo Z.

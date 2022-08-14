@@ -64,7 +64,7 @@ class Problema:
                 ha_list = []
                 # Vaciamos la lista de k-conectores para el siguiente estado
         hg = Hipergrafo(estados_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
-        return hg, self.tablero[self.filaInicial][self.columnaInicial]
+        return hg, self.tablero[self.filaInicial][self.columnaInicial], self.tablero[self.filaFinal][self.columnaFinal]
         # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
 
     """método que recibe una fila, una columna y una acción, y devuelve un diccionario con asociaciones (estado -> probabilidad) asociada al
@@ -103,7 +103,7 @@ class Problema:
     def print_info(self):   
         print("Tamaño de tablero: " + str(len(self.tablero)) + "x" + str(len(self.tablero[0])))
         for s in self.sumideros:
-                print("Sumidero: "+ s)
+            print("Sumidero: "+ s)
         print("Celda inicial: [" + str(self.filaInicial) + ", " + str(self.columnaInicial) + "]")
         print("Celda objetivo: [" + str(self.filaFinal) + ", " + str(self.columnaFinal) + "]\n")
 

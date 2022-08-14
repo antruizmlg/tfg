@@ -32,7 +32,7 @@ class LAO:
             F = self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
 
-            self.hg.update_envelope_graph(envelope_graph, s) # Actualizamos grafo explícito
+            self.hg.update_envelope_graph(envelope_graph, [s]) # Actualizamos grafo explícito
             Z = Hipergrafo(self.hg.get_Z(envelope_graph, s, self.p, {s:envelope_graph.estados[s]}), self.hg.dict_state) # Construimos el hipergrafo Z 
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z

@@ -1,5 +1,6 @@
 from Problema import *
 from LAO import *
+from RLAO import *
 import time
 
 import matplotlib
@@ -36,12 +37,12 @@ probs_4['E'] = {'E': 0.75, 'N': 0.1, 'S': 0.1, 'O': 0.05}
 probs_4['O'] = {'O': 0.75, 'N': 0.1, 'S': 0.1, 'E': 0.05}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 30
-numCol = 30
+numFilas = 3
+numCol = 3
 numSumideros = 0
 
 def solve_problem(p, algorithm, heuristic = None):
-    hg, s0 = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
+    hg, s0, sf = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
     pi, h = p.get_initial_policy_and_heuristic(heuristic)
@@ -53,7 +54,10 @@ def solve_problem(p, algorithm, heuristic = None):
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(hg, s0, h, pi, 'VI')
-        lao_algorithm.LAO() # Obtenemos lista con los tamaños de los tres grafos en cada iteración
+        lao_algorithm.LAO()
+    elif algorithm == 'RLAO*':
+        lao_algorithm = RLAO(hg, sf, h, pi, 'VI')
+        lao_algorithm.RLAO()
     elif algorithm == 'VI':
         vi_algorithm = VI(pi, h)
         vi_algorithm.run(hg)
@@ -73,4 +77,4 @@ def solve_problem(p, algorithm, heuristic = None):
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'LAO*', 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*', 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
