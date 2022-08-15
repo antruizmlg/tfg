@@ -14,21 +14,18 @@ class RLAO:
 
     def RLAO(self):
         F = [self.sf]
-        I = [self.sf]
+        expanded = [self.sf]
 
         envelope_graph = Hipergrafo({self.sf: []}, self.hg.dict_state)
-        bpsg = Hipergrafo({self.sf: []}, self.hg.dict_state)
 
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V) 
         if self.algorithm == 'VI':
             algorithm = VI(self.p, self.V)
 
-        predecessors = self.hg.predecessor_states(list(set(bpsg.estados) & set(F)), I)
-        while len(predecessors) > 0:
-            F = deepcopy(predecessors)
-            I = list(set(I + F))
-            self.hg.update_envelope_graph(envelope_graph, predecessors)
+        F = self.hg.predecessor_states(list(set(envelope_graph.estados) & set(F)), expanded)
+        while len(F) > 0:
+            expanded = list(set(expanded + F))
+            self.hg.update_envelope_graph(envelope_graph, F)
             algorithm.run(envelope_graph)
-            bpsg = Hipergrafo(self.hg.build_solution_graph(envelope_graph, self.sf, self.p, {self.sf:envelope_graph.estados[self.sf]}), self.hg.dict_state)
-            predecessors = self.hg.predecessor_states(list(set(bpsg.estados) & set(F)), I)
+            F = self.hg.predecessor_states(list(set(envelope_graph.estados) & set(F)), expanded)

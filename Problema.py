@@ -107,29 +107,36 @@ class Problema:
         print("Celda inicial: [" + str(self.filaInicial) + ", " + str(self.columnaInicial) + "]")
         print("Celda objetivo: [" + str(self.filaFinal) + ", " + str(self.columnaFinal) + "]\n")
 
-    """Método para imprimir el tablero con la solución dada la política óptima"""
+    """Métodos para imprimir el tablero con la solución dada la política óptima"""
+
     def print_solution(self, p):
-        print("------------------------------------------------------------------------")
+        dic = {}
+        self.get_solution(p, self.filaInicial, self.columnaInicial, dic)
         for i in range(len(self.tablero)):
             for j in range(len(self.tablero[0])):
-                state = self.tablero[i][j]
-                if state.terminal:
-                    print('TT', end = ' ')
-                elif state.sumidero:
-                    print('..', end = ' ')
+                if self.tablero[i][j].terminal:
+                    print('T', end=" ")
+                elif self.tablero[i][j].sumidero:
+                    print('.', end=" ")
+                elif self.tablero[i][j] in dic.keys():
+                    print(dic[self.tablero[i][j]], end=" ")
                 else:
-                    if p.get_politica(state.id) == 'N':
-                        print('NN', end = ' ')
-                    if p.get_politica(state.id) == 'S':
-                        print('SS', end = ' ')
-                    if p.get_politica(state.id) == 'E':
-                        print('EE', end = ' ')
-                    if p.get_politica(state.id) == 'O':
-                        print('OO', end = ' ')
-                    if p.get_politica(state.id) is None:
-                        print('##', end = ' ')
+                    print('#', end=" ")
             print("")
-        print("------------------------------------------------------------------------")
+
+    def get_solution(self, p, fil, col, dic):
+        state = self.tablero[fil][col]
+        if not state.terminal:
+            action = p.politica[state.id]
+            dic[state] = action
+            if action == 'N':
+                self.get_solution(p, fil - 1, col, dic)
+            if action == 'S':
+                self.get_solution(p, fil + 1, col, dic)
+            if action == 'E':
+                self.get_solution(p, fil, col + 1, dic)
+            if action == 'O':
+                self.get_solution(p, fil, col - 1, dic)
 
     """Método para obtener política inicial y heurístico"""
     def get_initial_policy_and_heuristic(self, heuristic):

@@ -30,16 +30,10 @@ probs_3['S'] = {'S': 0.8, '-': 0.2}
 probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
-"""Sistema 4"""
-probs_4['N'] = {'N': 0.75, 'E': 0.1, 'O': 0.1, 'S': 0.05}
-probs_4['S'] = {'S': 0.75, 'E': 0.1, 'O': 0.1, 'N': 0.05}
-probs_4['E'] = {'E': 0.75, 'N': 0.1, 'S': 0.1, 'O': 0.05}
-probs_4['O'] = {'O': 0.75, 'N': 0.1, 'S': 0.1, 'E': 0.05}
-
 """Número de filas, número de columnas y de sumideros""" 
 numFilas = 3
 numCol = 3
-numSumideros = 0
+numSumideros = 2
 
 def solve_problem(p, algorithm, heuristic = None):
     hg, s0, sf = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -77,4 +71,4 @@ def solve_problem(p, algorithm, heuristic = None):
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'RLAO*', 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
