@@ -33,10 +33,24 @@ class LAO:
             I.append(s) # Introducimos s en el conjunto I
 
             self.hg.update_envelope_graph(envelope_graph, [s]) # Actualizamos grafo explícito
-            Z = self.hg.set_Z(envelope_graph, s, self.p, [s]) # Construimos el hipergrafo Z
+
+            Z = self.hg.get_z(envelope_graph, s, self.p, {s}) # Construimos el hipergrafo Z
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
 
             bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, [], self.s0) # Obtenemos los estados del grafo solución
 
             s = self.hg.no_terminal_state(list(set(bpsg_states) & set(F)))
+
+    def get_z(self, envelope_graph, s, estados):
+        for st in envelope_graph.estados.keys(): # Para cada estado en el conjunto de estados del grafo explícito
+            if not st in estados.keys(): # Si el estado no se encuentra ya en el hipergrafo Z
+                for ha in envelope_graph.estados[st]: # Recorremos sus k-conectores buscando el asociado a la mejor acción del estado
+                    if s in ha.destino.keys() and ha.accion == self.p.get_politica(st): # Si desde ese k-conector se puede alcanzar el estado s
+                        # (significa que el estado st es antecesor directo del estado s) y es el k-conector asociado a la mejor acción para el estado st
+                        estados[st] = envelope_graph.estados[st] # Lo añadimos al diccionario de estados del hipergrafo Z
+                        if not s == st: # Si s es distinto a st (para evitar ciclos)
+                            estados = self.get_z(envelope_graph, st, estados) # Llamamos de forma recursiva al método buscando 
+                            # los antecesores de st que siguen la mejor política parcial para añadirlos también al hipergrafo Z
+                        break
+        return estados # Devolvemos el diccionario de estados asociado al hipergrafo Z.

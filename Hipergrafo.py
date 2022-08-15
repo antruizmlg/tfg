@@ -36,19 +36,19 @@ class Hipergrafo:
                     break
         return list_states # Devolvemos la lista de estados
 
-    """ método para obtener hipergrafo Z de forma recursiva """
-    def set_Z(self, envelope_graph, s, p, Z):
+    """ método para obtener el conjunto Z """
+    def get_z(self, envelope_graph, s, p, estados):
         for st in envelope_graph.estados.keys(): # Para cada estado en el conjunto de estados del grafo explícito
-            if not st in Z: # Si el estado no se encuentra ya en el hipergrafo Z
+            if not st in estados: # Si el estado no se encuentra ya en el hipergrafo Z
                 for ha in envelope_graph.estados[st]: # Recorremos sus k-conectores buscando el asociado a la mejor acción del estado
                     if s in ha.destino.keys() and ha.accion == p.get_politica(st): # Si desde ese k-conector se puede alcanzar el estado s
                         # (significa que el estado st es antecesor directo del estado s) y es el k-conector asociado a la mejor acción para el estado st
-                        Z.append(st)
+                        estados.add(st) # Lo añadimos al diccionario de estados del hipergrafo Z
                         if not s == st: # Si s es distinto a st (para evitar ciclos)
-                            self.set_Z(envelope_graph, st, p, Z) # Llamamos de forma recursiva al método buscando 
+                             self.get_z(envelope_graph, st, p, estados) # Llamamos de forma recursiva al método buscando 
                             # los antecesores de st que siguen la mejor política parcial para añadirlos también al hipergrafo Z
                         break
-        return Z # Devolvemos el diccionario de estados asociado al hipergrafo Z.
+        return estados # Devolvemos el diccionario de estados asociado al hipergrafo Z
 
     """ método para obtener estado no terminal """
     def no_terminal_state(self, states):
