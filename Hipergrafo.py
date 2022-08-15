@@ -38,26 +38,30 @@ class Hipergrafo:
     """ métodos para obtener el conjunto Z """
     def get_Z(self, envelope_graph, tablero, s, p, estados):
         predecessors = self.get_predecessors(s, tablero)
-        for st in predecessors.keys():
-            if p.politica[st] == predecessors[st] and st not in estados and st in envelope_graph.estados.keys():
-                estados.add(st)
-                self.get_Z(envelope_graph, tablero, st, p, estados)
+        for st in predecessors:
+            if st in envelope_graph.estados.keys() and st not in estados and p.get_politica(st) is not None:
+                for ha in envelope_graph.estados[st]:
+                    if ha.accion == p.get_politica(st):
+                        suc = ha.destino.keys()
+                        break
+                if s in suc:
+                    estados.add(st)
+                    self.get_Z(envelope_graph, tablero, st, p, estados)
         return estados
 
     def get_predecessors(self, s, tablero):
-        sol = {}
-
+        sol = set()
         fila = self.dict_state[s].fila
         columna = self.dict_state[s].col
 
         if fila - 1 > 0:
-            sol[tablero[fila - 1][columna].id] = 'N'
+            sol.add(tablero[fila - 1][columna].id)
         if fila + 1 < len(tablero):
-            sol[tablero[fila + 1][columna].id] = 'S'
+            sol.add(tablero[fila + 1][columna].id)
         if columna - 1 > 0:
-            sol[tablero[fila][columna - 1].id] = 'O'            
+            sol.add(tablero[fila][columna - 1].id)           
         if columna + 1 < len(tablero[0]):
-            sol[tablero[fila][columna + 1].id] = 'E'
+            sol.add(tablero[fila][columna + 1].id)
 
         return sol
 
