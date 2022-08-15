@@ -18,23 +18,22 @@ class Hipergrafo:
     def update_fringe_set(self, F, I, s):
         for st in self.sucesores(s): # Por cada sucesor de s en el hipergrafo
             if st not in I: # Si el sucesor no se encuentra en el conjunto I
-                F.append(st) # Lo introducimos en el conjunto F
-        F = list(dict.fromkeys(F)) # Eliminamos los elementos repetidos
+                F.add(st) # Lo introducimos en el conjunto F
         F.remove(s) # Eliminamos el estado s
         return F
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
-    def get_bpsg_states(self, envelope_graph, p, list_states, s):
-        list_states.append(s) # Añadimos el estado a la lista
+    def get_bpsg_states(self, envelope_graph, p, set_states, s):
+        set_states.add(s) # Añadimos el estado a la lista
         best_action = p.get_politica(s) # Obtenemos la mejor acción asociada al estado (empezando por el estado inicial)
         if best_action is not None: # Si hay una mejor acción asociada a ese estado
             for ha in envelope_graph.estados[s]: # Recorremos los k-conectores que salen de ese estado
                 if ha.accion == best_action: # Si el k-conector actual es el asociado con la mejor acción
                     for st in ha.destino.keys(): # Para cada uno de los estados alcanzables mediante ese k-conector
-                        if st not in list_states: # Si el estado no está en la lista
-                            self.get_bpsg_states(envelope_graph, p, list_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
+                        if st not in set_states: # Si el estado no está en la lista
+                            self.get_bpsg_states(envelope_graph, p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
                     break
-        return list_states # Devolvemos la lista de estados
+        return set_states # Devolvemos la lista de estados
 
     """ método para obtener el conjunto Z """
     def get_z(self, envelope_graph, s, p, estados):
