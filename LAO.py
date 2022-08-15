@@ -25,7 +25,7 @@ class LAO:
         if self.algorithm == 'PI':
             algorithm = PI(self.p, self.V) 
         if self.algorithm == 'VI':
-            algorithm = VI(self.p, self.V)
+            algorithm = VI(self.hg, self.p, self.V)
 
         s = self.hg.no_terminal_state(list(set(bpsg_states) & set(F))) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir
@@ -33,7 +33,7 @@ class LAO:
             I.append(s) # Introducimos s en el conjunto I
 
             self.hg.update_envelope_graph(envelope_graph, [s]) # Actualizamos grafo explícito
-            Z = Hipergrafo(self.hg.get_Z(envelope_graph, s, self.p, {s:envelope_graph.estados[s]}), self.hg.dict_state) # Construimos el hipergrafo Z 
+            Z = self.hg.set_Z(envelope_graph, s, self.p, [s]) # Construimos el hipergrafo Z
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
 
