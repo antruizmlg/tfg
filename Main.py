@@ -53,11 +53,11 @@ def solve_problem(p, algorithm, heuristic = None):
         lao_algorithm = RLAO(hg, sf, h, pi, 'VI')
         lao_algorithm.RLAO()
     elif algorithm == 'VI':
-        vi_algorithm = VI(pi, h)
-        vi_algorithm.run(hg)
+        vi_algorithm = VI(hg, pi, h)
+        vi_algorithm.run(hg.estados.keys())
     elif algorithm == 'PI':
-        pi_algorithm = PI(pi, h)
-        pi_algorithm.run(hg)
+        pi_algorithm = PI(hg, pi, h)
+        pi_algorithm.run(hg.estados.keys())
 
     # Finalizamos contador
     t_f = time.time()
@@ -71,4 +71,4 @@ def solve_problem(p, algorithm, heuristic = None):
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

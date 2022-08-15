@@ -2,13 +2,14 @@ from copy import *
 import random
 
 class PI:
-    def __init__(self, p, V):
-        self.hg = None
+    def __init__(self, hg, p, V):
+        self.set = None
+        self.hg = hg
         self.p = p
         self.V = V
 
-    def run(self, hg):
-        self.hg = hg
+    def run(self, set):
+        self.set = set
 
         while True:
             old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
@@ -24,7 +25,7 @@ class PI:
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
-            for s in self.hg.estados.keys(): # Para cada estado
+            for s in self.set: # Para cada estado
                 if not self.hg.dict_state[s].terminal: # Si el estado no es terminal
                     for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado
                         if self.p.get_politica(s) == ha.accion: # Si la acción dictada por la política coincide con la asociada al hiperarista, esta es la acción que debemos evaluar
@@ -38,7 +39,7 @@ class PI:
                 break
 
     def policy_improvement(self):
-        for s in self.hg.estados.keys(): # Para cada estado del grafo.
+        for s in self.set: # Para cada estado del grafo.
             if not self.hg.dict_state[s].terminal:
                 min_coste = float('inf')
                 for ha in self.hg.estados[s]: # Para cada hiperarista asociada a ese estado.

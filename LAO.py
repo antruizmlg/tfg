@@ -23,7 +23,7 @@ class LAO:
 
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         if self.algorithm == 'PI':
-            algorithm = PI(self.p, self.V) 
+            algorithm = PI(self.hg, self.p, self.V) 
         if self.algorithm == 'VI':
             algorithm = VI(self.hg, self.p, self.V)
 
