@@ -35,19 +35,31 @@ class Hipergrafo:
                     break
         return set_states # Devolvemos la lista de estados
 
-    """ método para obtener el conjunto Z """
-    def get_z(self, envelope_graph, s, p, estados):
-        for st in envelope_graph.estados.keys(): # Para cada estado en el conjunto de estados del grafo explícito
-            if not st in estados: # Si el estado no se encuentra ya en el hipergrafo Z
-                for ha in envelope_graph.estados[st]: # Recorremos sus k-conectores buscando el asociado a la mejor acción del estado
-                    if s in ha.destino.keys() and ha.accion == p.get_politica(st): # Si desde ese k-conector se puede alcanzar el estado s
-                        # (significa que el estado st es antecesor directo del estado s) y es el k-conector asociado a la mejor acción para el estado st
-                        estados.add(st) # Lo añadimos al diccionario de estados del hipergrafo Z
-                        if not s == st: # Si s es distinto a st (para evitar ciclos)
-                             self.get_z(envelope_graph, st, p, estados) # Llamamos de forma recursiva al método buscando 
-                            # los antecesores de st que siguen la mejor política parcial para añadirlos también al hipergrafo Z
-                        break
-        return estados # Devolvemos el diccionario de estados asociado al hipergrafo Z
+    """ métodos para obtener el conjunto Z """
+    def get_Z(self, envelope_graph, tablero, s, p, estados):
+        predecessors = self.get_predecessors(s, tablero)
+        for st in predecessors.keys():
+            if p.politica[st] == predecessors[st] and st not in estados and st in envelope_graph.estados.keys():
+                estados.add(st)
+                self.get_Z(envelope_graph, tablero, st, p, estados)
+        return estados
+
+    def get_predecessors(self, s, tablero):
+        sol = {}
+
+        fila = self.dict_state[s].fila
+        columna = self.dict_state[s].col
+
+        if fila - 1 > 0:
+            sol[tablero[fila - 1][columna].id] = 'N'
+        if fila + 1 < len(tablero):
+            sol[tablero[fila + 1][columna].id] = 'S'
+        if columna - 1 > 0:
+            sol[tablero[fila][columna - 1].id] = 'O'            
+        if columna + 1 < len(tablero[0]):
+            sol[tablero[fila][columna + 1].id] = 'E'
+
+        return sol
 
     """ método para obtener estado no terminal """
     def no_terminal_state(self, states):

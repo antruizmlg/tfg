@@ -31,8 +31,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 20
-numCol = 20
+numFilas = 30
+numCol = 30
 numSumideros = 0
 
 def solve_problem(p, algorithm, heuristic = None):
@@ -47,7 +47,7 @@ def solve_problem(p, algorithm, heuristic = None):
 
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(hg, s0, h, pi, 'VI')
+        lao_algorithm = LAO(hg, s0, h, pi, p.tablero, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
         lao_algorithm = RLAO(hg, sf, h, pi, 'VI')
@@ -71,4 +71,4 @@ def solve_problem(p, algorithm, heuristic = None):
 
 p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'LAO*', 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

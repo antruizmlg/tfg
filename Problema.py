@@ -13,9 +13,9 @@ class Problema:
         for i in range(numFilas):
             for j in range(numColumnas):
                 id = 's' + str(i) + "_" + str(j)
-                self.tablero[i][j] = Estado(id) # Rellenamos el tablero con cada estado
+                self.tablero[i][j] = Estado(id, i, j) # Rellenamos el tablero con cada estado
 
-        self.ss = Estado('s_ss') 
+        self.ss = Estado('s_ss', '', '') 
         self.ss.terminal = True # Añadimos un estado sumidero
 
         self.filaFinal = self.generador_posicion_final(numFilas - 1) 

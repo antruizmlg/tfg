@@ -5,11 +5,12 @@ from copy import *
 import time
 
 class LAO:
-    def __init__(self, hg, ini_state, h, pi, algorithm):
+    def __init__(self, hg, ini_state, h, pi, tablero, algorithm):
         self.hg = hg # Hipergrafo
         self.s0 = ini_state.id # Estado inicial
         self.V = h # Función de valor inicializada con el heurístico
         self.p = pi # Política inicial
+        self.tablero = tablero
         self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def LAO(self):
@@ -34,7 +35,7 @@ class LAO:
 
             self.hg.update_envelope_graph(envelope_graph, [s]) # Actualizamos grafo explícito
 
-            Z = self.hg.get_z(envelope_graph, s, self.p, {s}) # Construimos el hipergrafo Z
+            Z = self.hg.get_Z(envelope_graph, self.tablero, s, self.p, {s}) # Construimos el hipergrafo Z
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
 

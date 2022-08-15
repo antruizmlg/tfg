@@ -1,6 +1,8 @@
 class Estado:
-    def __init__(self, id):
+    def __init__(self, id, fila, columna):
         self.id = id
+        self.fila = fila
+        self.col = columna
         self.terminal = False
         self.sumidero = False
 
