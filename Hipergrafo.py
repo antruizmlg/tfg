@@ -54,11 +54,11 @@ class Hipergrafo:
         fila = self.dict_state[s].fila
         columna = self.dict_state[s].col
 
-        if fila - 1 > 0:
+        if fila - 1 >= 0:
             sol.add(tablero[fila - 1][columna].id)
         if fila + 1 < len(tablero):
             sol.add(tablero[fila + 1][columna].id)
-        if columna - 1 > 0:
+        if columna - 1 >= 0:
             sol.add(tablero[fila][columna - 1].id)           
         if columna + 1 < len(tablero[0]):
             sol.add(tablero[fila][columna + 1].id)

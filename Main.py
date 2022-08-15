@@ -31,8 +31,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 5
-numCol = 5
+numFilas = 30
+numCol = 30
 numSumideros = 0
 
 def solve_problem(p, algorithm, heuristic = None):

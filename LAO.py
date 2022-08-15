@@ -28,6 +28,8 @@ class LAO:
         if self.algorithm == 'VI':
             algorithm = VI(self.hg, self.p, self.V)
 
+        i = 0
+
         s = self.hg.no_terminal_state(bpsg_states & F) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir
             F = self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
@@ -41,6 +43,7 @@ class LAO:
 
             bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) # Obtenemos los estados del grafo solución
 
+            i += 1
             s = self.hg.no_terminal_state(bpsg_states & F)
 
     def get_z(self, envelope_graph, s, estados):
