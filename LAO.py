@@ -19,7 +19,7 @@ class LAO:
 
         # Inicialización grafo explícito y grafo solución
         envelope_graph = Hipergrafo({self.s0: []}, self.hg.dict_state)
-        bpsg = deepcopy(envelope_graph)
+        bpsg_states = [self.s0]
 
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         if self.algorithm == 'PI':
@@ -27,7 +27,7 @@ class LAO:
         if self.algorithm == 'VI':
             algorithm = VI(self.p, self.V)
 
-        s = self.hg.no_terminal_state(list(set(bpsg.estados) & set(F))) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
+        s = self.hg.no_terminal_state(list(set(bpsg_states) & set(F))) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir
             F = self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             I.append(s) # Introducimos s en el conjunto I
@@ -37,7 +37,6 @@ class LAO:
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
 
-            bpsg = Hipergrafo(self.hg.rebuild(envelope_graph, self.p, {}, self.s0), self.hg.dict_state) # Reconstruimos el "best partian solution graph" 
-            # Añadimos los tamaños de los hipergrafos a sus respectivas listas
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, [], self.s0) # Obtenemos los estados del grafo solución
 
-            s = self.hg.no_terminal_state(list(set(bpsg.estados) & set(F)))
+            s = self.hg.no_terminal_state(list(set(bpsg_states) & set(F)))

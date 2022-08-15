@@ -24,19 +24,17 @@ class Hipergrafo:
         return F
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
-    def rebuild(self, envelope_graph, p, dict, s):
+    def get_bpsg_states(self, envelope_graph, p, list_states, s):
+        list_states.append(s) # Añadimos el estado a la lista
         best_action = p.get_politica(s) # Obtenemos la mejor acción asociada al estado (empezando por el estado inicial)
         if best_action is not None: # Si hay una mejor acción asociada a ese estado
             for ha in envelope_graph.estados[s]: # Recorremos los k-conectores que salen de ese estado
-                if ha.accion == best_action and s not in dict.keys(): # Si el k-conector actual es el asociado con la mejor acción
-                    # y s no está ya en el grafo.
-                    dict[s] = [ha] # Añadimos s al grafo con el k-conector asociado a su mejor acción
+                if ha.accion == best_action: # Si el k-conector actual es el asociado con la mejor acción
                     for st in ha.destino.keys(): # Para cada uno de los estados alcanzables mediante ese k-conector
-                        dict = self.rebuild(envelope_graph, p, dict, st) # Llamamos de forma recursiva a la función para construir el árbol.
-        elif s not in dict.keys(): # De lo contrario, si el estado no tiene asociado una mejor acción y no está ya en el grafo solución,
-            # significa que estamos ante un nodo "hoja", es decir, un nodo que todavía no ha sido expandido.
-                dict[s] = [] # Lo añadimos al diccionario del grafo solución sin k-conectores
-        return dict # Devolvemos el diccionario
+                        if st not in list_states: # Si el estado no está en la lista
+                            self.get_bpsg_states(envelope_graph, p, list_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
+                    break
+        return list_states # Devolvemos la lista de estados
 
     """ método para obtener hipergrafo Z de forma recursiva """
     def get_Z(self, envelope_graph, s, p, estados):
