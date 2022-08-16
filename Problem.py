@@ -62,7 +62,7 @@ class Problem:
                 # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
                 ha_list = []
                 # Vaciamos la lista de k-conectores para el siguiente estado
-        hg = Connector(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
+        hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
         return hg, self.table[self.initial_row][self.initial_col], self.table[self.initial_row][self.initial_col]
         # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
 

@@ -34,7 +34,7 @@ class LAO:
             F.remove(s) # Eliminamos el estado s del conjunto fringe
             I.add(s) # Introducimos s en el conjunto I
 
-            envelope_graph.estados[s] = self.hg.estados[s] # Actualizamos grafo explícito
+            envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
 
             Z = self.hg.get_set_Z(envelope_graph, self.tablero, s, self.p, {s}) # Construimos el hipergrafo Z
 

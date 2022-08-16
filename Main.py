@@ -31,15 +31,15 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
+rows = 10
+columns = 10
 sinks = 0
 
 def solve_problem(problem, algorithm, heuristic = None):
     hg, s0, sf = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
-    p, h = p.get_initial_policy_and_heuristic(heuristic)
+    p, h = problem.get_initial_policy_and_heuristic(heuristic)
 
     problem.print_info() # Imprimimos información del problema
 
@@ -47,7 +47,7 @@ def solve_problem(problem, algorithm, heuristic = None):
 
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(hg, s0, h, p, p.table, 'VI')
+        lao_algorithm = LAO(hg, s0, h, p, problem.table, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
         lao_algorithm = RLAO(hg, sf, h, p, 'VI')
@@ -71,4 +71,4 @@ def solve_problem(problem, algorithm, heuristic = None):
 
 p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

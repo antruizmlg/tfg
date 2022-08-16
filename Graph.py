@@ -8,9 +8,9 @@ class Graph:
 
     """ Método para obtener la lista de estados sucesores de un estado en el hipergrafo"""
     def successors(self, s):
-        suc = set() # Inicializamos la lista de sucesores
+        suc = [] # Inicializamos la lista de sucesores
         for c in self.states[s]: # Para cada hiperarista de la lista
-            sol += c.states # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
+            suc += c.states() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
         return suc # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
 
     """ método para acutalizar el conjunto de estados 'fringe' """
