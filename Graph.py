@@ -7,17 +7,28 @@ class Graph:
         self.dict_state = dict_state # Diccionario con asociaciones (ID de estado -> Objeto estado)
 
     """ Método para obtener la lista de estados sucesores de un estado en el hipergrafo"""
-    def successors(self, s):
+    def get_successors(self, s):
         suc = [] # Inicializamos la lista de sucesores
         for c in self.states[s]: # Para cada hiperarista de la lista
             suc += c.states() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
         return suc # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
 
-    """ método para acutalizar el conjunto de estados 'fringe' """
-    def update_fringe_set(self, F, I, s):
-        for st in self.successors(s): # Por cada sucesor de s en el hipergrafo
-            if st not in I: # Si el sucesor no se encuentra en el conjunto I
-                F.add(st) # Lo introducimos en el conjunto F
+    """ Método para obtener un conjunto de predecesores de un estado en el hipergrafo"""
+    def get_predecessors(self, s, table):
+        sol = set()
+        row = self.dict_state[s].row
+        col = self.dict_state[s].col
+
+        if row - 1 >= 0:
+            sol.add(table[row - 1][col].id)
+        if row + 1 < len(table):
+            sol.add(table[row + 1][col].id)
+        if col - 1 >= 0:
+            sol.add(table[row][col - 1].id)           
+        if col + 1 < len(table[0]):
+            sol.add(table[row][col + 1].id)
+
+        return sol        
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
     def get_bpsg_states(self, graph, p, set_states, s):
@@ -40,21 +51,21 @@ class Graph:
                     self.get_set_Z(envelope_graph, table, st, p, Z)
         return Z
 
-    def get_predecessors(self, s, table):
-        sol = set()
-        row = self.dict_state[s].row
-        col = self.dict_state[s].col
 
-        if row - 1 >= 0:
-            sol.add(table[row - 1][col].id)
-        if row + 1 < len(table):
-            sol.add(table[row + 1][col].id)
-        if col - 1 >= 0:
-            sol.add(table[row][col - 1].id)           
-        if col + 1 < len(table[0]):
-            sol.add(table[row][col + 1].id)
+    """ métodos para acutalizar el conjunto de estados 'fringe' """
+    def update_fringe_set(self, F, I, s):
+        for st in self.get_successors(s): # Por cada sucesor de s en el hipergrafo
+            if st not in I: # Si el sucesor no se encuentra en el conjunto I
+                F.add(st) # Lo introducimos en el conjunto F
 
-        return sol
+    def update_fringe_rlao(self, table, states, expanded):
+        F = set()
+        for state in states:
+            predecessors = self.get_predecessors(state, table)
+            for p in predecessors:
+                if p not in expanded:
+                    F.add(p)
+        return F
 
     """ método para obtener estado no terminal """
     def get_no_final_state(self, states):

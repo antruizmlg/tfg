@@ -31,9 +31,9 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 10
-columns = 10
-sinks = 0
+rows = 5
+columns = 5
+sinks = 2
 
 def solve_problem(problem, algorithm, heuristic = None):
     hg, s0, sf = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -50,7 +50,7 @@ def solve_problem(problem, algorithm, heuristic = None):
         lao_algorithm = LAO(hg, s0, h, p, problem.table, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
-        lao_algorithm = RLAO(hg, sf, h, p, 'VI')
+        lao_algorithm = RLAO(hg, sf, h, p, problem.table, 'VI')
         lao_algorithm.RLAO()
     elif algorithm == 'VI':
         vi_algorithm = Value_Iteration(hg, p, h)
@@ -71,4 +71,4 @@ def solve_problem(problem, algorithm, heuristic = None):
 
 p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

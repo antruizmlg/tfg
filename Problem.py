@@ -31,7 +31,7 @@ class Problem:
             r = random.randint(0, rows - 1)
             c = random.randint(0, columns - 1)
             if not self.table[r][c].sink and not self.table[r][c].final and not (r == self.initial_row and c == self.initial_row):
-                self.table[r][c].final = True
+                self.table[r][c].sink = True
                 self.sinks.append("["+str(r)+", "+str(c)+"]")
                 i += 1
 
@@ -43,7 +43,7 @@ class Problem:
     def generate_problem(self):
         dict_state = {} # Diccionario con asociaciones (id de estado -> Objeto estado)
         states_hg = {} # Diccionario con asociaciones (Estado -> Lista de conectores que salen de ese estado)
-        ha_list = [] # Lista para almacenar los k-conectores que salen de un estado concreto
+        c_list = [] # Lista para almacenar los k-conectores que salen de un estado concreto
         dict_state[self.ss.id] = self.ss
 
         for i in range(len(self.table)): # Para cada estado en el tablero
@@ -53,17 +53,17 @@ class Problem:
                 if not state.sink: # Si el estado no es sumidero
                     for a in self.actions.keys(): # Para cada acción posible
                         if not a == '-': # Si la acción implica ir a un estado sucesor (N, S, E, O)
-                            ha_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
+                            c_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
                             # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
                 else:
-                    ha_list.append(Connector({self.ss.id: 1}, 'N', len(self.table)*3))
+                    c_list.append(Connector({self.ss.id: 1}, 'N', len(self.table)*3))
                     # Si es un estado sumidero, ese estado solo tendrá un sucesor con un coste alto, para evitar las transiciones a ese estado.
-                states_hg[state.id] = ha_list
+                states_hg[state.id] = c_list
                 # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
-                ha_list = []
+                c_list = []
                 # Vaciamos la lista de k-conectores para el siguiente estado
         hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
-        return hg, self.table[self.initial_row][self.initial_col], self.table[self.initial_row][self.initial_col]
+        return hg, self.table[self.initial_row][self.initial_col], self.table[self.final_row][self.final_col]
         # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
 
     """método que recibe una fila, una columna y una acción, y devuelve un diccionario con asociaciones (estado -> probabilidad) asociada al
