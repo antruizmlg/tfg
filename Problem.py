@@ -139,19 +139,19 @@ class Problem:
 
     """Método para obtener política inicial y heurístico"""
     def get_initial_policy_and_heuristic(self, heuristic):
-        policy = {}
-        heuristic = {}
+        p = {}
+        h = {}
         for i in range(len(self.table)): 
             for j in range(len(self.table[i])):
                 state = self.table[i][j]
-                policy[state.id] = None
+                p[state.id] = None
                 if heuristic == 'MD': 
-                    heuristic[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
+                    h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
                 else:
-                    heuristic[state.id] = 0
-        policy[self.ss.id] = None
-        heuristic[self.ss.id] = 0
-        return policy, heuristic
+                    h[state.id] = 0
+        p[self.ss.id] = None
+        h[self.ss.id] = 0
+        return p, h
 
     @staticmethod
     def random_generator(p):
