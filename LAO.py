@@ -1,6 +1,6 @@
-from Hipergrafo import *
-from PI import *
-from VI import *
+from Graph import *
+from Policy_Iteration import *
+from Value_Iteration import *
 from copy import *
 import time
 
@@ -19,42 +19,27 @@ class LAO:
         I = set()
 
         # Inicialización grafo explícito y grafo solución
-        envelope_graph = Hipergrafo({self.s0: []}, self.hg.dict_state)
+        envelope_graph = Graph({self.s0: []}, self.hg.dict_state)
         bpsg_states = {self.s0}
 
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         if self.algorithm == 'PI':
-            algorithm = PI(self.hg, self.p, self.V) 
+            algorithm = Policy_Iteration(self.hg, self.p, self.V) 
         if self.algorithm == 'VI':
-            algorithm = VI(self.hg, self.p, self.V)
+            algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        i = 0
-
-        s = self.hg.no_terminal_state(bpsg_states & F) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
+        s = self.hg.get_no_final_state(bpsg_states & F) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir
-            F = self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
+            self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
+            F.remove(s) # Eliminamos el estado s del conjunto fringe
             I.add(s) # Introducimos s en el conjunto I
 
-            self.hg.update_envelope_graph(envelope_graph, [s]) # Actualizamos grafo explícito
+            envelope_graph.estados[s] = self.hg.estados[s] # Actualizamos grafo explícito
 
-            Z = self.hg.get_Z(envelope_graph, self.tablero, s, self.p, {s}) # Construimos el hipergrafo Z
+            Z = self.hg.get_set_Z(envelope_graph, self.tablero, s, self.p, {s}) # Construimos el hipergrafo Z
 
             algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
 
             bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) # Obtenemos los estados del grafo solución
 
-            i += 1
-            s = self.hg.no_terminal_state(bpsg_states & F)
-
-    def get_z(self, envelope_graph, s, estados):
-        for st in envelope_graph.estados.keys(): # Para cada estado en el conjunto de estados del grafo explícito
-            if not st in estados.keys(): # Si el estado no se encuentra ya en el hipergrafo Z
-                for ha in envelope_graph.estados[st]: # Recorremos sus k-conectores buscando el asociado a la mejor acción del estado
-                    if s in ha.destino.keys() and ha.accion == self.p.get_politica(st): # Si desde ese k-conector se puede alcanzar el estado s
-                        # (significa que el estado st es antecesor directo del estado s) y es el k-conector asociado a la mejor acción para el estado st
-                        estados[st] = envelope_graph.estados[st] # Lo añadimos al diccionario de estados del hipergrafo Z
-                        if not s == st: # Si s es distinto a st (para evitar ciclos)
-                            estados = self.get_z(envelope_graph, st, estados) # Llamamos de forma recursiva al método buscando 
-                            # los antecesores de st que siguen la mejor política parcial para añadirlos también al hipergrafo Z
-                        break
-        return estados # Devolvemos el diccionario de estados asociado al hipergrafo Z.
+            s = self.hg.get_no_final_state(bpsg_states & F)

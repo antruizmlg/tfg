@@ -1,4 +1,4 @@
-from Problema import *
+from Problem import *
 from LAO import *
 from RLAO import *
 import time
@@ -31,44 +31,44 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-numFilas = 30
-numCol = 30
-numSumideros = 0
+rows = 30
+columns = 30
+sinks = 0
 
-def solve_problem(p, algorithm, heuristic = None):
-    hg, s0, sf = p.generar_problema() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
+def solve_problem(problem, algorithm, heuristic = None):
+    hg, s0, sf = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
-    pi, h = p.get_initial_policy_and_heuristic(heuristic)
+    p, h = p.get_initial_policy_and_heuristic(heuristic)
 
-    p.print_info() # Imprimimos información del problema
+    problem.print_info() # Imprimimos información del problema
 
     t_i = time.time() # Iniciamos contador
 
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(hg, s0, h, pi, p.tablero, 'VI')
+        lao_algorithm = LAO(hg, s0, h, p, p.table, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
-        lao_algorithm = RLAO(hg, sf, h, pi, 'VI')
+        lao_algorithm = RLAO(hg, sf, h, p, 'VI')
         lao_algorithm.RLAO()
     elif algorithm == 'VI':
-        vi_algorithm = VI(hg, pi, h)
-        vi_algorithm.run(hg.estados.keys())
+        vi_algorithm = Value_Iteration(hg, p, h)
+        vi_algorithm.run(hg.states.keys())
     elif algorithm == 'PI':
-        pi_algorithm = PI(hg, pi, h)
-        pi_algorithm.run(hg.estados.keys())
+        pi_algorithm = Policy_Iteration(hg, p, h)
+        pi_algorithm.run(hg.states.keys())
 
     # Finalizamos contador
     t_f = time.time()
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    p.print_solution(pi)
+    problem.print_solution(p)
 
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problema(numFilas, numCol, numSumideros, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
 solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
