@@ -46,9 +46,8 @@ class BLAO:
             I_reverse = I_reverse | F_Reverse
             F_Reverse = self.hg.update_fringe_rlao(self.table, F_Reverse, I_reverse)  
 
-            if not overlapped and (set(reverse_graph.states.keys()) | set(forward_graph.states.keys())):
+            if not overlapped and (set(reverse_graph.states.keys()) & set(forward_graph.states.keys())):
                 forward_graph.states.update(reverse_graph.states)
-                F = F | F_Reverse
                 overlapped = True
 
             Z = self.hg.get_set_Z(forward_graph, self.table, s, self.p, {s})
