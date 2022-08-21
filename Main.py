@@ -2,6 +2,7 @@ from Problem import *
 from LAO import *
 from RLAO import *
 from BLAO import *
+from ILAO import *
 import time
 
 import matplotlib
@@ -32,8 +33,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
+rows = 5
+columns = 5
 sinks = 0
 
 def solve_problem(problem, algorithm, heuristic = None):
@@ -51,11 +52,14 @@ def solve_problem(problem, algorithm, heuristic = None):
         lao_algorithm = LAO(hg, s0, h, p, problem.table, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
-        lao_algorithm = RLAO(hg, fs, h, p, problem.table, 'VI')
-        lao_algorithm.RLAO()
+        rlao_algorithm = RLAO(hg, fs, h, p, problem.table, 'VI')
+        rlao_algorithm.RLAO()
+    elif algorithm == 'ILAO*':
+        ilao_algorithm = ILAO(hg, s0, h, p, problem.table, 'VI')
+        ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
-        lao_algorithm = BLAO(hg, s0, fs, h, p, problem.table, 'VI')
-        lao_algorithm.BLAO()
+        blao_algorithm = BLAO(hg, s0, fs, h, p, problem.table, 'VI')
+        blao_algorithm.BLAO()
     elif algorithm == 'VI':
         vi_algorithm = Value_Iteration(hg, p, h)
         vi_algorithm.run(hg.states.keys())
@@ -75,4 +79,4 @@ def solve_problem(problem, algorithm, heuristic = None):
 
 p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                         # y el sistema transitorio
-solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'ILAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

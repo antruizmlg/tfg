@@ -18,14 +18,17 @@ class BLAO:
         F = {self.s0}
         I = set()
 
-        F_Reverse = {self.fs}
-        I_reverse = set()
+        Q = {s: {'N': 1, 'S': 1, 'E': 1, 'O': 1} for k in self.hg.states.keys()}
+        Q[self.fs] = {'N': 0, 'S': 0, 'E': 0, 'O': 0}
+
+        dict_suc = {}
+        for s in self.hg.states.keys():
+            dict_suc[s] = self.get_successors(s)
 
         forward_graph = Graph({self.s0: []}, self.hg.dict_state)
         reverse_graph = Graph({self.fs: []}, self.hg.dict_state)
-        bpsg_states = {self.s0}
 
-        overlapped = False
+        bpsg_states = {self.s0}
 
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         if self.algorithm == 'PI':
@@ -41,20 +44,10 @@ class BLAO:
             I.add(s) # Introducimos s en el conjunto I
             forward_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
 
-            for state in F_Reverse:
-                reverse_graph.states[state] = self.hg.states[state]     
-            I_reverse = I_reverse | F_Reverse
-            F_Reverse = self.hg.update_fringe_rlao(self.table, F_Reverse, I_reverse)  
-
-            if not overlapped and (set(reverse_graph.states.keys()) & set(forward_graph.states.keys())):
-                forward_graph.states.update(reverse_graph.states)
-                overlapped = True
-
-            Z = self.hg.get_set_Z(forward_graph, self.table, s, self.p, {s})
-            algorithm.run(Z)
-
-            if not overlapped:
-                algorithm.run(reverse_graph.states.keys())
-
-            bpsg_states = self.hg.get_bpsg_states(forward_graph, self.p, set(), self.s0)
-            s = self.hg.get_no_final_state(bpsg_states & F)            
+    def get_successors(self, state):
+        actions = ['N', 'S', 'E', 'O']
+        dict = {}
+        for a in actions:
+            c = self.hg.get_connector(state, a)
+            dict[a] = max(c.probs, key=c.probs.get)
+        return dict
