@@ -2,6 +2,7 @@ from Graph import *
 from Policy_Iteration import *
 from Value_Iteration import *
 from copy import *
+import time
 
 class ILAO:
     def __init__(self, hg, initial_state, h, p, table, algorithm):
@@ -13,42 +14,39 @@ class ILAO:
         self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def ILAO(self):
-        while True:
-            oldV = deepcopy(self.V)
+        bpsg = Graph({self.s0: self.hg.states[self.s0]}, self.hg.dict_state)
+        expanded = set()
+        fringe = set(filter(lambda s: not self.hg.dict_state[s].terminal and s not in expanded, bpsg.states.keys()))
 
-            DFS_stack = self.depth_first_search()
-            self.update_values(DFS_stack)
+        while fringe:
+            DFS_Stack = [self.s0]
+            self.depth_first_search(bpsg, self.s0, DFS_Stack)
+            self.update_values(bpsg, DFS_Stack)
+            self.update_bpsg(bpsg, expanded, self.s0)
+            fringe = set(filter(lambda s: not self.hg.dict_state[s].terminal and s not in expanded, bpsg.states.keys()))
 
-            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle
-                break
+    def update_bpsg(self, bpsg, expanded, s):
+        expanded.add(s)
+        c = bpsg.get_connector(s, self.p[s])
+        bpsg[s] = [c]
+        for suc in c.probs.keys():
+            if suc not in bpsg.states.keys() and self.p[suc] is not None:
+                self.update_bpsg(bpsg, expanded, suc)
 
-    def depth_first_search(self):
-        to_expand = [self.s0]
-        DFS_stack = []
+    def depth_first_search(self, bpsg, s, stack):
+        if self.p[s] is not None:
+            for suc in bpsg.get_connector(s, self.p[s]).probs.keys():
+                stack.add(suc)
+                self.depth_first_search(bpsg, suc, stack)
 
-        while to_expand:
-            s = to_expand.pop()
-
-            DFS_stack.append(s)
-            to_expand = self.get_fringe(self.hg.get_successors(s) + to_expand, DFS_stack)
-
-        return DFS_stack
-
-    def get_fringe(self, list, list2):
-        sol = []
-        for elem in list:
-            if elem not in sol and elem not in list2 and not self.hg.dict_state[elem].final:
-                sol.append(elem)
-        return sol
-
-    def update_values(self, stack):
+    def update_values(self, bpsg, stack):
         actions = {'N', 'S', 'E', 'O'}
         while stack:
             s = stack.pop()
-            if not self.hg.dict_state[s].final:
+            if not bpsg.dict_state[s].final:
                 minimum = float('inf')
                 for a in actions:
-                    c = self.hg.get_connector(s, a)
+                    c = bpsg.get_connector(s, a)
                     val = c.cost
                     for p in c.probs.keys():
                         val += c.probs[p] * self.V[p]
