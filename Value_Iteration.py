@@ -7,7 +7,6 @@ class Value_Iteration:
         self.V = V
 
     def run(self, set):
-
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 

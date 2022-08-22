@@ -13,23 +13,25 @@ class RLAO:
         self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def RLAO(self):
-        F = {self.fs}
-        expanded = set()
+        while True:
+            oldV = deepcopy(self.V) 
 
-        # Inicialización grafo explícito y grafo solución
-        envelope_graph = Graph({self.fs: []}, self.hg.dict_state)
+            bpsg_states = self.get_bpsg_states(self.fs, []) # Obtenemos el best partial solution graph partiendo desde el estado final
+            # y expandiendo los antecesores.
+            self.hg.update_values(bpsg_states, self.V, self.p) # Actualizamos valores y política de los estados del best partial solution
+            # graph
 
-        # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
-        if self.algorithm == 'PI':
-            algorithm = Policy_Iteration(self.hg, self.p, self.V) 
-        if self.algorithm == 'VI':
-            algorithm = Value_Iteration(self.hg, self.p, self.V)
+            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle.
+                break
 
-        while F:
-            for s in F:
-                envelope_graph.states[s] = self.hg.states[s]
-
-            algorithm.run(envelope_graph.states.keys())
-
-            expanded = expanded | F
-            F = self.hg.update_fringe_rlao(self.table, F, expanded)
+    def get_bpsg_states(self, state, states):
+        states.append(state)
+        predecessors = set(filter(lambda s: not s == state and s not in states, self.hg.get_predecessors(state, self.table)))
+        if predecessors:
+            min_value = float('inf')
+            for pred in predecessors:
+                if self.V[pred] < min_value:
+                    min_value = self.V[pred]
+                    best_pred = pred
+            states = self.get_bpsg_states(best_pred, states)
+        return states

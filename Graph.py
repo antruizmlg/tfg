@@ -81,3 +81,21 @@ class Graph:
                 con = c
                 break
         return con
+
+    
+    def update_values(self, stack, V, p):
+        actions = {'N', 'S', 'E', 'O'}
+        while stack:
+            s = stack.pop()
+            if not self.dict_state[s].final:
+                minimum = float('inf')
+                for a in actions:
+                    c = self.get_connector(s, a)
+                    val = c.cost
+                    for suc in c.probs.keys():
+                        val += c.probs[suc] * V[suc]
+                    if val < minimum:
+                        minimum = val
+                        best_action = a
+                V[s] = minimum
+                p[s] = best_action
