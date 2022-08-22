@@ -78,5 +78,6 @@ class Graph:
     def get_connector(self, state, action):
         for c in self.states[state]:
             if c.action == action:
+                con = c
                 break
-        return c
+        return con

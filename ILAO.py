@@ -14,29 +14,24 @@ class ILAO:
         self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def ILAO(self):
-        bpsg = Graph({self.s0: self.hg.states[self.s0]}, self.hg.dict_state)
-        expanded = set()
-        fringe = set(filter(lambda s: not self.hg.dict_state[s].terminal and s not in expanded, bpsg.states.keys()))
+        # Conjuntos de estados "fringe" e "interior"
+        F = {self.s0}
+        I = set()
 
-        while fringe:
-            DFS_Stack = [self.s0]
-            self.depth_first_search(bpsg, self.s0, DFS_Stack)
-            self.update_values(bpsg, DFS_Stack)
-            self.update_bpsg(bpsg, expanded, self.s0)
-            fringe = set(filter(lambda s: not self.hg.dict_state[s].terminal and s not in expanded, bpsg.states.keys()))
+        # Inicialización grafo explícito y grafo solución
+        envelope_graph = Graph({self.s0: []}, self.hg.dict_state)
+        bpsg_states = {self.s0}
 
-    def update_bpsg(self, bpsg, expanded, s):
-        expanded.add(s)
-        c = bpsg.get_connector(s, self.p[s])
-        bpsg[s] = [c]
-        for suc in c.probs.keys():
-            if suc not in bpsg.states.keys() and self.p[suc] is not None:
-                self.update_bpsg(bpsg, expanded, suc)
+        # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
+        if self.algorithm == 'PI':
+            algorithm = Policy_Iteration(self.hg, self.p, self.V) 
+        if self.algorithm == 'VI':
+            algorithm = Value_Iteration(self.hg, self.p, self.V)
 
     def depth_first_search(self, bpsg, s, stack):
         if self.p[s] is not None:
             for suc in bpsg.get_connector(s, self.p[s]).probs.keys():
-                stack.add(suc)
+                stack.append(suc)
                 self.depth_first_search(bpsg, suc, stack)
 
     def update_values(self, bpsg, stack):
@@ -46,7 +41,7 @@ class ILAO:
             if not bpsg.dict_state[s].final:
                 minimum = float('inf')
                 for a in actions:
-                    c = bpsg.get_connector(s, a)
+                    c = self.hg.get_connector(s, a)
                     val = c.cost
                     for p in c.probs.keys():
                         val += c.probs[p] * self.V[p]
