@@ -25,13 +25,14 @@ class RLAO:
                 break
 
     def get_bpsg_states(self, state, states):
-        states.append(state)
+        states.append(state) # Introducimos el estado actual en el conjunto de estados
         predecessors = set(filter(lambda s: not s == state and s not in states, self.hg.get_predecessors(state, self.table)))
-        if predecessors:
+        # Obtenemos todos los predecesores del estado actual que no esté ya en el conjunto de estados y que no sea el propio estado
+        if predecessors: # Si hay predecesores
             min_value = float('inf')
             for pred in predecessors:
                 if self.V[pred] < min_value:
                     min_value = self.V[pred]
-                    best_pred = pred
-            states = self.get_bpsg_states(best_pred, states)
-        return states
+                    best_pred = pred # Obtenemos el mejor predecesor "greedy"
+            states = self.get_bpsg_states(best_pred, states) # Llamada recursiva sobre predecesor "greedy"
+        return states #Devolvemos lista de estados
