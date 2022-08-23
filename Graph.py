@@ -82,7 +82,6 @@ class Graph:
                 break
         return con
 
-    
     def update_values(self, stack, V, p):
         actions = {'N', 'S', 'E', 'O'}
         while stack:
@@ -99,3 +98,45 @@ class Graph:
                         best_action = a
                 V[s] = minimum
                 p[s] = best_action
+
+    def depth_first_search(self, envelope, i, fringe, interior, p, stack):
+        stack.append(i) # Introducimos el estado i en la pila
+        if i in fringe: # Si el estado i no hay sido aún expandido
+            interior.add(i) # Lo añadimos al conjunto de estados interiores
+            fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
+            fringe = fringe | set(filter(lambda s:not envelope.dict_state[s].final and s not in interior, self.hg.get_successors(i)))
+            # Actualizamos el conjunto fringe con los sucesores del estado i
+            envelope.states[i] = self.states[i]
+            # Expandimos el estado i en el grafo "envelope"
+        else: # Si el estado ha sido expandido
+            for suc in self.get_connector(i, p[i]).probs.keys(): # Para cada sucesor "greedy" del estado
+                if suc not in stack and not self.dict_state[suc].final: # Si el sucesor no se encuentra ya en la pila y no es un estado
+                    # final
+                    fringe = self.depth_first_search(envelope, envelope, suc, fringe, interior, stack)
+                    # Realizamos la llamada recursiva sobre el estado sucesor
+        return fringe
+
+    def backward_search(self, envelope, i, fringe, interior, V, s0, stack):
+        stack.append(i) # Introducimos el estado i en la pila
+        if i in fringe: # Si el estado i no hay sido aún expandido
+            interior.add(i) # Lo añadimos al conjunto de estados interiores
+            fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
+            fringe = fringe | set(filter(lambda s:not envelope.dict_state[s].final and s not in interior, self.hg.get_successors(i)))
+            # Actualizamos el conjunto fringe con los sucesores del estado i
+            envelope.states[i] = self.states[i]
+            # Expandimos el estado i en el grafo "envelope"
+        else: # Si el estado ha sido expandido
+            predecessors = set(filter(lambda s: not s == i and s not in stack and not s == s0, self.get_predecessors(i, self.table)))
+            if predecessors: # Si hay predecesores
+                bp = self.best_predecessors(predecessors, V) # Obtenemos el mejor predecesor "greedy"
+                fringe = self.backward_search(envelope, bp, fringe, interior, V, s0, stack) # Llamada recursiva sobre predecesor "greedy"
+        return fringe
+
+    @staticmethod
+    def best_predecessors(predecessors, V):
+        min_value = float('inf')
+        for pred in predecessors:
+            if V[pred] < min_value:
+                min_value = V[pred]
+                best_pred = pred
+        return best_pred
