@@ -29,7 +29,7 @@ class BLAO:
             F = self.hg.depth_first_search(envelope_graph, self.s0, F, I, self.p, stack_DFS)
 
             stack_Backward = []
-            F_backward = self.hg.backward_search(self, backward_envelope_graph, self.fs, F_backward, I, self.V, self.s0, stack_Backward)
+            F_backward = self.hg.backward_search(backward_envelope_graph, self.fs, F_backward, I, self.V, self.s0, self.table, stack_Backward)
 
             self.hg.update_values(stack_DFS, self.V, self.p)
             self.hg.update_values(stack_Backward, self.V, self.p)
