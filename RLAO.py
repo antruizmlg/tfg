@@ -30,5 +30,5 @@ class RLAO:
         # Obtenemos todos los predecesores del estado actual que no esté ya en el conjunto de estados y que no sea el propio estado
         if predecessors: # Si hay predecesores
             bp = self.hg.best_predecessors(predecessors, self.V)
-            states = self.get_bpsg_states(bp, states) # Llamada recursiva sobre predecesor "greedy"
+            states = self.backward_bpsg_search(bp, states) # Llamada recursiva sobre predecesor "greedy"
         return states #Devolvemos lista de estados

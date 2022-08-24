@@ -78,5 +78,5 @@ def solve_problem(problem, algorithm, heuristic = None):
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
 p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                        # y el sistema transitorio
+                                                            # y el sistema transitorio
 solve_problem(p_1, 'BLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
