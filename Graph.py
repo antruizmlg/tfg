@@ -92,12 +92,13 @@ class Graph:
                 minimum = float('inf')
                 for a in actions:
                     c = self.get_connector(s, a)
-                    val = c.cost
-                    for suc in c.states():
-                        val += c.probs[suc] * V[suc]
-                    if val < minimum:
-                        minimum = val
-                        best_action = a
+                    if c is not None:
+                        val = c.cost
+                        for suc in c.states():
+                            val += c.probs[suc] * V[suc]
+                        if val < minimum:
+                            minimum = val
+                            best_action = a
                 V[s] = minimum
                 p[s] = best_action
                 
