@@ -11,6 +11,9 @@ class Policy_Iteration:
     def run(self, set):
         self.set = set
 
+        for s in set:
+            self.p[s] = 'N'
+
         while True:
             old_policy = deepcopy(self.p) # Hacemos una copia de la política actual
 
