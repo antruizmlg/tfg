@@ -93,14 +93,14 @@ class Graph:
                 for a in actions:
                     c = self.get_connector(s, a)
                     val = c.cost
-                    for suc in c.probs.keys():
+                    for suc in c.states():
                         val += c.probs[suc] * V[suc]
                     if val < minimum:
                         minimum = val
                         best_action = a
                 V[s] = minimum
                 p[s] = best_action
-
+                
     def depth_first_search(self, envelope, i, fringe, interior, p, stack):
         if i in fringe: # Si el estado i no hay sido aún expandido
             stack.append(i)
@@ -112,7 +112,7 @@ class Graph:
             # Expandimos el estado i en el grafo "envelope"
         elif i in interior: # Si el estado ha sido expandido
             stack.append(i)
-            for suc in self.get_connector(i, p[i]).probs.keys(): # Para cada sucesor "greedy" del estado
+            for suc in self.get_connector(i, p[i]).states(): # Para cada sucesor "greedy" del estado
                 if suc not in stack and not self.dict_state[suc].final and not suc == i: # Si el sucesor no se encuentra ya en la pila y no es un estado
                     # final y no es el propio estado
                     fringe = self.depth_first_search(envelope, suc, fringe, interior, p, stack)
