@@ -113,15 +113,15 @@ class Graph:
         elif i in interior: # Si el estado ha sido expandido
             stack.append(i)
             for suc in self.get_connector(i, p[i]).probs.keys(): # Para cada sucesor "greedy" del estado
-                if suc not in stack and not self.dict_state[suc].final: # Si el sucesor no se encuentra ya en la pila y no es un estado
-                    # final
+                if suc not in stack and not self.dict_state[suc].final and not suc == i: # Si el sucesor no se encuentra ya en la pila y no es un estado
+                    # final y no es el propio estado
                     fringe = self.depth_first_search(envelope, suc, fringe, interior, p, stack)
                     # Realizamos la llamada recursiva sobre el estado sucesor
         return fringe
 
     def backward_search(self, envelope, i, fringe, interior, V, s0, table, visited, stack):
         if i in fringe: # Si el estado i no hay sido aún expandido
-            stack.append(i)
+            stack.append(i) # Añadimos el estado a la pila
             interior.add(i) # Lo añadimos al conjunto de estados interiores
             fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
             fringe = fringe | set(filter(lambda s:not s == s0 and s not in interior, self.get_predecessors(i, table)))
@@ -129,8 +129,9 @@ class Graph:
             envelope.states[i] = self.states[i]
             # Expandimos el estado i en el grafo "envelope"
         elif i in interior: # Si el estado ha sido expandido
-            stack.append(i)
+            stack.append(i)  # Añadimos el estado a la pila
             predecessors = set(filter(lambda s: not s == i and s not in stack and not s == s0 and not s in visited, self.get_predecessors(i, table)))
+            # Obtenemos todos los predecesores que no sean el mismo estado, no estén ya en la pila, no sean el estado inicial y no hayan sido visitados.
             if predecessors: # Si hay predecesores
                 bp = self.best_predecessors(predecessors, V) # Obtenemos el mejor predecesor "greedy"
                 fringe = self.backward_search(envelope, bp, fringe, interior, V, s0, table, visited, stack) # Llamada recursiva sobre predecesor "greedy"

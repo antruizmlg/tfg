@@ -52,13 +52,13 @@ def solve_problem(problem, algorithm, heuristic = None):
         lao_algorithm = LAO(hg, s0, h, p, problem.table, 'VI')
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
-        rlao_algorithm = RLAO(hg, fs, h, p, problem.table, 'VI')
+        rlao_algorithm = RLAO(hg, fs, h, p, problem.table)
         rlao_algorithm.RLAO()
     elif algorithm == 'ILAO*':
-        ilao_algorithm = ILAO(hg, s0, h, p, problem.table, 'VI')
+        ilao_algorithm = ILAO(hg, s0, h, p, problem.table)
         ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
-        blao_algorithm = BLAO(hg, s0, fs, h, p, problem.table, 'VI')
+        blao_algorithm = BLAO(hg, s0, fs, h, p, problem.table)
         blao_algorithm.BLAO()
     elif algorithm == 'VI':
         vi_algorithm = Value_Iteration(hg, p, h)

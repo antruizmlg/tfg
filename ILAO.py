@@ -6,13 +6,12 @@ from copy import *
 import time
 
 class ILAO:
-    def __init__(self, hg, initial_state, h, p, table, algorithm):
+    def __init__(self, hg, initial_state, h, p, table):
         self.hg = hg # Hipergrafo
         self.s0 = initial_state.id # Estado inicial
         self.V = h # Función de valor inicializada con el heurístico
         self.p = p # Política inicial
         self.table = table
-        self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def ILAO(self):
         # Conjuntos de estados "fringe" e "interior"
