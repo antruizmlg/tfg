@@ -1,8 +1,6 @@
 from Graph import *
-from Policy_Iteration import *
 from Value_Iteration import *
 from copy import *
-import time
 
 class LAO:
     def __init__(self, hg, ini_state, h, pi, table, algorithm):
@@ -23,10 +21,7 @@ class LAO:
         bpsg_states = {self.s0}
 
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
-        if self.algorithm == 'PI':
-            algorithm = Policy_Iteration(self.hg, self.p, self.V) 
-        if self.algorithm == 'VI':
-            algorithm = Value_Iteration(self.hg, self.p, self.V)
+        algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         s = self.hg.get_no_final_state(bpsg_states & F) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
         while s is not None: # Mientras queden estados por expandir

@@ -1,5 +1,4 @@
 from Graph import *
-from Policy_Iteration import *
 from Value_Iteration import *
 from copy import *
 
@@ -23,14 +22,14 @@ class BLAO:
         backward_envelope_graph = Graph({self.fs: self.hg.states[self.fs]}, self.hg.dict_state) # Inicialización grafo explícito hacia atrás.
         # con estado final
 
+        stack_DFS = [] # Inicializamos pila búsqueda depth-first hacia adelante.
+        stack_Backward = [] # Inicializamos pila búsqueda hacia atrás.
+
         while True:
             oldV = deepcopy(self.V)
-
-            stack_DFS = [] # Inicializamos pila búsqueda depth-first hacia adelante.
+            
             F = self.hg.depth_first_search(envelope_graph, self.s0, F, I, self.p, stack_DFS)
             # Búsqueda primero en profundidad. Los nodos visitados se introducen en la pila, expandiendo los que están en el conjunto fringe
-
-            stack_Backward = [] # Inicializamos pila búsqueda hacia atrás.
             F_backward = self.hg.backward_search(backward_envelope_graph, self.fs, F_backward, I, self.V, self.s0, self.table, stack_DFS, stack_Backward)
             # Realizamos hacia atrás.
 
