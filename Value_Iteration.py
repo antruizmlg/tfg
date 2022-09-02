@@ -7,7 +7,11 @@ class Value_Iteration:
         self.V = V
 
     def run(self, set):
+        it = 0
+
         while True:
+            it += 1
+
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
 
             for s in set: # Para cada estado en el hipergrafo
@@ -25,3 +29,5 @@ class Value_Iteration:
                     
             if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle
                 break
+
+        return it

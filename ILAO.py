@@ -21,8 +21,12 @@ class ILAO:
 
         stack_DFS = [] # Inicializamos la pila de estados de la búsqueda "primero en profundidad"
 
+        it = 0
+
         while True:
             old_policy = deepcopy(self.p)
+
+            it += 1
 
             fringe = self.hg.depth_first_search(envelope_graph, self.s0, fringe, interior, self.p, stack_DFS)
             # Realizamos la búsqueda en profundidad, rellenando la pila y obteniendo el nuevo conjunto "fringe"
@@ -31,3 +35,5 @@ class ILAO:
 
             if all(old_policy[s] == self.p[s] for s in old_policy.keys()): # Si llegamos a convergencia, salimos del bucle
                 break
+
+        return it, len(envelope_graph.states)
