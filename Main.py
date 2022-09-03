@@ -32,19 +32,13 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-percent_sinks = 10
+percent_sinks_ = [10, 30, 50]
+systems = ['1', '2', '3']
 rows = 10
 columns = 10
-sinks = rows*columns*(percent_sinks/100)
 algorithm = 'ILAO'
-system = 1
 
-if system == 1:
-    probs = probs_1
-elif system == 2:
-    probs = probs_2
-elif system == 3:
-    probs = probs_3
+dict_system = {'1': probs_1, '2': probs_2, '3': probs_3}
 
 def solve_problem(problem, algorithm, heuristic = None):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -71,33 +65,39 @@ def solve_problem(problem, algorithm, heuristic = None):
     t_f = time.time()
     return t_f - t_i, it, size
 
+for system in systems:
+    print("Sistema: "+system)
+    for percent_sinks in percent_sinks_:
+        print("Porcentaje de sumideros: "+str(percent_sinks))
+        sinks = rows*columns*(percent_sinks/100)
+        while rows <= 100:
+            print("Generando stats para tablero "+str(rows)+"x"+str(columns)+"...")
+            times = []
+            list_it = []
+            list_size = []
+            for i in range(0, 100):
+                p_1 = Problem(rows, columns, sinks, dict_system[system]) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+                                                                            # y el sistema transitorio
+                t, it, size = solve_problem(p_1, algorithm, 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+                                                                        # y el sistema transitorio
+                times.append(t)
+                list_it.append(it)
+                list_size.append(size)
 
-while rows <= 100:
-    print("Generando stats para tablero "+str(rows)+"x"+str(columns)+"...")
-    times = []
-    list_it = []
-    list_size = []
-    for i in range(0, 100):
-        p_1 = Problem(rows, columns, sinks, probs) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                                    # y el sistema transitorio
-        t, it, size = solve_problem(p_1, algorithm, 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
-                                                                # y el sistema transitorio
-        times.append(t)
-        list_it.append(it)
-        list_size.append(size)
-
-    name = algorithm + "_" + str(rows * columns) + "_" + str(percent_sinks) + "_" + str(system) + ".txt"
-    f = open(name, "w")
-    f.write("Times required: ")
-    f.write(str(times))
-    f.write("\nIterations required:" )
-    f.write(str(list_it))
-    f.write("\nMean time: ")
-    f.write(str(sum(times)/len(times)))
-    f.write("\nMean iterations: ")
-    f.write(str(sum(list_it)/len(list_it)))
-    f.write("\nMean size graph: ")
-    f.write(str(sum(list_size)/len(list_size)))
-    f.close()
-    rows = rows + 10
-    columns = columns + 10
+            name = algorithm + "_" + str(rows * columns) + "_" + str(percent_sinks) + "_" + system + ".txt"
+            f = open(name, "w")
+            f.write("Times required: ")
+            f.write(str(times))
+            f.write("\nIterations required: " )
+            f.write(str(list_it))
+            f.write("\nSize graph: " )
+            f.write(str(list_size))  
+            f.write("\nMean time: ")
+            f.write(str(sum(times)/len(times)))
+            f.write("\nMean iterations: ")
+            f.write(str(sum(list_it)/len(list_it)))
+            f.write("\nMean size graph: ")
+            f.write(str(sum(list_size)/len(list_size)))
+            f.close()
+            rows = rows + 10
+            columns = columns + 10
