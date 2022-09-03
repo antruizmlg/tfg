@@ -102,21 +102,19 @@ class Graph:
                 V[s] = minimum
                 p[s] = best_action
                 
-    def depth_first_search(self, envelope, i, fringe, interior, p, stack):
+    def depth_first_search(self, i, fringe, interior, p, stack):
         if i in fringe: # Si el estado i no hay sido aún expandido
-            stack.append(i)
+            stack.append(i)            
             interior.add(i) # Lo añadimos al conjunto de estados interiores
             fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
-            fringe = fringe | set(filter(lambda s:not envelope.dict_state[s].final and s not in interior, self.get_successors(i)))
+            fringe = fringe | set(filter(lambda s:not self.dict_state[s].final and s not in interior, self.get_successors(i)))
             # Actualizamos el conjunto fringe con los sucesores del estado i
-            envelope.states[i] = self.states[i]
-            # Expandimos el estado i en el grafo "envelope"
         elif i in interior: # Si el estado ha sido expandido
-            stack.append(i)
+            stack.append(i)            
             for suc in self.get_connector(i, p[i]).states(): # Para cada sucesor "greedy" del estado
                 if suc not in stack and not self.dict_state[suc].final and not suc == i: # Si el sucesor no se encuentra ya en la pila y no es un estado
                     # final y no es el propio estado
-                    fringe = self.depth_first_search(envelope, suc, fringe, interior, p, stack)
+                    fringe = self.depth_first_search(suc, fringe, interior, p, stack)
                     # Realizamos la llamada recursiva sobre el estado sucesor
         return fringe
 

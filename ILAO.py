@@ -16,15 +16,14 @@ class ILAO:
         fringe = {self.s0}
         interior = set()
 
-        # Inicialización grafo explícito y grafo solución
-        envelope_graph = Graph({self.s0: []}, self.hg.dict_state)
-
         stack_DFS = [] # Inicializamos la pila de estados de la búsqueda "primero en profundidad"
+
+        cont = 0
 
         while True:
             old_policy = deepcopy(self.p)
 
-            fringe = self.hg.depth_first_search(envelope_graph, self.s0, fringe, interior, self.p, stack_DFS)
+            fringe = self.hg.depth_first_search(self.s0, fringe, interior, self.p, stack_DFS)
             # Realizamos la búsqueda en profundidad, rellenando la pila y obteniendo el nuevo conjunto "fringe"
             self.hg.update_values(stack_DFS, self.V, self.p)
             #Actualizamos valores y política sobre los estados de la pila, según un recorrido postorden

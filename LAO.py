@@ -3,13 +3,12 @@ from Value_Iteration import *
 from copy import *
 
 class LAO:
-    def __init__(self, hg, ini_state, h, pi, table, algorithm):
+    def __init__(self, hg, ini_state, h, pi, table):
         self.hg = hg # Hipergrafo
         self.s0 = ini_state.id # Estado inicial
         self.V = h # Función de valor inicializada con el heurístico
         self.p = pi # Política inicial
         self.table = table
-        self.algorithm = algorithm # Nombre del algoritmo a usar. Iteración de política o de valores.
 
     def LAO(self):
         # Conjuntos de estados "fringe" e "interior"
