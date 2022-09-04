@@ -32,8 +32,8 @@ probs_3['O'] = {'O': 0.8, '-': 0.2}
 sys.setrecursionlimit(10000)
 
 """Número de filas, número de columnas y de sumideros""" 
-percent_sinks_ = [10, 30, 50]
-systems = ['1', '2', '3']
+percent_sinks_ = [10]
+systems = ['1']
 algorithm = 'ILAO'
 
 dict_system = {'1': probs_1, '2': probs_2, '3': probs_3}
@@ -67,8 +67,8 @@ for system in systems:
     print("Sistema: "+system)
     for percent_sinks in percent_sinks_:
         print("Porcentaje de sumideros: "+str(percent_sinks))
-        rows = 10
-        columns = 10
+        rows = 70
+        columns = 70
         sinks = rows*columns*(percent_sinks/100)
         while rows <= 100:
             print("Generando para tablero de "+str(rows)+"x"+str(columns))
@@ -78,7 +78,7 @@ for system in systems:
             list_size = []
             ti = time.time()
             cont = 0
-            while cont < 300 and time.time() - ti < 2500:
+            while cont < 300 and time.time() - ti < 2000:
                 p_1 = Problem(rows, columns, sinks, dict_system[system]) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                                             # y el sistema transitorio
                 t, it, size = solve_problem(p_1, algorithm, 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado

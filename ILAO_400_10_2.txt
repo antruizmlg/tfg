@@ -1,6 +1,0 @@
-Times required: [0.03399348258972168]
-Iterations required: [37]
-Size graph: [203]
-Mean time: 0.03399348258972168
-Mean iterations: 37.0
-Mean size graph: 203.0
