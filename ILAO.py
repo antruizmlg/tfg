@@ -18,8 +18,6 @@ class ILAO:
 
         stack_DFS = [] # Inicializamos la pila de estados de la búsqueda "primero en profundidad"
 
-        cont = 0
-
         while True:
             old_policy = deepcopy(self.p)
 
