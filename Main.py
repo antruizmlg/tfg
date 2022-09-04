@@ -63,7 +63,7 @@ def solve_problem(problem, algorithm, heuristic = None):
     t_f = time.time()
     return t_f - t_i, it, size
 
-"""
+
 for system in systems:
     print("Sistema: "+system)
     for percent_sinks in percent_sinks_:
@@ -109,10 +109,3 @@ for system in systems:
             rows = rows + 10
             columns = columns + 10
             sinks = rows*columns*(percent_sinks/100)
-"""
-
-p_1 = Problem(70, 70, 490, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
-                                                            # y el sistema transitorio
-t, it, size = solve_problem(p_1, algorithm, 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
-                                                        # y el sistema transitorio
-print("FIN")
