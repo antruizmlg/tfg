@@ -4,9 +4,7 @@ from RLAO import *
 from BLAO import *
 from ILAO import *
 import time
-
-import matplotlib
-import matplotlib.pyplot as plt
+import sys
 
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
@@ -31,11 +29,11 @@ probs_3['S'] = {'S': 0.8, '-': 0.2}
 probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
+sys.setrecursionlimit(10000)
+
 """Número de filas, número de columnas y de sumideros""" 
 percent_sinks_ = [10, 30, 50]
 systems = ['1', '2', '3']
-rows = 10
-columns = 10
 algorithm = 'ILAO'
 
 dict_system = {'1': probs_1, '2': probs_2, '3': probs_3}
@@ -69,13 +67,18 @@ for system in systems:
     print("Sistema: "+system)
     for percent_sinks in percent_sinks_:
         print("Porcentaje de sumideros: "+str(percent_sinks))
+        rows = 10
+        columns = 10
         sinks = rows*columns*(percent_sinks/100)
         while rows <= 100:
-            print("Generando stats para tablero "+str(rows)+"x"+str(columns)+"...")
+            print("Generando para tablero de "+str(rows)+"x"+str(columns))
+            print("Número de sumideros: "+str(sinks))
             times = []
             list_it = []
             list_size = []
-            for i in range(0, 100):
+            ti = time.time()
+            cont = 0
+            while cont < 300 and time.time() - ti < 2500:
                 p_1 = Problem(rows, columns, sinks, dict_system[system]) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                                             # y el sistema transitorio
                 t, it, size = solve_problem(p_1, algorithm, 'MD') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
@@ -83,6 +86,8 @@ for system in systems:
                 times.append(t)
                 list_it.append(it)
                 list_size.append(size)
+
+                cont += 1
 
             name = algorithm + "_" + str(rows * columns) + "_" + str(percent_sinks) + "_" + system + ".txt"
             f = open(name, "w")
@@ -99,5 +104,7 @@ for system in systems:
             f.write("\nMean size graph: ")
             f.write(str(sum(list_size)/len(list_size)))
             f.close()
+
             rows = rows + 10
             columns = columns + 10
+            sinks = rows*columns*(percent_sinks/100)
