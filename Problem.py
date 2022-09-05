@@ -5,45 +5,50 @@ import random
 
 class Problem:
     def __init__(self, rows, columns, sinks, probs):
-
-        self.table = [[0 for j in range(rows)] for i in range(columns)] # Tablero con los estados
-
+        self.table = [] # Tablero con los estados
+        self.states = {} # Diccionario con los estados
         for i in range(rows):
+            row = []
             for j in range(columns):
-                id = 's' + str(i) + "_" + str(j)
-                self.table[i][j] = State(id, i, j) # Rellenamos el tablero con cada estado
+                row.append(State('s' + str(i) + "_" + str(j), i, j)) # Rellenamos el tablero con cada estado
+            self.table.append(row)
 
-        self.ss = State('s_ss', '', '') 
-        self.ss.final = True # Añadimos un estado sumidero
+        self.ss = State('s_ss')
+        self.ss.final = True # Añadimos un estado auxiliar al que transitarán los estados sumideros con un coste alto.
 
-        self.final_row = self.random_generator(rows - 1) 
-        self.final_col = self.random_generator(columns - 1) # Generamos la fila y columna objetivo. Una de las 4 esquinas aleatoriamente.
-
+        """ el estado final será una esquina aleatoria del tablero """
+        random_corner = random.randint(0, 3)
+        if random_corner == 0:
+            self.final_row = 0
+            self.final_col = 0
+        elif random_corner == 1:
+            self.final_row = 0
+            self.final_col = columns - 1
+        elif random_corner == 2:
+            self.final_row = rows - 1
+            self.final_col = 0
+        elif random_corner == 3:
+            self.final_row = rows - 1
+            self.final_col = columns - 1             
         self.table[self.final_row][self.final_col].final = True
 
         self.initial_row = rows // 2
         self.initial_col = columns // 2 # Establecemos el fila y la columna inicial en la mitad del tablero
 
-        self.sinks = [] # Lista para almacenar la representación en cadena de carácteres de los sumideros
-
-        i = 0
-        while i < sinks: # Establecemos los sumideros de forma aleatoria. No pueden ser estados terminales ni el estado inical
+        while sinks: # Establecemos los sumideros de forma aleatoria. No pueden ser estados terminales ni el estado inical.
             r = random.randint(0, rows - 1)
             c = random.randint(0, columns - 1)
             if not self.table[r][c].sink and not self.table[r][c].final and not (r == self.initial_row and c == self.initial_row):
                 self.table[r][c].sink = True
-                self.sinks.append("["+str(r)+", "+str(c)+"]")
-                i += 1
+                sinks -= 1
 
         self.actions = {'N': 1, 'S': 1, 'E': 1, 'O': 1, '-': 1} # Diccionario con asociación (acción -> coste)
         # La acción "-" representa mantenerse en el mismo estado.
-
         self.probs = probs # Inicializamos diccionario de probabilidades
 
     def generate_problem(self):
         dict_state = {} # Diccionario con asociaciones (id de estado -> Objeto estado)
         states_hg = {} # Diccionario con asociaciones (Estado -> Lista de conectores que salen de ese estado)
-        c_list = [] # Lista para almacenar los k-conectores que salen de un estado concreto
         dict_state[self.ss.id] = self.ss
 
         for i in range(len(self.table)): # Para cada estado en el tablero
@@ -53,17 +58,16 @@ class Problem:
                 c_list = [] # Lista para almacenar los k-conectores que salen de un estado concreto
                 if not state.final: # Si el estado no es terminal
                     if not state.sink: # Si el estado no es sumidero
-                        for a in self.actions.keys(): # Para cada acción posible
-                            if not a == '-': # Si la acción implica ir a un estado sucesor (N, S, E, O)
-                                c_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
-                                # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
+                        for a in set(filter(lambda action: not action == '-', self.actions.keys())): # Para cada acción posible que implica ir a un estado sucesor
+                            c_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
+                            # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
                     else:
                         c_list.append(Connector({self.ss.id: 1}, 'N', len(self.table)*3))
-                    # Si es un estado sumidero, ese estado solo tendrá un sucesor con un coste alto, para evitar las transiciones a ese estado.
+                    # Si es un estado sumidero, ese estado solo tendrá un sucesor con un coste alto.
                 states_hg[state.id] = c_list # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
         hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
         return hg, self.table[self.initial_row][self.initial_col], self.table[self.final_row][self.final_col]
-        # Devolvemos el diccionario con asociaciones (id de estado -> objeto estado), el hipergrafo que representa el problema, el estado inicial
+        # Devolvemos el hipergrafo que representa el problema, el estado inicial y el estado final
 
     """método que recibe una fila, una columna y una acción, y devuelve un diccionario con asociaciones (estado -> probabilidad) asociada al
     k-conector que sale del estado en la posición (fila, columna) del tablero al realizar la acción 'a' """
@@ -98,12 +102,12 @@ class Problem:
             return self.table[of][oc] # Hemos salido del tablero, devolvemos el mismo estado
 
     """Método para imprimir información del problema"""
-    def print_info(self):   
+    def print_info(self):
+        print("---------------PROBLEMA GENERADO---------------")   
         print("Tamaño de tablero: " + str(len(self.table)) + "x" + str(len(self.table[0])))
-        for s in self.sinks:
-            print("Sumidero: "+ s)
         print("Celda inicial: [" + str(self.initial_row) + ", " + str(self.initial_col) + "]")
-        print("Celda objetivo: [" + str(self.final_row) + ", " + str(self.final_col) + "]\n")
+        print("Celda objetivo: [" + str(self.final_row) + ", " + str(self.final_col) + "]")
+        print("-----------------------------------------------")   
 
     """Métodos para imprimir el tablero con la solución dada la política óptima"""
 
@@ -113,13 +117,13 @@ class Problem:
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
                 if self.table[i][j].final:
-                    print('T', end=" ")
+                    print('T', end="")
                 elif self.table[i][j].sink:
-                    print('.', end=" ")
+                    print('.', end="")
                 elif self.table[i][j] in dic.keys():
-                    print(dic[self.table[i][j]], end=" ")
+                    print(dic[self.table[i][j]], end="")
                 else:
-                    print('#', end=" ")
+                    print('#', end="")
             print("")
 
     def get_solution(self, p, fil, col, dic):
@@ -137,24 +141,14 @@ class Problem:
                 self.get_solution(p, fil, col - 1, dic)
 
     """Método para obtener política inicial y heurístico"""
-    def get_initial_policy_and_heuristic(self, heuristic):
+    def get_initial_policy_and_heuristic(self):
         p = {}
         h = {}
         for i in range(len(self.table)): 
             for j in range(len(self.table[i])):
                 state = self.table[i][j]
                 p[state.id] = None
-                if heuristic == 'MD': 
-                    h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
-                else:
-                    h[state.id] = 0
+                h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
         p[self.ss.id] = None
         h[self.ss.id] = 0
         return p, h
-
-    @staticmethod
-    def random_generator(p):
-        if random.randint(0, 1) == 0:
-            return 0
-        else:
-            return p

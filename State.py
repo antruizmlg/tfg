@@ -1,5 +1,5 @@
 class State:
-    def __init__(self, id, row, column):
+    def __init__(self, id, row = None, column = None):
         self.id = id
         self.row = row
         self.col = column

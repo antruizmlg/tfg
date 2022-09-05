@@ -20,7 +20,7 @@ class Value_Iteration:
                         if action_cost < min_cost: # Si ese valor (coste) es menor que el menor encontrado hasta el momento
                             min_cost = action_cost # Actualizamos el menor coste
                             best_action = c.action # Actualizamos la mejor acción
-                    self.V[s] = round(min_cost, 1) # Establecemos nuevo valor asociado al estado
+                    self.V[s] = round(min_cost, 2) # Establecemos nuevo valor asociado al estado
                     self.p[s] = best_action # Establecemos nueva mejor acción asociada al estado
                     
             if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle

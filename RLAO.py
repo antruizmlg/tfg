@@ -1,3 +1,4 @@
+from configparser import InterpolationError
 from Graph import *
 from Value_Iteration import *
 from copy import *
@@ -11,15 +12,17 @@ class RLAO:
         self.table = table
 
     def RLAO(self):
+        bpsg_states = []
+
         while True:
-            oldV = deepcopy(self.V) 
+            old_bpsg = deepcopy(bpsg_states) 
 
             bpsg_states = self.get_bpsg_states(self.fs, []) # Obtenemos el best partial solution graph partiendo desde el estado final
             # y expandiendo los antecesores.
             self.hg.update_values(bpsg_states, self.V, self.p) # Actualizamos valores y política de los estados del best partial solution
             # graph
 
-            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle.
+            if set(bpsg_states) == set(old_bpsg): # Si llegamos a convergencia, salimos del bucle.
                 break
 
     def get_bpsg_states(self, state, states):
