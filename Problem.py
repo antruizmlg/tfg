@@ -38,7 +38,7 @@ class Problem:
         while sinks: # Establecemos los sumideros de forma aleatoria. No pueden ser estados terminales ni el estado inical.
             r = random.randint(0, rows - 1)
             c = random.randint(0, columns - 1)
-            if not self.table[r][c].sink and not self.table[r][c].final and not (r == self.initial_row and c == self.initial_row):
+            if not self.table[r][c].sink and not r == self.initial_row and not c == self.final_col:
                 self.table[r][c].sink = True
                 sinks -= 1
 
