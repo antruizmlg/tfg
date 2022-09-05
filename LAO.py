@@ -22,18 +22,19 @@ class LAO:
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        s = self.hg.get_no_final_state(bpsg_states & F) # Obtenemos un estado no terminal del conjunto de estados "fringe" del grafo solución
-        while s is not None: # Mientras queden estados por expandir
+        while True: # Mientras queden estados por expandir
+            s = (bpsg_states & F).pop()
             self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             F.remove(s) # Eliminamos el estado s del conjunto fringe
             I.add(s) # Introducimos s en el conjunto I
-
             envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
 
             Z = self.hg.get_set_Z(envelope_graph, self.table, s, self.p, {s}) # Construimos el hipergrafo Z
-
-            algorithm.run(Z) # Aplicamos VI o PI sobre hipergrafo Z
-
+            algorithm.run(Z) # Aplicamos VI sobre hipergrafo Z
             bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) # Obtenemos los estados del grafo solución
 
-            s = self.hg.get_no_final_state(bpsg_states & F)
+            algorithm.run(bpsg_states) # Aplicamos VI sobre el grafo solución parcial
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) 
+
+            if not (bpsg_states & F): # Si el grafo solución parcial no tiene estados sin expandir, se ha llegado a convergencia.
+                break

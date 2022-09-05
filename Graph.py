@@ -55,7 +55,7 @@ class Graph:
     """ métodos para acutalizar el conjunto de estados 'fringe' """
     def update_fringe_set(self, F, I, s):
         for st in self.get_successors(s): # Por cada sucesor de s en el hipergrafo
-            if st not in I: # Si el sucesor no se encuentra en el conjunto I
+            if st not in I and not self.dict_state[st].final: # Si el sucesor no se encuentra en el conjunto I
                 F.add(st) # Lo introducimos en el conjunto F
 
     def update_fringe_rlao(self, table, states, expanded):
@@ -66,13 +66,6 @@ class Graph:
                 if p not in expanded:
                     F.add(p)
         return F
-
-    """ método para obtener estado no terminal """
-    def get_no_final_state(self, states):
-        for s in states: # Por cada estado en el conjunto states
-            if not self.dict_state[s].final: # Si el estado no es terminal
-                return s # Lo devolvemos
-        return None # Si no hemos encontrado ningún estado no terminal en el conjunto, devolvemos None
     
     """método que dado un estado, devuelve el conector asociado a la acción dada"""
     def get_connector(self, state, action):
@@ -99,22 +92,22 @@ class Graph:
                         if val < minimum:
                             minimum = val
                             best_action = a
-                V[s] = minimum
+                V[s] = round(minimum, 2)
                 p[s] = best_action
                 
-    def depth_first_search(self, i, fringe, interior, p, stack):
-        if i in fringe: # Si el estado i no hay sido aún expandido
-            stack.append(i)            
-            interior.add(i) # Lo añadimos al conjunto de estados interiores
+    def depth_first_search(self, graph, i, fringe, interior, p, stack):
+        stack.append(i)    
+        if i in fringe: # Si el estado i no hay sido aún expandido           
             fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
-            fringe = fringe | set(filter(lambda s:not self.dict_state[s].final and s not in interior, self.get_successors(i)))
+            interior.add(i) # Lo añadimos al conjunto de estados interiores            
+            graph.states[i] = self.states[i] # Añadimos estados al grafo
+            fringe = fringe | set(filter(lambda s:not self.dict_state[s].final and s not in interior, graph.get_successors(i)))
             # Actualizamos el conjunto fringe con los sucesores del estado i
-        elif i in interior: # Si el estado ha sido expandido
-            stack.append(i)            
+        elif i in interior: # Si el estado ha sido expandido        
             for suc in self.get_connector(i, p[i]).states(): # Para cada sucesor "greedy" del estado
-                if suc not in stack and not self.dict_state[suc].final and not suc == i: # Si el sucesor no se encuentra ya en la pila y no es un estado
-                    # final y no es el propio estado
-                    fringe = self.depth_first_search(suc, fringe, interior, p, stack)
+                if suc not in stack and not self.dict_state[suc].final: # Si el sucesor no se encuentra ya en la pila y no es un estado
+                    # final
+                    fringe = self.depth_first_search(graph, suc, fringe, interior, p, stack)
                     # Realizamos la llamada recursiva sobre el estado sucesor
         return fringe
 

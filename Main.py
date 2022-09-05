@@ -4,7 +4,6 @@ from RLAO import *
 from BLAO import *
 from ILAO import *
 import time
-import sys
 
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
@@ -31,20 +30,18 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 10
-columns = 10
-sinks = 80
+rows = 70
+columns = 70
+sinks = 800
 
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
     p, h = problem.get_initial_policy_and_heuristic()
-
     problem.print_info() # Imprimimos información del problema
 
     t_i = time.time() # Iniciamos contador
-
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(hg, s0, h, p, problem.table)
@@ -72,7 +69,7 @@ def solve_problem(problem, algorithm):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

@@ -1,7 +1,7 @@
 from inspect import stack
 from Graph import *
 from copy import *
-import time
+from Value_Iteration import *
 
 class ILAO:
     def __init__(self, hg, initial_state, h, p, table):
@@ -16,15 +16,20 @@ class ILAO:
         fringe = {self.s0}
         interior = set()
 
+        envelope_graph = Graph({self.s0: []}, self.hg.dict_state)
         stack_DFS = [] # Inicializamos la pila de estados de la búsqueda "primero en profundidad"
+        algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True:
-            old_policy = deepcopy(self.p)
-
-            fringe = self.hg.depth_first_search(self.s0, fringe, interior, self.p, stack_DFS)
+            fringe = self.hg.depth_first_search(envelope_graph, self.s0, fringe, interior, self.p, stack_DFS)
             # Realizamos la búsqueda en profundidad, rellenando la pila y obteniendo el nuevo conjunto "fringe"
             self.hg.update_values(stack_DFS, self.V, self.p)
             #Actualizamos valores y política sobre los estados de la pila, según un recorrido postorden
+            
+            #Test de convergencia
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) 
+            algorithm.run(bpsg_states)
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) # Obtenemos los estados del grafo solución
 
-            if all(old_policy[s] == self.p[s] for s in old_policy.keys()): # Si llegamos a convergencia, salimos del bucle
+            if not (bpsg_states & fringe):
                 break

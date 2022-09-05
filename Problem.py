@@ -140,6 +140,22 @@ class Problem:
             if action == 'O':
                 self.get_solution(p, fil, col - 1, dic)
 
+    def print_table(self, p):
+        for i in range(len(self.table)):
+            for j in range(len(self.table[0])):
+                state = self.table[i][j]
+                if state.final:
+                    print('T', end="")
+                elif state.sink:
+                    print('.', end="")
+                else:
+                    ac = p[state.id]
+                    if ac is None:
+                        print('#', end="")
+                    else:
+                        print(ac, end="")
+            print("")
+
     """Método para obtener política inicial y heurístico"""
     def get_initial_policy_and_heuristic(self):
         p = {}
