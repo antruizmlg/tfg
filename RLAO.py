@@ -4,36 +4,33 @@ from Value_Iteration import *
 from copy import *
 
 class RLAO:
-    def __init__(self, hg, final_state, h, p, table):
+    def __init__(self, hg, s0,final_state, h, p, problem):
         self.hg = hg # Hipergrafo
+        self.s0 = s0.id
         self.fs = final_state.id # Estado final
         self.V = h # Función de valor inicializada con el heurístico
         self.p = p # Política inicial
-        self.table = table
+        self.table = problem.table
+        self.problem = problem
 
     def RLAO(self):
-        bpsg_states = []
+        I = set() # Conjunto interior. Este conjunto es compartido, los nodos se expanden buscando hacia atrás o hacia adelante.
+        F = {self.fs} # Conjunto fringe búsqueda hacia atrás
+
+        algorithm = Value_Iteration(self.hg, self.p, self.V)
+        # Inicialización grafo explícito
+        envelope_graph = Graph({self.fs: self.hg.states[self.fs]}, self.hg.dict_state)
+        stack = []
 
         while True:
-            old_bpsg = deepcopy(bpsg_states) 
+            oldV = deepcopy(self.V)
 
-            bpsg_states = self.get_bpsg_states(self.fs, []) # Obtenemos el best partial solution graph partiendo desde el estado final
-            # y expandiendo los antecesores.
-            self.hg.update_values(bpsg_states, self.V, self.p) # Actualizamos valores y política de los estados del best partial solution
-            # graph
+            F = self.hg.backward_search(envelope_graph, self.fs, F, I, self.V, '', self.table, [], stack)
+            self.hg.update_values(stack, self.V, self.p) 
 
-            if set(bpsg_states) == set(old_bpsg): # Si llegamos a convergencia, salimos del bucle.
+            #Test de convergencia
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
+            algorithm.run(bpsg_states)
+            #Test de convergencia
+            if all(oldV[s] == self.V[s] for s in oldV.keys()) and bpsg_states: 
                 break
-
-    def get_bpsg_states(self, state, states):
-        states.append(state) # Introducimos el estado actual en el conjunto de estados
-        predecessors = set(filter(lambda s: not s == state and s not in states, self.hg.get_predecessors(state, self.table)))
-        # Obtenemos todos los predecesores del estado actual que no esté ya en el conjunto de estados y que no sea el propio estado
-        if predecessors: # Si hay predecesores
-            min_value = float('inf')
-            for pred in predecessors:
-                if self.V[pred] < min_value:
-                    min_value = self.V[pred]
-                    best_pred = pred # Obtenemos el mejor predecesor "greedy"
-            states = self.get_bpsg_states(best_pred, states) # Llamada recursiva sobre predecesor "greedy"
-        return states #Devolvemos lista de estados

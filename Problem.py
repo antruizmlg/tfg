@@ -62,7 +62,7 @@ class Problem:
                             c_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
                             # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
                     else:
-                        c_list.append(Connector({self.ss.id: 1}, 'N', len(self.table)*3))
+                        c_list.append(Connector({self.ss.id: 1}, 'N', 999999999))
                     # Si es un estado sumidero, ese estado solo tendrá un sucesor con un coste alto.
                 states_hg[state.id] = c_list # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
         hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
@@ -140,20 +140,25 @@ class Problem:
             if action == 'O':
                 self.get_solution(p, fil, col - 1, dic)
 
-    def print_table(self, p):
+    def print_table(self, p = None):
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
                 state = self.table[i][j]
-                if state.final:
+                if i == self.initial_row and j == self.initial_col:
+                    print('I', end="")                    
+                elif state.final:
                     print('T', end="")
                 elif state.sink:
                     print('.', end="")
                 else:
-                    ac = p[state.id]
-                    if ac is None:
-                        print('#', end="")
+                    if p is not None:
+                        action = p[state.id]
+                        if action is None:
+                            print('#', end="")
+                        else:
+                            print(action, end="")
                     else:
-                        print(ac, end="")
+                        print('#', end="")                      
             print("")
 
     """Método para obtener política inicial y heurístico"""

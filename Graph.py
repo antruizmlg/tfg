@@ -19,13 +19,13 @@ class Graph:
         row = self.dict_state[s].row
         col = self.dict_state[s].col
 
-        if row - 1 >= 0:
+        if row - 1 >= 0 and not table[row - 1][col].sink:
             sol.add(table[row - 1][col].id)
-        if row + 1 < len(table):
-            sol.add(table[row + 1][col].id)
-        if col - 1 >= 0:
+        if row + 1 < len(table) and not table[row + 1][col].sink:
+            sol.add(table[row + 1][col].id) 
+        if col - 1 >= 0 and not table[row][col - 1].sink:
             sol.add(table[row][col - 1].id)           
-        if col + 1 < len(table[0]):
+        if col + 1 < len(table[0]) and not table[row][col + 1].sink:
             sol.add(table[row][col + 1].id)
 
         return sol        
@@ -120,7 +120,7 @@ class Graph:
             fringe = fringe | set(filter(lambda s:not s == s0 and s not in interior, self.get_predecessors(i, table)))
             # Actualizamos el conjunto fringe con los sucesores del estado i
         elif i in interior: # Si el estado ha sido expandido
-            predecessors = set(filter(lambda s: not s == i and s not in stack and not s == s0 and not s in visited, self.get_predecessors(i, table)))
+            predecessors = set(filter(lambda s: s not in stack and not s == s0 and not s in visited, self.get_predecessors(i, table)))
             # Obtenemos todos los predecesores que no sean el mismo estado, no estén ya en la pila, no sean el estado inicial y no hayan sido visitados.
             if predecessors: # Si hay predecesores
                 bp = self.best_predecessors(predecessors, V) # Obtenemos el mejor predecesor "greedy"

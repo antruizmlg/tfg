@@ -21,15 +21,14 @@ class ILAO:
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True:
+            oldV = deepcopy(self.V)
+
             fringe = self.hg.depth_first_search(envelope_graph, self.s0, fringe, interior, self.p, stack_DFS)
             # Realizamos la búsqueda en profundidad, rellenando la pila y obteniendo el nuevo conjunto "fringe"
             self.hg.update_values(stack_DFS, self.V, self.p)
             #Actualizamos valores y política sobre los estados de la pila, según un recorrido postorden
             
             #Test de convergencia
-            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) 
-            algorithm.run(bpsg_states)
-            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0) # Obtenemos los estados del grafo solución
-
-            if not (bpsg_states & fringe):
+            algorithm.run(self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0))
+            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle
                 break

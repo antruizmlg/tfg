@@ -4,6 +4,7 @@ from RLAO import *
 from BLAO import *
 from ILAO import *
 import time
+import sys
 
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
@@ -30,9 +31,10 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
-sinks = 10
+rows = 80
+columns = 80
+sinks = 6000
+
 
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -44,16 +46,16 @@ def solve_problem(problem, algorithm):
     t_i = time.time() # Iniciamos contador
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
-        lao_algorithm = LAO(hg, s0, h, p, problem.table)
+        lao_algorithm = LAO(hg, s0, h, p, problem)
         lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
-        rlao_algorithm = RLAO(hg, fs, h, p, problem.table)
+        rlao_algorithm = RLAO(hg, s0, fs, h, p, problem)
         rlao_algorithm.RLAO()
     elif algorithm == 'ILAO*':
         ilao_algorithm = ILAO(hg, s0, h, p, problem.table)
         ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
-        blao_algorithm = BLAO(hg, s0, fs, h, p, problem.table)
+        blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
         blao_algorithm.BLAO()
     elif algorithm == 'VI':
         vi_algorithm = Value_Iteration(hg, p, h)
@@ -69,7 +71,7 @@ def solve_problem(problem, algorithm):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'BLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

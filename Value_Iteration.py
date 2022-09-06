@@ -9,6 +9,7 @@ class Value_Iteration:
     def run(self, set):
         while True:
             oldV = deepcopy(self.V) # Almacenamos la antigua función de valor
+            old_policy = deepcopy(self.p)
 
             for s in set: # Para cada estado en el hipergrafo
                 if not self.hg.dict_state[s].final: # Si el estado no es terminal
@@ -23,5 +24,5 @@ class Value_Iteration:
                     self.V[s] = round(min_cost, 2) # Establecemos nuevo valor asociado al estado
                     self.p[s] = best_action # Establecemos nueva mejor acción asociada al estado
                     
-            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle
+            if all(old_policy[s] == self.p[s] for s in old_policy.keys()): # Si llegamos a convergencia, salimos del bucle
                 break
