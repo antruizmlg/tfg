@@ -23,9 +23,7 @@ class BLAO:
         # Inicialización grafo explícito e instancia del algoritmo iteración de valores
         envelope_graph = Graph({self.s0: [], self.fs: []}, self.hg.dict_state)
         algorithm = Value_Iteration(self.hg, self.p, self.V)
-        while True:
-            oldV = deepcopy(self.V)
-            
+        while True:     
             F = self.hg.depth_first_search(envelope_graph, self.s0, F, I, self.p, stack_DFS)
             # Búsqueda primero en profundidad. Los nodos visitados se introducen en la pila, expandiendo los que están en el conjunto fringe
             F_backward = self.hg.backward_search(envelope_graph, self.fs, F_backward, I, self.V, self.s0, self.table, stack_DFS, stack_Backward)
@@ -35,6 +33,8 @@ class BLAO:
             self.hg.update_values(stack_Backward, self.V, self.p) # Actualizamos valores estados visitados en la búsqueda hacia atrás.
 
             #Test de convergencia
-            algorithm.run(self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0))
-            if all(oldV[s] == self.V[s] for s in oldV.keys()): # Si llegamos a convergencia, salimos del bucle
+            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
+            algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
+            bpsg_states_ = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
+            if not (bpsg_states & F) and bpsg_states == bpsg_states_:        
                 break

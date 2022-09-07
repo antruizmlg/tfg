@@ -23,14 +23,13 @@ class RLAO:
         stack = []
 
         while True:
-            oldV = deepcopy(self.V)
-
             F = self.hg.backward_search(envelope_graph, self.fs, F, I, self.V, '', self.table, [], stack)
             self.hg.update_values(stack, self.V, self.p) 
 
             #Test de convergencia
             bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
-            algorithm.run(bpsg_states)
-            #Test de convergencia
-            if all(oldV[s] == self.V[s] for s in oldV.keys()) and bpsg_states: 
-                break
+            if bpsg_states:
+                algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
+                bpsg_states_ = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
+                if not (bpsg_states & F) and bpsg_states == bpsg_states_:        
+                    break

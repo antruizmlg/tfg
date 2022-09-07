@@ -52,7 +52,7 @@ def solve_problem(problem, algorithm):
         rlao_algorithm = RLAO(hg, s0, fs, h, p, problem)
         rlao_algorithm.RLAO()
     elif algorithm == 'ILAO*':
-        ilao_algorithm = ILAO(hg, s0, h, p, problem.table)
+        ilao_algorithm = ILAO(hg, s0, h, p, problem)
         ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
@@ -71,7 +71,7 @@ def solve_problem(problem, algorithm):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

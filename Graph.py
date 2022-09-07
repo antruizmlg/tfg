@@ -96,14 +96,15 @@ class Graph:
                 p[s] = best_action
                 
     def depth_first_search(self, graph, i, fringe, interior, p, stack):
-        stack.append(i)    
-        if i in fringe: # Si el estado i no hay sido aún expandido           
+        if i in fringe: # Si el estado i no hay sido aún expandido   
+            stack.append(i)                        
             fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
             interior.add(i) # Lo añadimos al conjunto de estados interiores            
             graph.states[i] = self.states[i] # Añadimos estados al grafo
             fringe = fringe | set(filter(lambda s:not self.dict_state[s].final and s not in interior, graph.get_successors(i)))
             # Actualizamos el conjunto fringe con los sucesores del estado i
-        elif i in interior: # Si el estado ha sido expandido        
+        elif i in interior: # Si el estado ha sido expandido
+            stack.append(i)    
             for suc in self.get_connector(i, p[i]).states(): # Para cada sucesor "greedy" del estado
                 if suc not in stack and not self.dict_state[suc].final: # Si el sucesor no se encuentra ya en la pila y no es un estado
                     # final
