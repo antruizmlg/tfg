@@ -59,11 +59,10 @@ class Problem:
                 if not state.final: # Si el estado no es terminal
                     if not state.sink: # Si el estado no es sumidero
                         for a in set(filter(lambda action: not action == '-', self.actions.keys())): # Para cada acción posible que implica ir a un estado sucesor
-                            c_list.append(Connector(self.get_probs(i, j, a), a, self.actions[a]))
+                            probs_trans = self.get_probs(i, j, a)
+                            if probs_trans:
+                                c_list.append(Connector(probs_trans, a, self.actions[a]))
                             # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
-                    else:
-                        c_list.append(Connector({self.ss.id: 1}, 'N', 999999999))
-                    # Si es un estado sumidero, ese estado solo tendrá un sucesor con un coste alto.
                 states_hg[state.id] = c_list # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
         hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
         return hg, self.table[self.initial_row][self.initial_col], self.table[self.final_row][self.final_col]
@@ -76,6 +75,8 @@ class Problem:
 
         for a in self.probs[action].keys():
             suc = self.successor(row, col, a)
+            if suc.sink:
+                return {}
             if suc.id in probs.keys():
                 probs[suc.id] += self.probs[action][a]
             else:
