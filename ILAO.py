@@ -12,23 +12,32 @@ class ILAO:
         self.problem = problem
 
     def ILAO(self):
-        # Conjuntos de estados "fringe" e "interior"
-        fringe = {self.s0}
-        interior = set()
+        bpsg = Graph({self.s0:[]}, self.hg.dict_state)
+        explicit_graph = deepcopy(bpsg)
 
-        envelope_graph = Graph({self.s0: []}, self.hg.dict_state)
-        stack_DFS = [] # Inicializamos la pila de estados de la búsqueda "primero en profundidad"
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
+        expanded = set()
+        unexpanded = set(filter(lambda s: not s in expanded and not bpsg.dict_state[s].final, bpsg.states.keys()))
         while True:
-            fringe = self.hg.depth_first_search(envelope_graph, self.s0, fringe, interior, self.p, stack_DFS)
-            # Realizamos la búsqueda en profundidad, rellenando la pila y obteniendo el nuevo conjunto "fringe"
-            self.hg.update_values(stack_DFS, self.V, self.p)
-            #Actualizamos valores y política sobre los estados de la pila, según un recorrido postorden
+            old_p = deepcopy(self.p)
+
+            while unexpanded:
+                s = unexpanded.pop()
+
+                if not s in expanded and not bpsg.dict_state[s].final:
+                    expanded.add(s)
+                    explicit_graph.states[s] = self.hg.states[s]
+                    self.hg.update_values([s], self.V, self.p)
+                
+                bpsg_states = self.hg.get_bpsg_states(explicit_graph, self.p, set(), self.s0)
+                unexpanded = set(filter(lambda s: s not in expanded and not bpsg.dict_state[s].final, bpsg_states))
+
+            Z = [s for s in bpsg_states if not bpsg.dict_state[s].final]
+            algorithm.run(Z)
             
-            #Test de convergencia
-            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
-            algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
-            bpsg_states_ = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
-            if not (bpsg_states & fringe) and bpsg_states == bpsg_states_:        
+            if all(old_p[s] == self.p[s] for s in old_p.keys()): 
                 break
+
+            bpsg_states = self.hg.get_bpsg_states(explicit_graph, self.p, set(), self.s0)
+            unexpanded = set(filter(lambda s: s not in expanded and not bpsg.dict_state[s].final, bpsg_states))                     

@@ -31,9 +31,9 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
-sinks = 0
+rows = 80
+columns = 80
+sinks = 6000
 
 
 def solve_problem(problem, algorithm):
@@ -73,5 +73,5 @@ def solve_problem(problem, algorithm):
 
 p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'ILAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
