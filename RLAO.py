@@ -21,7 +21,7 @@ class RLAO:
             self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, set())
             #Test de convergencia
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-            if bpsg_states:
+            if len(bpsg_states) > 1:
                 algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
                 if all(old_p[s] == self.p[s] for s in old_p.keys()): # Si llegamos a convergencia, salimos del bucle
                     break

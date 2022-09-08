@@ -78,11 +78,12 @@ class Graph:
   
     def expand_backward(self, s, V, p, table, expanded):
         expanded.add(s)
+        interior = p[s] is not None
         self.update_values([s], V, p)
-        predecessors = set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
-        if predecessors:
-            bp = self.best_predecessor(predecessors, V)
-            self.expand_backward(bp, V, p, table, expanded)
+        if interior or self.dict_state[s].final:
+            predecessors = set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
+            for pred in predecessors:
+                self.expand_backward(pred, V, p, table, expanded)
 
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
