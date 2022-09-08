@@ -44,7 +44,7 @@ class Graph:
         set_states.add(s) # Añadimos el estado a la lista
         if s in graph.states.keys():
             predecessors = set(filter(lambda s: s not in set_states, graph.get_predecessors(s, table)))
-            if predecessors is not None:
+            if predecessors:
                 bp = self.best_predecessor(predecessors, V)
                 self.get_bpsg_states_b(graph, V, set_states, table, bp) # Llamamos de forma recursiva a la función para construir el árbol.
         return set_states # Devolvemos la lista de estados
@@ -88,6 +88,7 @@ class Graph:
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
         actions = {'N', 'S', 'E', 'O'}
+        best_action = None
         while stack:
             s = stack.pop()
             if not self.dict_state[s].final:
@@ -102,6 +103,8 @@ class Graph:
                             minimum = val
                             best_action = a
                 V[s] = round(minimum, 2)
+                if best_action is None:
+                    print("")
                 p[s] = best_action
                 
     def depth_first_search(self, graph, i, fringe, interior, p, stack):

@@ -34,4 +34,4 @@ class Value_Iteration:
         if self.p_convergence:
             return all(old_p[s] == self.p[s] for s in old_p.keys())
         else:
-            all(old_V[s] == self.V[s] for s in old_V.keys())
+            return all(old_V[s] == self.V[s] for s in old_V.keys())
