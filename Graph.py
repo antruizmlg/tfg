@@ -40,6 +40,15 @@ class Graph:
                     self.get_bpsg_states(graph, p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
         return set_states # Devolvemos la lista de estados
 
+    def get_bpsg_states_b(self, graph, V, set_states, table, s):
+        set_states.add(s) # Añadimos el estado a la lista
+        if s in graph.states.keys():
+            predecessors = set(filter(lambda s: s not in set_states, graph.get_predecessors(s, table)))
+            if predecessors is not None:
+                bp = self.best_predecessor(predecessors, V)
+                self.get_bpsg_states_b(graph, V, set_states, table, bp) # Llamamos de forma recursiva a la función para construir el árbol.
+        return set_states # Devolvemos la lista de estados
+
     """ métodos para obtener el conjunto Z """
     def get_set_Z(self, envelope_graph, table, s, p, Z):
         predecessors = self.get_predecessors(s, table)
@@ -129,7 +138,7 @@ class Graph:
         return fringe
 
     @staticmethod
-    def best_predecessors(predecessors, V):
+    def best_predecessor(predecessors, V):
         min_value = float('inf')
         for pred in predecessors:
             if V[pred] < min_value:

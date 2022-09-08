@@ -28,10 +28,8 @@ class ILAO:
                 if not s in expanded and not bpsg.dict_state[s].final:
                     expanded.add(s)
                     explicit_graph.states[s] = self.hg.states[s]
-                    self.hg.update_values([s], self.V, self.p)
-                
+                    self.hg.update_values([s], self.V, self.p)               
                 bpsg_states = self.hg.get_bpsg_states(explicit_graph, self.p, set(), self.s0)
-                unexpanded = set(filter(lambda s: s not in expanded and not bpsg.dict_state[s].final, bpsg_states))
 
             Z = [s for s in bpsg_states if not bpsg.dict_state[s].final]
             algorithm.run(Z)
