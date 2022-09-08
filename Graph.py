@@ -31,22 +31,13 @@ class Graph:
         return sol        
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
-    def get_bpsg_states(self, graph, p, set_states, s):
+    def get_bpsg_states(self, p, set_states, s):
         set_states.add(s) # Añadimos el estado a la lista
         best_action = p[s] # Obtenemos la mejor acción asociada al estado (empezando por el estado inicial)
         if best_action is not None: # Si hay una mejor acción asociada a ese estado
             for st in self.get_connector(s, best_action).states(): # Por cada estado sucesor de esa acción en el grafo
                 if st not in set_states: # Si el estado no está en la lista
-                    self.get_bpsg_states(graph, p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
-        return set_states # Devolvemos la lista de estados
-
-    def get_bpsg_states_b(self, graph, V, set_states, table, s):
-        set_states.add(s) # Añadimos el estado a la lista
-        if s in graph.states.keys():
-            predecessors = set(filter(lambda s: s not in set_states, graph.get_predecessors(s, table)))
-            if predecessors:
-                bp = self.best_predecessor(predecessors, V)
-                self.get_bpsg_states_b(graph, V, set_states, table, bp) # Llamamos de forma recursiva a la función para construir el árbol.
+                    self.get_bpsg_states(p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
         return set_states # Devolvemos la lista de estados
 
     """ métodos para obtener el conjunto Z """
@@ -66,15 +57,6 @@ class Graph:
         for st in self.get_successors(s): # Por cada sucesor de s en el hipergrafo
             if st not in I and not self.dict_state[st].final: # Si el sucesor no se encuentra en el conjunto I
                 F.add(st) # Lo introducimos en el conjunto F
-
-    def update_fringe_rlao(self, table, states, expanded):
-        F = set()
-        for state in states:
-            predecessors = self.get_predecessors(state, table)
-            for p in predecessors:
-                if p not in expanded:
-                    F.add(p)
-        return F
     
     """método que dado un estado, devuelve el conector asociado a la acción dada"""
     def get_connector(self, state, action):
@@ -84,6 +66,23 @@ class Graph:
                 con = c
                 break
         return con
+
+    def expand_forward(self, s, V, p, expanded):
+        expanded.add(s)
+        action = p[s]
+        if action is not None:
+            for suc in self.get_connector(s, action).states():
+                if suc not in expanded:
+                    self.expand_forward(suc, V, p, expanded)
+        self.update_values([s], V, p)    
+  
+    def expand_backward(self, s, V, p, table, expanded):
+        expanded.add(s)
+        self.update_values([s], V, p)
+        predecessors = set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
+        if predecessors:
+            bp = self.best_predecessor(predecessors, V)
+            self.expand_backward(bp, V, p, table, expanded)
 
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
@@ -106,39 +105,6 @@ class Graph:
                 if best_action is None:
                     print("")
                 p[s] = best_action
-                
-    def depth_first_search(self, graph, i, fringe, interior, p, stack):
-        if i in fringe: # Si el estado i no hay sido aún expandido   
-            stack.append(i)                        
-            fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
-            interior.add(i) # Lo añadimos al conjunto de estados interiores            
-            graph.states[i] = self.states[i] # Añadimos estados al grafo
-            fringe = fringe | set(filter(lambda s:not self.dict_state[s].final and s not in interior, graph.get_successors(i)))
-            # Actualizamos el conjunto fringe con los sucesores del estado i
-        elif i in interior: # Si el estado ha sido expandido
-            stack.append(i)    
-            for suc in self.get_connector(i, p[i]).states(): # Para cada sucesor "greedy" del estado
-                if suc not in stack and not self.dict_state[suc].final: # Si el sucesor no se encuentra ya en la pila y no es un estado
-                    # final
-                    fringe = self.depth_first_search(graph, suc, fringe, interior, p, stack)
-                    # Realizamos la llamada recursiva sobre el estado sucesor
-        return fringe
-
-    def backward_search(self, graph, i, fringe, interior, V, s0, table, visited, stack):
-        stack.append(i)  # Añadimos el estado a la pila
-        if i in fringe: # Si el estado i no hay sido aún expandido
-            interior.add(i) # Lo añadimos al conjunto de estados interiores
-            fringe.remove(i) # Lo eliminamos del conjunto de estados "fringe"
-            graph.states[i] = self.states[i]
-            fringe = fringe | set(filter(lambda s:not s == s0 and s not in interior, self.get_predecessors(i, table)))
-            # Actualizamos el conjunto fringe con los sucesores del estado i
-        elif i in interior: # Si el estado ha sido expandido
-            predecessors = set(filter(lambda s: s not in stack and not s == s0 and not s in visited, self.get_predecessors(i, table)))
-            # Obtenemos todos los predecesores que no sean el mismo estado, no estén ya en la pila, no sean el estado inicial y no hayan sido visitados.
-            if predecessors: # Si hay predecesores
-                bp = self.best_predecessors(predecessors, V) # Obtenemos el mejor predecesor "greedy"
-                fringe = self.backward_search(graph, bp, fringe, interior, V, s0, table, visited, stack) # Llamada recursiva sobre predecesor "greedy"
-        return fringe
 
     @staticmethod
     def best_predecessor(predecessors, V):

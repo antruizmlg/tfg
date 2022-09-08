@@ -1,4 +1,5 @@
 from inspect import stack
+from tkinter import S
 from Graph import *
 from copy import *
 from Value_Iteration import *
@@ -12,30 +13,13 @@ class ILAO:
         self.problem = problem
 
     def ILAO(self):
-        bpsg = Graph({self.s0:[]}, self.hg.dict_state)
-        explicit_graph = deepcopy(bpsg)
-
         algorithm = Value_Iteration(self.hg, self.p, self.V)
-
-        expanded = set()
-        unexpanded = set(filter(lambda s: not s in expanded and not bpsg.dict_state[s].final, bpsg.states.keys()))
         while True:
             old_p = deepcopy(self.p)
 
-            while unexpanded:
-                s = unexpanded.pop()
-
-                if not s in expanded and not bpsg.dict_state[s].final:
-                    expanded.add(s)
-                    explicit_graph.states[s] = self.hg.states[s]
-                    self.hg.update_values([s], self.V, self.p)               
-                bpsg_states = self.hg.get_bpsg_states(explicit_graph, self.p, set(), self.s0)
-
-            Z = [s for s in bpsg_states if not bpsg.dict_state[s].final]
-            algorithm.run(Z)
-            
-            if all(old_p[s] == self.p[s] for s in old_p.keys()): 
+            self.hg.expand_forward(self.s0, self.V, self.p, set())
+            #Test de convergencia
+            bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+            algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
+            if all(old_p[s] == self.p[s] for s in old_p.keys()): # Si llegamos a convergencia, salimos del bucle
                 break
-
-            bpsg_states = self.hg.get_bpsg_states(explicit_graph, self.p, set(), self.s0)
-            unexpanded = set(filter(lambda s: s not in expanded and not bpsg.dict_state[s].final, bpsg_states))                     

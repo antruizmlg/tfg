@@ -34,7 +34,7 @@ class LAO:
             algorithm.run(Z) # Aplicamos VI sobre estados en Z
 
             #Test de convergencia
-            algorithm.run(self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)) # Aplicamos VI sobre los estados del grafo solución parcial
-            bpsg_states = self.hg.get_bpsg_states(envelope_graph, self.p, set(), self.s0)
+            algorithm.run(self.hg.get_bpsg_states(self.p, set(), self.s0)) # Aplicamos VI sobre los estados del grafo solución parcial
+            bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
                 break
