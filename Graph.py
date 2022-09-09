@@ -11,24 +11,47 @@ class Graph:
         suc = [] # Inicializamos la lista de sucesores
         for c in self.states[s]: # Para cada hiperarista de la lista
             suc += c.states() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
-        return suc # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
+        return list(set(suc)) # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
 
     """ Método para obtener un conjunto de predecesores de un estado en el hipergrafo"""
     def get_predecessors(self, s, table):
         sol = set()
-        row = self.dict_state[s].row
-        col = self.dict_state[s].col
+        x = self.dict_state[s].x
+        y = self.dict_state[s].y
+        w = self.dict_state[s].w
+        z = self.dict_state[s].z
 
-        if row - 1 >= 0 and not table[row - 1][col].sink:
-            sol.add(table[row - 1][col].id)
-        if row + 1 < len(table) and not table[row + 1][col].sink:
-            sol.add(table[row + 1][col].id) 
-        if col - 1 >= 0 and not table[row][col - 1].sink:
-            sol.add(table[row][col - 1].id)           
-        if col + 1 < len(table[0]) and not table[row][col + 1].sink:
-            sol.add(table[row][col + 1].id)
+        x_pt = self.possible_transitions(x, len(table))
+        y_pt = self.possible_transitions(y, len(table[0]))
+        w_pt = self.possible_transitions(w, len(table[0][0]))
+        z_pt = self.possible_transitions(z, len(table[0][0][0]))
 
-        return sol        
+        for i in x_pt:
+            state = table[i][y][w][z]
+            if not state.sink:
+                sol.add(state.id)
+        for i in y_pt:
+            state = table[x][i][w][z]
+            if not state.sink:
+                sol.add(state.id)
+        for i in w_pt:
+            state = table[x][y][i][z]
+            if not state.sink:
+                sol.add(state.id)
+        for i in z_pt:
+            state = table[x][y][w][i]
+            if not state.sink:
+                sol.add(state.id)
+        return sol
+
+    @staticmethod
+    def possible_transitions(val, total_dim):
+        pt = []
+        if val - 1 >= 0:
+            pt.append(val - 1)
+        if val + 1 < total_dim:
+            pt.append(val + 1)
+        return pt
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
     def get_bpsg_states(self, p, set_states, s):
@@ -87,7 +110,7 @@ class Graph:
 
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
-        actions = {'N', 'S', 'E', 'O'}
+        actions = {'1', '2', '3', '4', '5', '6', '7', '8'}
         best_action = None
         while stack:
             s = stack.pop()

@@ -10,7 +10,7 @@ class Value_Iteration:
     def run(self, set):
         while True:
             old_V = deepcopy(self.V)
-
+            
             for s in set: # Para cada estado en el hipergrafo
                 if not self.hg.dict_state[s].final: # Si el estado no es terminal
                     best_action = None

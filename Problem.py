@@ -5,7 +5,7 @@ import random
 
 class Problem:
     def __init__(self, x, y, w, z, sinks, probs):
-        self.table = [[[[0 for _ in range(w)] for _ in range(z)] for _ in range(y)] for _ in range(x)]
+        self.table = [[[[0 for _ in range(z)] for _ in range(w)] for _ in range(y)] for _ in range(x)]
         for i in range(x):
             for j in range(y):
                 for k in range(w):
@@ -17,6 +17,7 @@ class Problem:
         self.y_final = self.first_or_last_random(y)
         self.w_final = self.first_or_last_random(w)
         self.z_final = self.first_or_last_random(z)
+        self.table[self.x_final][self.y_final][self.w_final][self.z_final].final = True
 
         self.initial_x = x // 2
         self.initial_y = y // 2
@@ -79,43 +80,29 @@ class Problem:
     """método que recibe una fila, una columna y una acción y devuelve el sucesor directo de realizar esa acción desde esa fila y esa columna del tablero"""
     def successor(self, x, y, w, z, action):
         if action == '1':
-            return self.get_successor_state(x, x + 1, y, y + 1, w, w + 1, z, z + 1)
+            return self.get_successor_state(x, y, w, z, x + 1, y, w, z)
         if action == '2':
-            return self.get_successor_state(x, x + 1, y, y + 1, w, w + 1, z, z)
+            return self.get_successor_state(x, y, w, z, x - 1, y, w, z)
         if action == '3':
-            return self.get_successor_state(x, x + 1, y, y + 1, w, w, z, z + 1)            
+            return self.get_successor_state(x, y, w, z, x, y + 1, w, z)            
         if action == '4':
-            return self.get_successor_state(x, x + 1, y, y + 1, w, w, z, z)
+            return self.get_successor_state(x, y, w, z, x, y - 1, w, z)
         if action == '5':
-            return self.get_successor_state(x, x + 1, y, y, w, w + 1, z, z + 1)
+            return self.get_successor_state(x, y, w, z, x, y, w + 1, z)
         if action == '6':
-            return self.get_successor_state(x, x + 1, y, y, w, w + 1, z, z)
+            return self.get_successor_state(x, y, w, z, x, y, w - 1, z)
         if action == '7':
-            return self.get_successor_state(x, x + 1, y, y, w, w, z, z + 1)            
+            return self.get_successor_state(x, y, w, z, x, y, w, z + 1)            
         if action == '8':
-            return self.get_successor_state(x, x + 1, y, y, w, w, z, z)
-        if action == '9':
-            return self.get_successor_state(x, x, y, y + 1, w, w + 1, z, z + 1)
-        if action == '10':
-            return self.get_successor_state(x, x, y, y + 1, w, w + 1, z, z)
-        if action == '11':
-            return self.get_successor_state(x, x, y, y + 1, w, w, z, z + 1)            
-        if action == '12':
-            return self.get_successor_state(x, x, y, y + 1, w, w, z, z)
-        if action == '13':
-            return self.get_successor_state(x, x, y, y, w, w + 1, z, z + 1)
-        if action == '14':
-            return self.get_successor_state(x, x, y, y, w, w + 1, z, z)
-        if action == '15':
-            return self.get_successor_state(x, x, y, y, w, w, z, z + 1)            
+            return self.get_successor_state(x, y, w, z, x, y, w, z - 1)
         if action == '-':
             return self.table[x][y][w][z]
 
-    def get_successor_state(self, x, x_, y, y_, z, z_, w, w_):
+    def get_successor_state(self, x, y, w, z, x_, y_, w_, z_):
         if self.valid_dimension(x_, len(self.table)) and self.valid_dimension(y_, len(self.table[0])) and self.valid_dimension(w_, len(self.table[0][0])) and self.valid_dimension(z_, len(self.table[0][0][0])): # Si la acción lleva a una posición valida del tablero
-            return self.table[x_][y_][z_][w_] # Devolvemos el sucesor
+            return self.table[x_][y_][w_][z_] # Devolvemos el sucesor
         else: # De lo contrario
-            return self.table[x][y][z][w] # Hemos salido del tablero, devolvemos el mismo estado
+            return self.table[x][y][w][z] # Hemos salido del tablero, devolvemos el mismo estado
 
     """Método para imprimir información del problema"""
     def print_info(self):
@@ -127,7 +114,7 @@ class Problem:
         print("-----------------------------------------------")   
 
     """Método para obtener política inicial y heurístico"""
-    def get_initial_policy_and_heuristic(self):
+    def get_initial_policy_and_heuristic(self, algorithm):
         p = {}
         h = {}
         for i in range(len(self.table)): 
@@ -136,7 +123,10 @@ class Problem:
                     for l in range(len(self.table[0][0][0])):
                         state = self.table[i][j][k][l]
                         p[state.id] = None
-                        h[state.id] = state.h_MD(i, self.x_final, j, self.y_final, k, self.w_final, l, self.z_final)
+                        if algorithm == 'VI':
+                            h[state.id] = 0
+                        else:
+                            h[state.id] = state.h_MD(i, self.x_final, j, self.y_final, k, self.w_final, l, self.z_final)
         return p, h
 
     @staticmethod

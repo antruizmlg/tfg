@@ -17,27 +17,20 @@ probs_1['5'] = {'5': 0.8, '-': 0.2}
 probs_1['6'] = {'6': 0.8, '-': 0.2}
 probs_1['7'] = {'7': 0.8, '-': 0.2}
 probs_1['8'] = {'8': 0.8, '-': 0.2}
-probs_1['9'] = {'9': 0.8, '-': 0.2}
-probs_1['10'] = {'10': 0.8, '-': 0.2}
-probs_1['11'] = {'11': 0.8, '-': 0.2}
-probs_1['12'] = {'12': 0.8, '-': 0.2}
-probs_1['13'] = {'13': 0.8, '-': 0.2}
-probs_1['14'] = {'14': 0.8, '-': 0.2}
-probs_1['15'] = {'15': 0.8, '-': 0.2}
 
 
 """Número de filas, número de columnas y de sumideros""" 
-x = 10
-y = 10
-w = 10
-z = 10
+x = 5
+y = 5
+w = 5
+z = 5
 sinks = 0
 
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
-    p, h = problem.get_initial_policy_and_heuristic()
+    p, h = problem.get_initial_policy_and_heuristic(algorithm)
     problem.print_info() # Imprimimos información del problema
 
     t_i = time.time() # Iniciamos contador
@@ -66,5 +59,5 @@ def solve_problem(problem, algorithm):
 
 p_1 = Problem(x, y, w, z, sinks, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
