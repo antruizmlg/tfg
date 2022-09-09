@@ -80,25 +80,73 @@ class Problem:
     """método que recibe una fila, una columna y una acción y devuelve el sucesor directo de realizar esa acción desde esa fila y esa columna del tablero"""
     def successor(self, x, y, w, z, action):
         if action == '1':
-            return self.get_successor_state(x, y, w, z, x + 1, y, w, z)
+            return self.get_successor_state(x + 1, y + 1, w + 1, z + 1, x, y, w, z)
         if action == '2':
-            return self.get_successor_state(x, y, w, z, x - 1, y, w, z)
+            return self.get_successor_state(x + 1, y + 1, w + 1, z, x, y, w, z)
         if action == '3':
-            return self.get_successor_state(x, y, w, z, x, y + 1, w, z)            
+            return self.get_successor_state(x + 1, y + 1, w, z + 1, x, y, w, z)            
         if action == '4':
-            return self.get_successor_state(x, y, w, z, x, y - 1, w, z)
+            return self.get_successor_state(x + 1, y + 1, w, z, x, y, w, z)
         if action == '5':
-            return self.get_successor_state(x, y, w, z, x, y, w + 1, z)
+            return self.get_successor_state(x + 1, y, w + 1, z + 1, x, y, w, z)
         if action == '6':
-            return self.get_successor_state(x, y, w, z, x, y, w - 1, z)
+            return self.get_successor_state(x + 1, y, w + 1, z, x, y, w, z)
         if action == '7':
-            return self.get_successor_state(x, y, w, z, x, y, w, z + 1)            
+            return self.get_successor_state(x + 1, y, w, z + 1, x, y, w, z)            
         if action == '8':
-            return self.get_successor_state(x, y, w, z, x, y, w, z - 1)
+            return self.get_successor_state(x + 1, y, w, z, x, y, w, z)
+        if action == '9':
+            return self.get_successor_state(x, y + 1, w + 1, z + 1, x, y, w, z)
+        if action == '10':
+            return self.get_successor_state(x, y + 1, w + 1, z, x, y, w, z)
+        if action == '11':
+            return self.get_successor_state(x, y + 1, w, z + 1, x, y, w, z)            
+        if action == '12':
+            return self.get_successor_state(x, y + 1, w, z, x, y, w, z)
+        if action == '13':
+            return self.get_successor_state(x, y, w + 1, z + 1, x, y, w, z)
+        if action == '14':
+            return self.get_successor_state(x, y, w + 1, z, x, y, w, z)
+        if action == '15':
+            return self.get_successor_state(x, y, w, z + 1, x, y, w, z)            
+        if action == '16':
+            return self.get_successor_state(x, y, w, z, x, y, w, z)
+        if action == '17':
+            return self.get_successor_state(x - 1, y - 1, w - 1, z - 1, x, y, w, z)
+        if action == '18':
+            return self.get_successor_state(x - 1, y - 1, w - 1, z, x, y, w, z)
+        if action == '19':
+            return self.get_successor_state(x - 1, y - 1, w, z - 1, x, y, w, z)            
+        if action == '20':
+            return self.get_successor_state(x - 1, y - 1, w, z, x, y, w, z)
+        if action == '21':
+            return self.get_successor_state(x - 1, y, w - 1, z - 1, x, y, w, z)
+        if action == '22':
+            return self.get_successor_state(x - 1, y, w - 1, z, x, y, w, z)
+        if action == '23':
+            return self.get_successor_state(x - 1, y, w, z - 1, x, y, w, z)            
+        if action == '24':
+            return self.get_successor_state(x - 1, y, w, z, x, y, w, z)
+        if action == '25':
+            return self.get_successor_state(x, y - 1, w - 1, z - 1, x, y, w, z)
+        if action == '26':
+            return self.get_successor_state(x, y - 1, w - 1, z, x, y, w, z)
+        if action == '27':
+            return self.get_successor_state(x, y - 1, w, z - 1, x, y, w, z)            
+        if action == '28':
+            return self.get_successor_state(x, y - 1, w, z, x, y, w, z)
+        if action == '29':
+            return self.get_successor_state(x, y, w - 1, z - 1, x, y, w, z)
+        if action == '30':
+            return self.get_successor_state(x, y, w - 1, z, x, y, w , z)
+        if action == '31':
+            return self.get_successor_state(x, y, w, z - 1, x, y, w, z)            
+        if action == '32':
+            return self.get_successor_state(x, y, w, z, x, y, w, z)
         if action == '-':
             return self.table[x][y][w][z]
 
-    def get_successor_state(self, x, y, w, z, x_, y_, w_, z_):
+    def get_successor_state(self, x_, y_, w_, z_, x, y, w, z):
         if self.valid_dimension(x_, len(self.table)) and self.valid_dimension(y_, len(self.table[0])) and self.valid_dimension(w_, len(self.table[0][0])) and self.valid_dimension(z_, len(self.table[0][0][0])): # Si la acción lleva a una posición valida del tablero
             return self.table[x_][y_][w_][z_] # Devolvemos el sucesor
         else: # De lo contrario

@@ -27,26 +27,17 @@ class Graph:
         z_pt = self.possible_transitions(z, len(table[0][0][0]))
 
         for i in x_pt:
-            state = table[i][y][w][z]
-            if not state.sink:
-                sol.add(state.id)
-        for i in y_pt:
-            state = table[x][i][w][z]
-            if not state.sink:
-                sol.add(state.id)
-        for i in w_pt:
-            state = table[x][y][i][z]
-            if not state.sink:
-                sol.add(state.id)
-        for i in z_pt:
-            state = table[x][y][w][i]
-            if not state.sink:
-                sol.add(state.id)
+            for j in y_pt:
+                for k in w_pt:
+                    for l in z_pt:
+                        state = table[i][j][k][l]
+                        if not state.sink:
+                            sol.add(state.id)
         return sol
 
     @staticmethod
     def possible_transitions(val, total_dim):
-        pt = []
+        pt = [val]
         if val - 1 >= 0:
             pt.append(val - 1)
         if val + 1 < total_dim:
