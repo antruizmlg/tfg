@@ -4,37 +4,34 @@ from RLAO import *
 from BLAO import *
 from ILAO import *
 import time
-import sys
 
 """Tres posibles sistemas de transiciones"""
 probs_1 = {}
-probs_2 = {}
-probs_3 = {}
-probs_4 = {}
-
-"""Sistema 1"""
-probs_1['N'] = {'N': 0.8, 'E': 0.1, 'O': 0.1}
-probs_1['S'] = {'S': 0.8, 'E': 0.1, 'O': 0.1}
-probs_1['E'] = {'E': 0.8, 'N': 0.1, 'S': 0.1}
-probs_1['O'] = {'O': 0.8, 'N': 0.1, 'S': 0.1}
-
-"""Sistema 2"""
-probs_2['N'] = {'N': 0.8, 'E': 0.2}
-probs_2['S'] = {'S': 0.8, 'O': 0.2}
-probs_2['E'] = {'E': 0.8, 'S': 0.2}
-probs_2['O'] = {'O': 0.8, 'N': 0.2}
 
 """Sistema 3"""
-probs_3['N'] = {'N': 0.8, '-': 0.2}
-probs_3['S'] = {'S': 0.8, '-': 0.2}
-probs_3['E'] = {'E': 0.8, '-': 0.2}
-probs_3['O'] = {'O': 0.8, '-': 0.2}
+probs_1['1'] = {'1': 0.8, '-': 0.2}
+probs_1['2'] = {'2': 0.8, '-': 0.2}
+probs_1['3'] = {'3': 0.8, '-': 0.2}
+probs_1['4'] = {'4': 0.8, '-': 0.2}
+probs_1['5'] = {'5': 0.8, '-': 0.2}
+probs_1['6'] = {'6': 0.8, '-': 0.2}
+probs_1['7'] = {'7': 0.8, '-': 0.2}
+probs_1['8'] = {'8': 0.8, '-': 0.2}
+probs_1['9'] = {'9': 0.8, '-': 0.2}
+probs_1['10'] = {'10': 0.8, '-': 0.2}
+probs_1['11'] = {'11': 0.8, '-': 0.2}
+probs_1['12'] = {'12': 0.8, '-': 0.2}
+probs_1['13'] = {'13': 0.8, '-': 0.2}
+probs_1['14'] = {'14': 0.8, '-': 0.2}
+probs_1['15'] = {'15': 0.8, '-': 0.2}
+
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 100
-columns = 100
-sinks = 9800
-sys.setrecursionlimit(rows*columns)
+x = 10
+y = 10
+w = 10
+z = 10
+sinks = 0
 
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
@@ -64,14 +61,10 @@ def solve_problem(problem, algorithm):
     # Finalizamos contador
     t_f = time.time()
 
-    #Imprimimos resultado
-    print("RESULTADO: ")
-    problem.print_table(p)
-
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(x, y, w, z, sinks, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'BLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
