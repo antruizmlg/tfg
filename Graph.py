@@ -11,7 +11,7 @@ class Graph:
         suc = [] # Inicializamos la lista de sucesores
         for c in self.states[s]: # Para cada hiperarista de la lista
             suc += c.states() # Concatenamos todos los estados destinos del hiperarista a la lista de sucesores
-        return suc # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
+        return list(set(suc)) # Devolvemos la lista de sucesores con la previa eliminación de elementos repetidos
 
     """ Método para obtener un conjunto de predecesores de un estado en el hipergrafo"""
     def get_predecessors(self, s, table):
