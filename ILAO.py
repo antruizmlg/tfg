@@ -13,13 +13,19 @@ class ILAO:
         self.problem = problem
 
     def ILAO(self):
+        bpsg_states = {self.s0}
+        expanded = set()
         algorithm = Value_Iteration(self.hg, self.p, self.V)
-        while True:
-            old_p = deepcopy(self.p)
 
-            self.hg.expand_forward(self.s0, self.V, self.p, set())
+        while True:
+            old_policy = deepcopy(self.p)
+
+            while (bpsg_states - expanded):
+                self.hg.expand_forward(self.s0, self.V, self.p, expanded, set())
+                bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             #Test de convergencia
+            algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-            algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
-            if all(old_p[s] == self.p[s] for s in old_p.keys()): # Si llegamos a convergencia, salimos del bucle
+
+            if all(old_policy[s] == self.p[s] for s in old_policy.keys()):
                 break

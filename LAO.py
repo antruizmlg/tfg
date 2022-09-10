@@ -25,6 +25,7 @@ class LAO:
 
         while True: # Mientras queden estados por expandir
             s = (bpsg_states & F).pop()
+
             self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
             F.remove(s)
             I.add(s) # Introducimos s en el conjunto I
@@ -34,7 +35,6 @@ class LAO:
             algorithm.run(Z) # Aplicamos VI sobre estados en Z
 
             #Test de convergencia
-            algorithm.run(self.hg.get_bpsg_states(self.p, set(), self.s0)) # Aplicamos VI sobre los estados del grafo solución parcial
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
                 break

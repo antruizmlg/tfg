@@ -67,13 +67,14 @@ class Graph:
                 break
         return con
 
-    def expand_forward(self, s, V, p, expanded):
-        expanded.add(s)
-        action = p[s]
-        if action is not None:
-            for suc in self.get_connector(s, action).states():
-                if suc not in expanded:
-                    self.expand_forward(suc, V, p, expanded)
+    def expand_forward(self, s, V, p, expanded, updated):
+        updated.add(s)
+        if s in expanded and not self.dict_state[s].final:
+            for suc in self.get_connector(s, p[s]).states():
+                if suc not in updated:
+                    self.expand_forward(suc, V, p, expanded, updated)
+        else:
+            expanded.add(s)
         self.update_values([s], V, p)    
   
     def expand_backward(self, s, V, p, table, expanded):
