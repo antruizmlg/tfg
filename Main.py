@@ -33,7 +33,7 @@ probs_3['O'] = {'O': 0.8, '-': 0.2}
 """Número de filas, número de columnas y de sumideros""" 
 rows = 50
 columns = 50
-sinks = 1500
+sinks = 2200
 
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo

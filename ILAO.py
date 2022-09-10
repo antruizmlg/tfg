@@ -15,17 +15,15 @@ class ILAO:
     def ILAO(self):
         bpsg_states = {self.s0}
         expanded = set()
+        fringe = {self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True:
-            old_policy = deepcopy(self.p)
-
-            while (bpsg_states - expanded):
-                self.hg.expand_forward(self.s0, self.V, self.p, expanded, set())
+            while bpsg_states & fringe:
+                fringe = self.hg.expand_forward(self.s0, self.V, self.p, expanded, fringe, set())
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             #Test de convergencia
-            algorithm.run(bpsg_states)
+            algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-
-            if all(old_policy[s] == self.p[s] for s in old_policy.keys()):
+            if not (bpsg_states & fringe):
                 break

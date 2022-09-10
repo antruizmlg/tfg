@@ -13,15 +13,17 @@ class RLAO:
         self.problem = problem
 
     def RLAO(self):
+        bpsg_states = {self.fs}
+        expanded = set()
+        fringe = {self.fs}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        while True: 
-            old_p = deepcopy(self.p)
-
-            self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, set())
+        while True:
+            while (bpsg_states & fringe) or not self.s0 in expanded:
+                fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, set())
+                bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             #Test de convergencia
+            algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-            if len(bpsg_states) > 1:
-                algorithm.run(bpsg_states) # Aplicamos VI sobre los estados del grafo solución parcial
-                if all(old_p[s] == self.p[s] for s in old_p.keys()): # Si llegamos a convergencia, salimos del bucle
-                    break
+            if not (bpsg_states & fringe):
+                break

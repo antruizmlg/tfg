@@ -41,14 +41,14 @@ class Graph:
         return set_states # Devolvemos la lista de estados
 
     """ métodos para obtener el conjunto Z """
-    def get_set_Z(self, envelope_graph, table, s, p, Z):
+    def get_set_Z(self, graph, table, s, p, Z):
         predecessors = self.get_predecessors(s, table)
         for st in predecessors:
-            if st in envelope_graph.states and st not in Z and p[st] is not None:
+            if st in graph.states and st not in Z and p[st] is not None:
                 suc = self.get_connector(st, p[st]).states()
                 if s in suc:
                     Z.add(st)
-                    self.get_set_Z(envelope_graph, table, st, p, Z)
+                    self.get_set_Z(graph, table, st, p, Z)
         return Z
 
 
@@ -67,24 +67,33 @@ class Graph:
                 break
         return con
 
-    def expand_forward(self, s, V, p, expanded, updated):
+    def expand_forward(self, s, V, p, expanded, fringe, updated):
         updated.add(s)
         if s in expanded and not self.dict_state[s].final:
             for suc in self.get_connector(s, p[s]).states():
                 if suc not in updated:
-                    self.expand_forward(suc, V, p, expanded, updated)
+                    fringe = self.expand_forward(suc, V, p, expanded, fringe, updated)
         else:
             expanded.add(s)
-        self.update_values([s], V, p)    
-  
-    def expand_backward(self, s, V, p, table, expanded):
-        expanded.add(s)
-        interior = p[s] is not None
+            if not self.dict_state[s].final:
+                fringe.remove(s)
+                fringe = fringe | set(filter(lambda s: s not in expanded and not self.dict_state[s].final, self.get_successors(s)))            
         self.update_values([s], V, p)
-        if interior or self.dict_state[s].final:
-            predecessors = set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
-            for pred in predecessors:
-                self.expand_backward(pred, V, p, table, expanded)
+        return fringe  
+  
+    def expand_backward(self, s, V, p, table, expanded, fringe, s0, updated):
+        updated.add(s)
+        self.update_values([s], V, p)    
+        if s in expanded:
+            if not s == s0:
+                predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
+                for pred in predecessors:
+                    fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)
+        else:
+            expanded.add(s)
+            fringe.remove(s)
+            fringe = fringe | set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
+        return fringe
 
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
