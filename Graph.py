@@ -85,10 +85,9 @@ class Graph:
         updated.add(s)
         self.update_values([s], V, p)    
         if s in expanded:
-            if not s == s0:
-                predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
-                for pred in predecessors:
-                    fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)
+            predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
+            for pred in predecessors:
+                fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)
         else:
             expanded.add(s)
             fringe.remove(s)

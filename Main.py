@@ -31,10 +31,11 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 50
-columns = 50
-sinks = 2200
+rows = 80
+columns = 80
+sinks = 6000
 
+sys.setrecursionlimit(1000000)
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
@@ -72,5 +73,5 @@ def solve_problem(problem, algorithm):
 
 p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'BLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
