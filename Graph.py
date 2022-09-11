@@ -62,11 +62,11 @@ class Graph:
 
     def expand_forward(self, s, V, p, expanded, fringe, updated):
         updated.add(s)
-        if s in expanded and not self.dict_state[s].final:
+        if s in expanded and not self.dict_state[s].final and p[s] is not None:
             for suc in self.get_connector(s, p[s]).states():
                 if suc not in updated:
                     fringe = self.expand_forward(suc, V, p, expanded, fringe, updated)
-        else:
+        elif s in fringe:
             expanded.add(s)
             if not self.dict_state[s].final:
                 fringe.remove(s)
@@ -81,7 +81,7 @@ class Graph:
             predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
             for pred in predecessors:
                 fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)
-        else:
+        elif s in fringe:
             expanded.add(s)
             fringe.remove(s)
             fringe = fringe | set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
@@ -105,8 +105,6 @@ class Graph:
                             minimum = val
                             best_action = a
                 V[s] = round(minimum, 2)
-                if best_action is None:
-                    print("")
                 p[s] = best_action
 
     @staticmethod

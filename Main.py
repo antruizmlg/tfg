@@ -31,9 +31,9 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
-sinks = 0
+rows = 10
+columns = 10
+sinks = 10
 
 sys.setrecursionlimit(1000000)
 def solve_problem(problem, algorithm):
@@ -66,12 +66,11 @@ def solve_problem(problem, algorithm):
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    problem.print_solution(p)
 
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
