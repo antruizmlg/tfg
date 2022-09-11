@@ -18,12 +18,15 @@ class ILAO:
         fringe = {self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
+        it = 0
+
         while True:
             while bpsg_states & fringe:
                 fringe = self.hg.expand_forward(self.s0, self.V, self.p, expanded, fringe, set())
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+                it += 1
             #Test de convergencia
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & fringe):
-                break
+                return it, len(expanded)

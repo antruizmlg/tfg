@@ -23,19 +23,20 @@ class LAO:
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        while True: # Mientras queden estados por expandir
-            while bpsg_states & F:
-                s = (bpsg_states & F).pop()
-                F.remove(s)
-                F = F | set(filter(lambda s: s not in I and not self.hg.dict_state[s].final, self.hg.get_successors(s)))
-                I.add(s) # Introducimos s en el conjunto I
-                envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
-                Z = self.hg.get_set_Z(envelope_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
-                algorithm.run(Z) # Aplicamos VI sobre estados en Z
+        it = 0
+        Z_percents = []
 
-            #Test de convergencia
+        while True: # Mientras queden estados por expandir
+            s = (bpsg_states & F).pop()
+            F.remove(s)
+            F = F | set(filter(lambda s: s not in I and not self.hg.dict_state[s].final, self.hg.get_successors(s)))
+            I.add(s) # Introducimos s en el conjunto I
+            envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
+            Z = self.hg.get_set_Z(envelope_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
+            algorithm.run(Z) # Aplicamos VI sobre estados en Z
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-            algorithm.run(bpsg_states)
-            bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+
+            it += 1
+            Z_percents.append(round(len(Z)/len(self.hg.states.keys())*100, 2))
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
-                break
+                return it, len(envelope_graph.states.keys()), Z_percents

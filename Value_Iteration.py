@@ -8,6 +8,8 @@ class Value_Iteration:
         self.gamma = gamma
 
     def run(self, set):
+        it = 0
+
         while True:
             old_V = deepcopy(self.V)
             for s in set: # Para cada estado en el hipergrafo
@@ -24,6 +26,7 @@ class Value_Iteration:
                             best_action = c.action # Actualizamos la mejor acción
                     self.V[s] = round(min_cost, 2) # Establecemos nuevo valor asociado al estado
                     self.p[s] = best_action # Establecemos nueva mejor acción
+                    it += 1
         
             if all(old_V[s] == self.V[s] for s in old_V.keys()):
-                break
+                return it

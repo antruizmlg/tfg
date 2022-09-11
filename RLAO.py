@@ -18,6 +18,8 @@ class RLAO:
         fringe = {self.fs}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
+        it = 0
+
         while True:
             while (bpsg_states & fringe) or not self.s0 in expanded:
                 fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, set())
@@ -25,5 +27,6 @@ class RLAO:
             #Test de convergencia
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+            it += 1
             if not (bpsg_states & fringe):
-                break
+                return it, len(expanded)
