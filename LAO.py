@@ -24,17 +24,18 @@ class LAO:
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True: # Mientras queden estados por expandir
-            s = (bpsg_states & F).pop()
-
-            self.hg.update_fringe_set(F, I, s) # Actualizamos el conjunto F
-            F.remove(s)
-            I.add(s) # Introducimos s en el conjunto I
-            envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
-
-            Z = self.hg.get_set_Z(envelope_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
-            algorithm.run(Z) # Aplicamos VI sobre estados en Z
+            while bpsg_states & F:
+                s = (bpsg_states & F).pop()
+                F.remove(s)
+                F = F | set(filter(lambda s: s not in I and not self.hg.dict_state[s].final, self.hg.get_successors(s)))
+                I.add(s) # Introducimos s en el conjunto I
+                envelope_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
+                Z = self.hg.get_set_Z(envelope_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
+                algorithm.run(Z) # Aplicamos VI sobre estados en Z
 
             #Test de convergencia
+            bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+            algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
                 break

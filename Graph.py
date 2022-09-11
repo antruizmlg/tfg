@@ -50,13 +50,6 @@ class Graph:
                     Z.add(st)
                     self.get_set_Z(graph, table, st, p, Z)
         return Z
-
-
-    """ métodos para acutalizar el conjunto de estados 'fringe' """
-    def update_fringe_set(self, F, I, s):
-        for st in self.get_successors(s): # Por cada sucesor de s en el hipergrafo
-            if st not in I and not self.dict_state[st].final: # Si el sucesor no se encuentra en el conjunto I
-                F.add(st) # Lo introducimos en el conjunto F
     
     """método que dado un estado, devuelve el conector asociado a la acción dada"""
     def get_connector(self, state, action):
