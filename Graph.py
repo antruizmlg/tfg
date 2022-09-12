@@ -62,22 +62,21 @@ class Graph:
 
     def expand_forward(self, s, V, p, expanded, fringe, updated):
         updated.add(s)
-        if s in expanded and not self.dict_state[s].final and p[s] is not None:
+        if s in expanded and p[s] is not None:
             for suc in self.get_connector(s, p[s]).states():
-                if suc not in updated:
+                if suc not in updated and not self.dict_state[suc].final:
                     fringe = self.expand_forward(suc, V, p, expanded, fringe, updated)
         elif s in fringe:
             expanded.add(s)
-            if not self.dict_state[s].final:
-                fringe.remove(s)
-                fringe = fringe | set(filter(lambda s: s not in expanded and not self.dict_state[s].final, self.get_successors(s)))            
+            fringe.remove(s)
+            fringe = fringe | set(filter(lambda s: s not in expanded and not self.dict_state[s].final, self.get_successors(s)))            
         self.update_values([s], V, p)
-        return fringe  
+        return fringe 
   
     def expand_backward(self, s, V, p, table, expanded, fringe, s0, updated):
         updated.add(s)
         self.update_values([s], V, p)    
-        if s in expanded:
+        if s in expanded and (p[s] is not None or self.dict_state[s].final):
             predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
             for pred in predecessors:
                 fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)

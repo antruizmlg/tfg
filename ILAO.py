@@ -1,5 +1,3 @@
-from inspect import stack
-from tkinter import S
 from Graph import *
 from copy import *
 from Value_Iteration import *
@@ -18,15 +16,13 @@ class ILAO:
         fringe = {self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        it = 0
-
         while True:
             while bpsg_states & fringe:
                 fringe = self.hg.expand_forward(self.s0, self.V, self.p, expanded, fringe, set())
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-                it += 1
+
             #Test de convergencia
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & fringe):
-                return it, len(expanded)
+                return len(expanded)
