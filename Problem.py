@@ -163,14 +163,17 @@ class Problem:
             print("")
 
     """Método para obtener política inicial y heurístico"""
-    def get_initial_policy_and_heuristic(self):
+    def get_initial_policy_and_heuristic(self, algorithm):
         p = {}
         h = {}
         for i in range(len(self.table)): 
             for j in range(len(self.table[i])):
                 state = self.table[i][j]
                 p[state.id] = None
-                h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
+                if algorithm == 'VI':
+                    h[state.id] = 0
+                else:
+                    h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
         p[self.ss.id] = None
         h[self.ss.id] = 0
         return p, h

@@ -31,16 +31,16 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 70
-columns = 70
-sinks = 490
+rows = 50
+columns = 50
+sinks = 0
 
 sys.setrecursionlimit(1000000)
 def solve_problem(problem, algorithm):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos diccionario (estado id -> objeto estado), el hipergrafo
     # que representa el problema, el estado inicial, el heurístico y la política inicial
 
-    p, h = problem.get_initial_policy_and_heuristic()
+    p, h = problem.get_initial_policy_and_heuristic(algorithm)
     problem.print_info() # Imprimimos información del problema
 
     t_i = time.time() # Iniciamos contador
@@ -58,7 +58,7 @@ def solve_problem(problem, algorithm):
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
         blao_algorithm.BLAO()
     elif algorithm == 'VI':
-        vi_algorithm = Value_Iteration(hg, p, h, gamma = 0.99)
+        vi_algorithm = Value_Iteration(hg, p, h, gamma = 1)
         vi_algorithm.run(hg.states.keys())
 
     # Finalizamos contador
@@ -66,7 +66,7 @@ def solve_problem(problem, algorithm):
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    problem.print_solution(p)   
+    problem.print_table(p)   
 
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
