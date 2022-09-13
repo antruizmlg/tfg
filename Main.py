@@ -10,7 +10,6 @@ import sys
 probs_1 = {}
 probs_2 = {}
 probs_3 = {}
-probs_4 = {}
 
 """Sistema 1"""
 probs_1['N'] = {'N': 0.8, 'E': 0.1, 'O': 0.1}
@@ -31,8 +30,8 @@ probs_3['E'] = {'E': 0.8, '-': 0.2}
 probs_3['O'] = {'O': 0.8, '-': 0.2}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 50
-columns = 50
+rows = 30
+columns = 30
 sinks = 0
 
 sys.setrecursionlimit(1000000)
@@ -58,7 +57,7 @@ def solve_problem(problem, algorithm):
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
         blao_algorithm.BLAO()
     elif algorithm == 'VI':
-        vi_algorithm = Value_Iteration(hg, p, h, gamma = 1)
+        vi_algorithm = Value_Iteration(hg, p, h, gamma = 0.95)
         vi_algorithm.run(hg.states.keys())
 
     # Finalizamos contador
@@ -66,12 +65,12 @@ def solve_problem(problem, algorithm):
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    problem.print_table(p)   
+    problem.print_solution(p)
 
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

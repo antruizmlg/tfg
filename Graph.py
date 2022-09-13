@@ -15,20 +15,20 @@ class Graph:
 
     """ Método para obtener un conjunto de predecesores de un estado en el hipergrafo"""
     def get_predecessors(self, s, table):
-        sol = set()
+        pred = set()
         row = self.dict_state[s].row
         col = self.dict_state[s].col
 
         if row - 1 >= 0 and not table[row - 1][col].sink:
-            sol.add(table[row - 1][col].id)
+            pred.add(table[row - 1][col].id)
         if row + 1 < len(table) and not table[row + 1][col].sink:
-            sol.add(table[row + 1][col].id) 
+            pred.add(table[row + 1][col].id) 
         if col - 1 >= 0 and not table[row][col - 1].sink:
-            sol.add(table[row][col - 1].id)           
+            pred.add(table[row][col - 1].id)           
         if col + 1 < len(table[0]) and not table[row][col + 1].sink:
-            sol.add(table[row][col + 1].id)
+            pred.add(table[row][col + 1].id)
 
-        return sol        
+        return pred      
 
     """ método para reconstruir de best partial solution graph de forma recursiva """
     def get_bpsg_states(self, p, set_states, s):
@@ -41,14 +41,13 @@ class Graph:
         return set_states # Devolvemos la lista de estados
 
     """ métodos para obtener el conjunto Z """
-    def get_set_Z(self, graph, table, s, p, Z):
+    def set_Z(self, graph, table, s, p, Z):
         predecessors = self.get_predecessors(s, table)
         for st in predecessors:
-            if st in graph.states and st not in Z and p[st] is not None:
-                suc = self.get_connector(st, p[st]).states()
-                if s in suc:
+            if st in graph.states.keys() and st not in Z:
+                if s in self.get_connector(st, p[st]).states():
                     Z.add(st)
-                    self.get_set_Z(graph, table, st, p, Z)
+                    self.set_Z(graph, table, st, p, Z)
         return Z
     
     """método que dado un estado, devuelve el conector asociado a la acción dada"""
