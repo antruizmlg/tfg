@@ -39,7 +39,5 @@ class LAO:
             it += 1
             Z_percents.append(round(len(Z)/len(self.hg.states.keys())*100, 2))
 
-            self.problem.print_table(self.p)
-
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
                 return len(explicit_graph.states.keys()), Z_percents

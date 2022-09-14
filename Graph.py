@@ -19,14 +19,10 @@ class Graph:
         row = self.dict_state[s].row
         col = self.dict_state[s].col
 
-        if row - 1 >= 0 and not table[row - 1][col].sink:
-            pred.add(table[row - 1][col].id)
-        if row + 1 < len(table) and not table[row + 1][col].sink:
-            pred.add(table[row + 1][col].id) 
-        if col - 1 >= 0 and not table[row][col - 1].sink:
-            pred.add(table[row][col - 1].id)           
-        if col + 1 < len(table[0]) and not table[row][col + 1].sink:
-            pred.add(table[row][col + 1].id)
+        for i in range(row - 1, row + 2):
+            for j in range(col - 1, col + 2):
+                if i >= 0 and i < len(table) and j >= 0 and j < len(table[0]) and not table[i][j].sink:
+                    pred.add(table[i][j].id)
 
         return pred      
 
@@ -39,6 +35,15 @@ class Graph:
                 if st not in set_states: # Si el estado no está en la lista
                     self.get_bpsg_states(p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
         return set_states # Devolvemos la lista de estados
+
+    def get_bpsg_states_backwards(self, V, expanded, set_states, table, s):
+        set_states.add(s)
+        if s in expanded:
+            predecessors = set(filter(lambda s: s not in set_states, self.get_predecessors(s, table)))
+            if predecessors:
+                bp = self.best_predecessor(predecessors, V)
+                self.get_bpsg_states_backwards(V, expanded, set_states, table, bp)
+        return set_states
 
     """ métodos para obtener el conjunto Z """
     def set_Z(self, graph, table, s, p, Z):
@@ -87,7 +92,7 @@ class Graph:
 
     """método para actualizar los valores de los estados en la pila"""
     def update_values(self, stack, V, p):
-        actions = {'N', 'S', 'E', 'O'}
+        actions = {'NN', 'SS', 'EE', 'OO', 'NE', 'NO', 'SE', 'SO', '-'}
         best_action = None
         while stack:
             s = stack.pop()
@@ -102,7 +107,7 @@ class Graph:
                         if val < minimum:
                             minimum = val
                             best_action = a
-                V[s] = round(minimum, 2)
+                V[s] = minimum
                 p[s] = best_action
 
     @staticmethod

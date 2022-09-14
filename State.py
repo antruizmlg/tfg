@@ -7,8 +7,8 @@ class State:
         self.sink = False
 
     """ heurístico distancia Manhattan"""
-    def h_MD(self, row, col, final_row, final_column):
-        return abs(final_row - row) + abs(col - final_column)
+    def h(self, row, final_row):
+        return abs(final_row - row)
 
     def __hash__(self):
         return hash(self.id)

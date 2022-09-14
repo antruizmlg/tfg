@@ -6,30 +6,16 @@ import random
 class Problem:
     def __init__(self, rows, columns, sinks, probs):
         self.table = [] # Tablero con los estados
-        self.states = {} # Diccionario con los estados
+
         for i in range(rows):
             row = []
             for j in range(columns):
                 row.append(State('s' + str(i) + "_" + str(j), i, j)) # Rellenamos el tablero con cada estado
             self.table.append(row)
 
-        self.ss = State('s_ss')
-        self.ss.final = True # Añadimos un estado auxiliar al que transitarán los estados sumideros con un coste alto.
-
         """ el estado final será una esquina aleatoria del tablero """
-        random_corner = random.randint(0, 3)
-        if random_corner == 0:
-            self.final_row = 0
-            self.final_col = 0
-        elif random_corner == 1:
-            self.final_row = 0
-            self.final_col = columns - 1
-        elif random_corner == 2:
-            self.final_row = rows - 1
-            self.final_col = 0
-        elif random_corner == 3:
-            self.final_row = rows - 1
-            self.final_col = columns - 1             
+        self.final_row = random.randrange(0, rows - 1, rows - 1) 
+        self.final_col = random.randrange(0, columns - 1, columns - 1) 
         self.table[self.final_row][self.final_col].final = True
 
         self.initial_row = rows // 2
@@ -42,26 +28,22 @@ class Problem:
                 self.table[r][c].sink = True
                 sinks -= 1
 
-        self.actions = {'N': 1, 'S': 1, 'E': 1, 'O': 1, '-': 1} # Diccionario con asociación (acción -> coste)
-        # La acción "-" representa mantenerse en el mismo estado.
         self.probs = probs # Inicializamos diccionario de probabilidades
 
     def generate_problem(self):
         dict_state = {} # Diccionario con asociaciones (id de estado -> Objeto estado)
         states_hg = {} # Diccionario con asociaciones (Estado -> Lista de conectores que salen de ese estado)
-        dict_state[self.ss.id] = self.ss
 
         for i in range(len(self.table)): # Para cada estado en el tablero
             for j in range(len(self.table[0])):
                 state = self.table[i][j] # Obtenemos el estado
                 dict_state[state.id] = state # Almacenamos la asociación (id estado -> objeto estado) en el diccionario
                 c_list = [] # Lista para almacenar los k-conectores que salen de un estado concreto
-                if not state.final: # Si el estado no es terminal
-                    if not state.sink: # Si el estado no es sumidero
-                        for a in set(filter(lambda action: not action == '-', self.actions.keys())): # Para cada acción posible que implica ir a un estado sucesor
-                            probs_trans = self.get_probs(i, j, a)
-                            if probs_trans:
-                                c_list.append(Connector(probs_trans, a, self.actions[a]))
+                if not state.final and not state.sink: # Si el estado no es terminal ni sumidero
+                    for a in {'NN', 'SS', 'EE', 'OO', 'NE', 'NO', 'SE', 'SO', '--'}: # Para cada acción posible que implica ir a un estado sucesor
+                        probs_trans = self.get_probs(i, j, a)
+                        if probs_trans:
+                            c_list.append(Connector(probs_trans, a, 1))
                             # Introducimos en la lista de k-conectores para ese estado el k-conector que hace referencia a la acción a.
                 states_hg[state.id] = c_list # Introducimos en el diccionario de estados la asociación (estado id -> lista de k-conectores)
         hg = Graph(states_hg, dict_state) # Creamos el hipergrafo con el diccionario de estados.
@@ -85,15 +67,23 @@ class Problem:
 
     """método que recibe una fila, una columna y una acción y devuelve el sucesor directo de realizar esa acción desde esa fila y esa columna del tablero"""
     def successor(self, row, col, action):
-        if action == 'N':
+        if action == 'NN':
             return self.get_successor_state(row, col, row - 1, col)
-        if action == 'S':
+        if action == 'SS':
             return self.get_successor_state(row, col, row + 1, col)
-        if action == 'E':
+        if action == 'EE':
             return self.get_successor_state(row, col, row, col + 1)            
-        if action == 'O':
+        if action == 'OO':
             return self.get_successor_state(row, col, row, col - 1)
-        if action == '-':
+        if action == 'NE':
+            return self.get_successor_state(row, col, row - 1, col + 1)
+        if action == 'SE':
+            return self.get_successor_state(row, col, row + 1, col + 1)
+        if action == 'NO':
+            return self.get_successor_state(row, col, row - 1, col - 1)            
+        if action == 'SO':
+            return self.get_successor_state(row, col, row + 1, col - 1)
+        if action == '--':
             return self.table[row][col]
 
     def get_successor_state(self, of, oc, nf, nc):
@@ -118,13 +108,13 @@ class Problem:
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
                 if self.table[i][j].final:
-                    print('T', end="")
+                    print('TT', end=" ")
                 elif self.table[i][j].sink:
-                    print('.', end="")
+                    print('##', end=" ")
                 elif self.table[i][j] in dic.keys():
-                    print(dic[self.table[i][j]], end="")
+                    print(dic[self.table[i][j]], end=" ")
                 else:
-                    print('#', end="")
+                    print('..', end=" ")
             print("")
 
     def get_solution(self, p, fil, col, dic):
@@ -132,34 +122,39 @@ class Problem:
         if not state.final:
             action = p[state.id]
             dic[state] = action
-            if action == 'N':
+            if action == 'NN':
                 self.get_solution(p, fil - 1, col, dic)
-            if action == 'S':
+            if action == 'SS':
                 self.get_solution(p, fil + 1, col, dic)
-            if action == 'E':
+            if action == 'EE':
                 self.get_solution(p, fil, col + 1, dic)
-            if action == 'O':
+            if action == 'OO':
                 self.get_solution(p, fil, col - 1, dic)
+            if action == 'NE':
+                self.get_solution(p, fil - 1, col + 1, dic)
+            if action == 'SE':
+                self.get_solution(p, fil + 1, col + 1, dic)
+            if action == 'NO':
+                self.get_solution(p, fil - 1, col - 1, dic)
+            if action == 'SO':
+                self.get_solution(p, fil + 1, col - 1, dic)
 
-    def print_table(self, p = None):
+    def print_table(self, p):
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
                 state = self.table[i][j]
                 if i == self.initial_row and j == self.initial_col:
-                    print('I', end="")                    
+                    print('II', end=" ")                    
                 elif state.final:
-                    print('T', end="")
+                    print('TT', end=" ")
                 elif state.sink:
-                    print('.', end="")
+                    print('##', end=" ")
                 else:
-                    if p is not None:
-                        action = p[state.id]
-                        if action is None:
-                            print('#', end="")
-                        else:
-                            print(action, end="")
+                    action = p[state.id]
+                    if action is None:
+                        print('..', end=" ")
                     else:
-                        print('#', end="")                      
+                        print(action, end=" ")                
             print("")
 
     """Método para obtener política inicial y heurístico"""
@@ -173,7 +168,5 @@ class Problem:
                 if algorithm == 'VI':
                     h[state.id] = 0
                 else:
-                    h[state.id] = state.h_MD(i, j, self.final_row, self.final_col)
-        p[self.ss.id] = None
-        h[self.ss.id] = 0
+                    h[state.id] = state.h(i, self.final_row)
         return p, h
