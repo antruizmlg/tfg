@@ -77,6 +77,7 @@ class Graph:
         self.update_values([s], V, p)
         return fringe 
   
+    """método busqueda hacia atrás rlao* """
     def expand_backward(self, s, V, p, table, expanded, fringe, s0, updated):
         updated.add(s)
         self.update_values([s], V, p)    
@@ -84,6 +85,21 @@ class Graph:
             predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
             for pred in predecessors:
                 fringe = self.expand_backward(pred, V, p, table, expanded, fringe, s0, updated)
+        elif s in fringe:
+            expanded.add(s)
+            fringe.remove(s)
+            fringe = fringe | set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
+        return fringe
+
+    """método búsqueda hacia atrás blao* """
+    def expand_backward_(self, s, V, p, table, expanded, fringe, s0, updated):
+        updated.add(s)
+        self.update_values([s], V, p)    
+        if s in expanded and (p[s] is not None or self.dict_state[s].final):
+            predecessors = set(filter(lambda s: s not in updated, self.get_predecessors(s, table)))
+            if predecessors:
+                bp = self.best_predecessor(predecessors, V)
+                fringe = self.expand_backward(bp, V, p, table, expanded, fringe, s0, updated)
         elif s in fringe:
             expanded.add(s)
             fringe.remove(s)

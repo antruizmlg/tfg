@@ -47,7 +47,7 @@ probs_3['--'] = {'--': 1}
 """Número de filas, número de columnas y de sumideros""" 
 rows = 30
 columns = 30
-sinks = 300
+sinks = 0
 
 sys.setrecursionlimit(1000000)
 def solve_problem(problem, algorithm):
@@ -85,7 +85,7 @@ def solve_problem(problem, algorithm):
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_1) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
 solve_problem(p_1, 'VI') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

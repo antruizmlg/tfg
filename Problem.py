@@ -168,5 +168,5 @@ class Problem:
                 if algorithm == 'VI':
                     h[state.id] = 0
                 else:
-                    h[state.id] = state.h(i, self.final_row)
+                    h[state.id] = state.h(i, self.final_row, j, self.final_col)
         return p, h

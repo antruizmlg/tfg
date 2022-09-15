@@ -21,8 +21,9 @@ class BLAO:
             while bpsg_states & fringe:
                 updated = set()
                 fringe = self.hg.expand_forward(self.s0, self.V, self.p, expanded, fringe, updated)
-                fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, updated)
+                fringe = self.hg.expand_backward_(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, updated)
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+                
             #Test de convergencia
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
