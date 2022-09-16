@@ -13,13 +13,13 @@ class RLAO:
         self.problem = problem
 
     def RLAO(self):
-        bpsg_states = {self.fs}
+        bpsg_states = {self.s0}
         expanded = set()
-        fringe = {self.fs}
+        fringe = {self.fs, self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True:
-            while (bpsg_states & fringe) or not self.s0 in expanded:
+            while (bpsg_states & fringe):
                 fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, set())
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
 

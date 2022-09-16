@@ -26,18 +26,21 @@ class LAO:
         it = 0
         Z_percents = []
 
-        while (bpsg_states & F): # Mientras queden estados por expandir
-            s = (bpsg_states & F).pop()
-            F.remove(s)
-            I.add(s) # Introducimos s en el conjunto I
-            F = F | set(filter(lambda s: s not in I and not self.hg.dict_state[s].final, self.hg.get_successors(s)))
-            explicit_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
-            Z = self.hg.set_Z(explicit_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
-            algorithm.run(Z) # Aplicamos VI sobre estados en Z
+        while True: # Mientras queden estados por expandir
+            while bpsg_states & F:
+                s = (bpsg_states & F).pop()
+                F.remove(s)
+                I.add(s) # Introducimos s en el conjunto I
+                F = F | set(filter(lambda s: s not in I, self.hg.get_successors(s)))
+                explicit_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
+                Z = self.hg.set_Z(explicit_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
+                algorithm.run(Z) # Aplicamos VI sobre estados en Z
+                bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+
+                it += 1
+                Z_percents.append(round(len(Z)/len(self.hg.states.keys())*100, 2))
+
+            algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-
-            it += 1
-            Z_percents.append(round(len(Z)/len(self.hg.states.keys())*100, 2))
-
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
                 return len(explicit_graph.states.keys()), Z_percents

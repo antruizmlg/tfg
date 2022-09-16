@@ -49,7 +49,7 @@ class Graph:
     def set_Z(self, graph, table, s, p, Z):
         predecessors = self.get_predecessors(s, table)
         for st in predecessors:
-            if st in graph.states.keys() and st not in Z:
+            if st in graph.states.keys() and st not in Z and not graph.dict_state[st].final:
                 if s in self.get_connector(st, p[st]).states():
                     Z.add(st)
                     self.set_Z(graph, table, st, p, Z)
