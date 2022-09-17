@@ -1,0 +1,230 @@
+Problema 1
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.305
+Nodos expandidos: 47
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.22, 0.22, 0.44, 0.44, 0.67, 0.67, 0.78, 0.78, 0.89, 0.89, 1.0, 1.0, 1.11, 1.11, 1.22, 1.22, 2.0, 1.33, 1.33, 2.33, 1.67, 1.67, 0.22, 0.22, 0.22, 0.22, 0.44, 1.89, 1.89, 0.67, 0.67, 1.56, 3.33, 1.0, 1.67, 2.11, 1.22, 3.78, 1.44, 1.0, 3.89, 1.67, 1.22, 4.0]
+
+ILAO*:
+Tiempo requerido: 0.039
+Nodos expandidos: 57
+
+RLAO*:
+Tiempo requerido: 0.07
+Nodos expandidos: 278
+
+BLAO*:
+Tiempo requerido: 0.071
+Nodos expandidos: 257
+
+VI:
+Tiempo requerido: 0.214
+Numero de iteraciones: 37
+-------------------------------------------------------
+Problema 2
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.525
+Nodos expandidos: 63
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.22, 0.22, 0.44, 0.44, 0.67, 0.67, 0.89, 1.0, 1.11, 1.22, 1.22, 1.44, 1.56, 1.67, 0.22, 0.33, 0.33, 0.22, 1.78, 0.67, 0.56, 1.0, 1.33, 1.44, 1.56, 2.33, 1.22, 1.44, 1.78, 1.56, 1.89, 1.67, 2.44, 0.33, 0.44, 2.0, 1.78, 2.78, 2.56, 0.78, 0.78, 2.22, 0.67, 2.67, 2.33, 0.78, 2.78, 2.44, 2.44, 1.11, 1.22, 2.56, 3.78, 2.67, 4.0, 1.22, 2.89, 4.33, 1.11]
+
+ILAO*:
+Tiempo requerido: 0.065
+Nodos expandidos: 69
+
+RLAO*:
+Tiempo requerido: 0.115
+Nodos expandidos: 329
+
+BLAO*:
+Tiempo requerido: 0.105
+Nodos expandidos: 258
+
+VI:
+Tiempo requerido: 0.235
+Numero de iteraciones: 41
+-------------------------------------------------------
+Problema 3
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.896
+Nodos expandidos: 67
+Porcentajes del conjunto Z: [0.11, 0.22, 0.22, 0.33, 0.33, 0.44, 0.44, 0.56, 0.56, 0.89, 0.67, 1.22, 0.78, 1.44, 0.89, 1.67, 1.0, 1.89, 2.11, 2.22, 0.22, 0.22, 0.33, 0.56, 0.44, 0.67, 0.78, 0.89, 1.0, 1.11, 1.33, 1.89, 1.56, 2.22, 1.78, 2.0, 2.11, 2.33, 1.89, 0.33, 2.33, 3.44, 0.56, 2.22, 2.44, 0.56, 3.67, 3.67, 0.78, 2.33, 2.56, 0.89, 4.0, 4.44, 1.44, 2.56, 4.22, 4.78, 1.56, 2.67, 1.33, 4.44, 5.22, 1.33, 1.67, 2.56, 5.44]
+
+ILAO*:
+Tiempo requerido: 0.116
+Nodos expandidos: 67
+
+RLAO*:
+Tiempo requerido: 0.18
+Nodos expandidos: 409
+
+BLAO*:
+Tiempo requerido: 0.112
+Nodos expandidos: 240
+
+VI:
+Tiempo requerido: 0.221
+Numero de iteraciones: 40
+-------------------------------------------------------
+Problema 4
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.293
+Nodos expandidos: 47
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.67, 0.78, 0.89, 1.0, 0.22, 0.44, 0.67, 0.44, 0.89, 0.78, 0.89, 1.0, 1.22, 1.22, 1.44, 1.44, 1.56, 1.56, 0.22, 0.22, 0.22, 0.22, 0.44, 1.67, 0.44, 0.56, 1.67, 1.67, 1.78, 2.33, 0.89, 0.78, 2.11, 1.22, 1.22, 2.11, 2.11, 1.67, 2.22, 2.33, 1.89, 2.44]
+
+ILAO*:
+Tiempo requerido: 0.033
+Nodos expandidos: 52
+
+RLAO*:
+Tiempo requerido: 0.166
+Nodos expandidos: 337
+
+BLAO*:
+Tiempo requerido: 0.116
+Nodos expandidos: 233
+
+VI:
+Tiempo requerido: 0.56
+Numero de iteraciones: 91
+-------------------------------------------------------
+Problema 5
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.277
+Nodos expandidos: 42
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.67, 0.78, 0.22, 0.22, 0.44, 0.67, 0.89, 0.67, 0.78, 0.89, 1.0, 1.11, 1.11, 1.22, 1.22, 1.33, 1.44, 0.22, 0.22, 0.22, 0.44, 1.44, 0.67, 0.56, 1.56, 0.89, 1.67, 1.11, 0.56, 1.78, 1.78, 1.44, 0.78, 1.89, 2.0, 1.11, 2.22]
+
+ILAO*:
+Tiempo requerido: 0.037
+Nodos expandidos: 49
+
+RLAO*:
+Tiempo requerido: 0.102
+Nodos expandidos: 315
+
+BLAO*:
+Tiempo requerido: 0.069
+Nodos expandidos: 182
+
+VI:
+Tiempo requerido: 0.188
+Numero de iteraciones: 39
+-------------------------------------------------------
+Problema 6
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.568
+Nodos expandidos: 70
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.22, 0.22, 0.44, 0.44, 0.67, 0.67, 0.89, 0.89, 1.11, 1.11, 1.22, 1.22, 1.33, 1.33, 2.0, 1.56, 1.44, 2.56, 2.67, 0.22, 0.33, 0.33, 0.22, 2.89, 0.67, 0.56, 1.0, 0.89, 1.0, 1.33, 1.56, 1.22, 1.78, 2.0, 1.56, 1.78, 2.78, 1.89, 2.89, 0.33, 1.89, 1.89, 3.11, 3.33, 0.89, 0.67, 2.0, 3.22, 3.56, 1.33, 2.11, 3.33, 3.78, 1.78, 1.33, 2.22, 4.44, 4.0, 1.56, 2.33, 5.0, 2.11, 5.11, 1.78, 1.56]
+
+ILAO*:
+Tiempo requerido: 0.068
+Nodos expandidos: 69
+
+RLAO*:
+Tiempo requerido: 0.222
+Nodos expandidos: 365
+
+BLAO*:
+Tiempo requerido: 0.099
+Nodos expandidos: 290
+
+VI:
+Tiempo requerido: 0.188
+Numero de iteraciones: 40
+-------------------------------------------------------
+Problema 7
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.355
+Nodos expandidos: 55
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.67, 0.78, 0.89, 0.22, 0.44, 0.56, 0.67, 0.89, 1.0, 1.11, 1.22, 1.33, 1.44, 0.22, 0.22, 0.22, 0.44, 1.56, 0.56, 0.56, 0.89, 0.56, 1.22, 1.0, 1.22, 0.89, 1.67, 1.22, 1.22, 1.33, 1.44, 1.67, 0.33, 1.67, 0.44, 1.89, 0.78, 1.78, 2.11, 1.11, 2.22, 0.89, 2.33, 1.22, 2.33, 1.44, 2.44, 2.56, 1.11, 2.78]
+
+ILAO*:
+Tiempo requerido: 0.036
+Nodos expandidos: 65
+
+RLAO*:
+Tiempo requerido: 0.09
+Nodos expandidos: 333
+
+BLAO*:
+Tiempo requerido: 0.091
+Nodos expandidos: 293
+
+VI:
+Tiempo requerido: 0.192
+Numero de iteraciones: 41
+-------------------------------------------------------
+Problema 8
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.167
+Nodos expandidos: 24
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.67, 0.78, 0.89, 1.0, 1.11, 1.22, 0.22, 0.22, 1.33, 0.44, 1.44, 0.67, 0.56, 1.56, 1.67, 0.67, 0.67, 1.78, 0.78]
+
+ILAO*:
+Tiempo requerido: 0.019
+Nodos expandidos: 22
+
+RLAO*:
+Tiempo requerido: 0.085
+Nodos expandidos: 302
+
+BLAO*:
+Tiempo requerido: 0.049
+Nodos expandidos: 134
+
+VI:
+Tiempo requerido: 0.176
+Numero de iteraciones: 37
+-------------------------------------------------------
+Problema 9
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.277
+Nodos expandidos: 45
+Porcentajes del conjunto Z: [0.11, 0.22, 0.33, 0.44, 0.56, 0.67, 0.78, 0.22, 0.22, 0.44, 0.44, 0.67, 0.67, 0.89, 0.89, 1.11, 1.22, 1.33, 0.89, 1.56, 1.0, 1.11, 1.11, 1.22, 0.22, 0.22, 0.22, 0.44, 1.33, 0.56, 0.44, 1.33, 1.56, 0.78, 1.0, 1.67, 1.11, 1.33, 1.78, 1.44, 1.67, 1.89, 1.56, 2.0, 2.0]
+
+ILAO*:
+Tiempo requerido: 0.031
+Nodos expandidos: 47
+
+RLAO*:
+Tiempo requerido: 0.146
+Nodos expandidos: 401
+
+BLAO*:
+Tiempo requerido: 0.073
+Nodos expandidos: 243
+
+VI:
+Tiempo requerido: 0.186
+Numero de iteraciones: 40
+-------------------------------------------------------
+Problema 10
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.258
+Nodos expandidos: 44
+Porcentajes del conjunto Z: [0.11, 0.22, 0.22, 0.22, 0.44, 0.44, 0.56, 0.56, 0.67, 0.67, 1.0, 0.78, 0.78, 1.33, 0.89, 0.89, 1.67, 1.33, 1.33, 1.44, 2.22, 1.56, 2.44, 2.67, 0.22, 0.22, 0.22, 0.44, 3.0, 0.67, 0.56, 3.11, 0.89, 0.78, 3.22, 1.22, 1.11, 3.33, 1.56, 1.44, 3.44, 1.89, 1.78, 3.67]
+
+ILAO*:
+Tiempo requerido: 0.033
+Nodos expandidos: 50
+
+RLAO*:
+Tiempo requerido: 0.074
+Nodos expandidos: 290
+
+BLAO*:
+Tiempo requerido: 0.064
+Nodos expandidos: 218
+
+VI:
+Tiempo requerido: 0.216
+Numero de iteraciones: 39
+-------------------------------------------------------

@@ -104,18 +104,20 @@ class Problem:
 
     def print_solution(self, p):
         dic = {}
+        str = ""
         self.get_solution(p, self.initial_row, self.initial_col, dic)
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
                 if self.table[i][j].final:
-                    print('TT', end=" ")
+                    str += 'TT '
                 elif self.table[i][j].sink:
-                    print('##', end=" ")
+                    str += '## '
                 elif self.table[i][j] in dic.keys():
-                    print(dic[self.table[i][j]], end=" ")
+                    str += dic[self.table[i][j]] + ' '
                 else:
-                    print('..', end=" ")
-            print("")
+                    str += '.. '
+            str += '\n'
+        return str
 
     def get_solution(self, p, fil, col, dic):
         state = self.table[fil][col]
