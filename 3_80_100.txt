@@ -1,230 +1,290 @@
 Problema 1
 -------------------------------------------------------
 LAO*:
-Tiempo requerido: 0.028
+Tiempo requerido: 0.01
+Iteraciones requeridas: 12
 Nodos expandidos: 12
 Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
 
 ILAO*:
-Tiempo requerido: 0.007
+Tiempo requerido: 0.002
+Iteraciones requeridas: 11
 Nodos expandidos: 11
 
 RLAO*:
-Tiempo requerido: 0.004
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
 Nodos expandidos: 20
 
 BLAO*:
 Tiempo requerido: 0.002
+Iteraciones requeridas: 6
+Nodos expandidos: 13
+
+VI:
+Tiempo requerido: 0.004
+Iteraciones requeridas: 18
+
+Problema 2
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.011
+Iteraciones requeridas: 13
+Nodos expandidos: 13
+Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 8.0, 10.0, 11.0]
+
+ILAO*:
+Tiempo requerido: 0.002
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+
+RLAO*:
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
+Nodos expandidos: 20
+
+BLAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 6
 Nodos expandidos: 14
 
 VI:
 Tiempo requerido: 0.004
-Numero de iteraciones: 18
--------------------------------------------------------
-Problema 2
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.01
-Nodos expandidos: 12
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+Iteraciones requeridas: 18
 
-ILAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 11
-
-RLAO*:
-Tiempo requerido: 0.003
-Nodos expandidos: 19
-
-BLAO*:
-Tiempo requerido: 0.001
-Nodos expandidos: 13
-
-VI:
-Tiempo requerido: 0.036
-Numero de iteraciones: 91
--------------------------------------------------------
 Problema 3
 -------------------------------------------------------
 LAO*:
-Tiempo requerido: 0.015
+Tiempo requerido: 0.009
+Iteraciones requeridas: 12
 Nodos expandidos: 12
 Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
 
 ILAO*:
 Tiempo requerido: 0.002
-Nodos expandidos: 11
-
-RLAO*:
-Tiempo requerido: 0.004
-Nodos expandidos: 20
-
-BLAO*:
-Tiempo requerido: 0.014
-Nodos expandidos: 13
-
-VI:
-Tiempo requerido: 0.009
-Numero de iteraciones: 18
--------------------------------------------------------
-Problema 4
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.013
-Nodos expandidos: 12
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-
-ILAO*:
-Tiempo requerido: 0.003
+Iteraciones requeridas: 11
 Nodos expandidos: 11
 
 RLAO*:
 Tiempo requerido: 0.003
+Iteraciones requeridas: 14
 Nodos expandidos: 19
 
 BLAO*:
 Tiempo requerido: 0.001
+Iteraciones requeridas: 6
 Nodos expandidos: 13
 
 VI:
-Tiempo requerido: 0.026
-Numero de iteraciones: 91
+Tiempo requerido: 0.018
+Iteraciones requeridas: 91
+
+Problema 4
 -------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.009
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+
+ILAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 11
+Nodos expandidos: 11
+
+RLAO*:
+Tiempo requerido: 0.002
+Iteraciones requeridas: 14
+Nodos expandidos: 19
+
+BLAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 6
+Nodos expandidos: 13
+
+VI:
+Tiempo requerido: 0.019
+Iteraciones requeridas: 91
+
 Problema 5
 -------------------------------------------------------
 LAO*:
 Tiempo requerido: 0.01
+Iteraciones requeridas: 12
 Nodos expandidos: 12
 Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
 
 ILAO*:
 Tiempo requerido: 0.002
+Iteraciones requeridas: 11
 Nodos expandidos: 11
 
 RLAO*:
-Tiempo requerido: 0.004
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
 Nodos expandidos: 19
 
 BLAO*:
-Tiempo requerido: 0.002
+Tiempo requerido: 0.001
+Iteraciones requeridas: 6
 Nodos expandidos: 13
 
 VI:
-Tiempo requerido: 0.024
-Numero de iteraciones: 91
--------------------------------------------------------
+Tiempo requerido: 0.019
+Iteraciones requeridas: 91
+
 Problema 6
 -------------------------------------------------------
 LAO*:
-Tiempo requerido: 0.016
+Tiempo requerido: 0.009
+Iteraciones requeridas: 12
 Nodos expandidos: 12
 Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-
-ILAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 11
-
-RLAO*:
-Tiempo requerido: 0.005
-Nodos expandidos: 19
-
-BLAO*:
-Tiempo requerido: 0.003
-Nodos expandidos: 13
-
-VI:
-Tiempo requerido: 0.062
-Numero de iteraciones: 91
--------------------------------------------------------
-Problema 7
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.013
-Nodos expandidos: 13
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 7.0, 9.0, 10.0, 11.0]
-
-ILAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 12
-
-RLAO*:
-Tiempo requerido: 0.013
-Nodos expandidos: 20
-
-BLAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 14
-
-VI:
-Tiempo requerido: 0.006
-Numero de iteraciones: 18
--------------------------------------------------------
-Problema 8
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.013
-Nodos expandidos: 12
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-
-ILAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 11
-
-RLAO*:
-Tiempo requerido: 0.004
-Nodos expandidos: 19
-
-BLAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 13
-
-VI:
-Tiempo requerido: 0.025
-Numero de iteraciones: 91
--------------------------------------------------------
-Problema 9
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.015
-Nodos expandidos: 13
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
 
 ILAO*:
 Tiempo requerido: 0.001
-Nodos expandidos: 12
-
-RLAO*:
-Tiempo requerido: 0.003
-Nodos expandidos: 20
-
-BLAO*:
-Tiempo requerido: 0.002
-Nodos expandidos: 16
-
-VI:
-Tiempo requerido: 0.008
-Numero de iteraciones: 18
--------------------------------------------------------
-Problema 10
--------------------------------------------------------
-LAO*:
-Tiempo requerido: 0.011
-Nodos expandidos: 12
-Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
-
-ILAO*:
-Tiempo requerido: 0.004
+Iteraciones requeridas: 11
 Nodos expandidos: 11
 
 RLAO*:
 Tiempo requerido: 0.003
+Iteraciones requeridas: 14
+Nodos expandidos: 19
+
+BLAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 6
+Nodos expandidos: 13
+
+VI:
+Tiempo requerido: 0.019
+Iteraciones requeridas: 91
+
+Problema 7
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.009
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+
+ILAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 11
+Nodos expandidos: 11
+
+RLAO*:
+Tiempo requerido: 0.004
+Iteraciones requeridas: 14
+Nodos expandidos: 20
+
+BLAO*:
+Tiempo requerido: 0.002
+Iteraciones requeridas: 6
+Nodos expandidos: 13
+
+VI:
+Tiempo requerido: 0.004
+Iteraciones requeridas: 18
+
+Problema 8
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.009
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+
+ILAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 11
+Nodos expandidos: 11
+
+RLAO*:
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
+Nodos expandidos: 19
+
+BLAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 6
+Nodos expandidos: 13
+
+VI:
+Tiempo requerido: 0.019
+Iteraciones requeridas: 91
+
+Problema 9
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.01
+Iteraciones requeridas: 13
+Nodos expandidos: 13
+Porcentajes del conjunto Z: [1.0, 2.0, 3.0, 2.0, 4.0, 5.0, 3.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0]
+
+ILAO*:
+Tiempo requerido: 0.002
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+
+RLAO*:
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
+Nodos expandidos: 20
+
+BLAO*:
+Tiempo requerido: 0.001
+Iteraciones requeridas: 7
+Nodos expandidos: 15
+
+VI:
+Tiempo requerido: 0.004
+Iteraciones requeridas: 18
+
+Problema 10
+-------------------------------------------------------
+LAO*:
+Tiempo requerido: 0.01
+Iteraciones requeridas: 12
+Nodos expandidos: 12
+Porcentajes del conjunto Z: [1.0, 2.0, 2.0, 3.0, 4.0, 3.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]
+
+ILAO*:
+Tiempo requerido: 0.002
+Iteraciones requeridas: 11
+Nodos expandidos: 11
+
+RLAO*:
+Tiempo requerido: 0.003
+Iteraciones requeridas: 14
 Nodos expandidos: 19
 
 BLAO*:
 Tiempo requerido: 0.002
+Iteraciones requeridas: 6
 Nodos expandidos: 13
 
 VI:
-Tiempo requerido: 0.028
-Numero de iteraciones: 91
+Tiempo requerido: 0.019
+Iteraciones requeridas: 91
+
+Media tiempo LAO: 0.01
+Media iteraciones LAO: 12.2
+Media expansiones LAO: 12.2
+
+Media tiempo RLAO: 0.003
+Media iteraciones RLAO: 14.0
+Media expansiones RLAO: 19.4
+
+Media tiempo ILAO: 0.002
+Media iteraciones ILAO: 11.2
+Media expansiones ILAO: 11.2
+
+Media tiempo BLAO: 0.001
+Media iteraciones BLAO: 6.1
+Media expansiones BLAO: 13.3
+
+Media tiempo VI: 0.013
+Media iteraciones VI: 61.8
+
 -------------------------------------------------------

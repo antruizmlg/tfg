@@ -1,4 +1,5 @@
 from configparser import InterpolationError
+from re import I
 from Graph import *
 from Value_Iteration import *
 from copy import *
@@ -18,13 +19,16 @@ class RLAO:
         fringe = {self.fs, self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
+        it = 0
+
         while True:
             while (bpsg_states & fringe):
                 fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, set())
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+                it += 1
 
             #Test de convergencia
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & fringe):
-                return len(expanded)
+                return len(expanded), it

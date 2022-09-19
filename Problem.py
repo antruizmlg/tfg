@@ -144,10 +144,8 @@ class Problem:
     def print_table(self, p):
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
-                state = self.table[i][j]
-                if i == self.initial_row and j == self.initial_col:
-                    print('II', end=" ")                    
-                elif state.final:
+                state = self.table[i][j]            
+                if state.final:
                     print('TT', end=" ")
                 elif state.sink:
                     print('##', end=" ")

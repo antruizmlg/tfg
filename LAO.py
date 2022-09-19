@@ -43,4 +43,4 @@ class LAO:
             algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
-                return len(explicit_graph.states.keys()), Z_percents
+                return len(explicit_graph.states.keys()), it, Z_percents
