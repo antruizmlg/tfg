@@ -31,4 +31,4 @@ class BLAO:
             algorithm.run(expanded)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & fringe):
-                return len(expanded), it
+                return bpsg_states

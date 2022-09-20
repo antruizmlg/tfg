@@ -53,20 +53,22 @@ def solve_problem(problem, algorithm, output):
     p, h = problem.get_initial_policy_and_heuristic(algorithm)
     problem.print_info() # Imprimimos información del problema
 
+    bpsg_states = None
+
     t_i = time.time() # Iniciamos contador
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 1:
         lao_algorithm = LAO(hg, s0, h, p, problem)
-        lao_algorithm.LAO()
+        bpsg_states = lao_algorithm.LAO()
     elif algorithm == 2:
         rlao_algorithm = RLAO(hg, s0, fs, h, p, problem)
-        rlao_algorithm.RLAO()
+        bpsg_states = rlao_algorithm.RLAO()
     elif algorithm == 3:
         ilao_algorithm = ILAO(hg, s0, h, p, problem)
-        ilao_algorithm.ILAO()        
+        bpsg_states = ilao_algorithm.ILAO()        
     elif algorithm == 4:
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
-        blao_algorithm.BLAO()
+        bpsg_states = blao_algorithm.BLAO()
     elif algorithm == 5:
         vi_algorithm = Value_Iteration(hg, p, h, gamma = 0.95)
         vi_algorithm.run(hg.states.keys())
@@ -75,7 +77,7 @@ def solve_problem(problem, algorithm, output):
     t_f = time.time()
 
     #Imprimimos resultado
-    sol = problem.print_solution(p)
+    sol = problem.print_table(p, bpsg_states)
     print("RESULTADO: ")
     print(sol)
 
