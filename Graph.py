@@ -36,16 +36,7 @@ class Graph:
                     self.get_bpsg_states(p, set_states, st) # Llamamos de forma recursiva a la función para construir el árbol.
         return set_states # Devolvemos la lista de estados
 
-    def get_bpsg_states_backwards(self, V, expanded, set_states, table, s):
-        set_states.add(s)
-        if s in expanded:
-            predecessors = set(filter(lambda s: s not in set_states, self.get_predecessors(s, table)))
-            if predecessors:
-                bp = self.best_predecessor(predecessors, V)
-                self.get_bpsg_states_backwards(V, expanded, set_states, table, bp)
-        return set_states
-
-    """ métodos para obtener el conjunto Z """
+    """ métodos para obtener estados del conjunto Z """
     def set_Z(self, graph, table, s, p, Z):
         predecessors = self.get_predecessors(s, table)
         for st in predecessors:
@@ -64,6 +55,7 @@ class Graph:
                 break
         return con
 
+    """ método expansión hacia adelante """
     def expand_forward(self, s, V, p, expanded, fringe, updated):
         updated.add(s)
         if s in expanded and p[s] is not None:
@@ -77,7 +69,7 @@ class Graph:
         self.update_values([s], V, p)
         return fringe 
   
-    """método busqueda hacia atrás rlao* """
+    """método expansión hacia atrás """
     def expand_backward(self, s, V, p, table, expanded, fringe, s0, updated):
         updated.add(s)
         self.update_values([s], V, p)
@@ -92,7 +84,7 @@ class Graph:
             fringe = fringe | set(filter(lambda s: s not in expanded, self.get_predecessors(s, table)))
         return fringe
 
-    """método para actualizar los valores de los estados en la pila"""
+    """Bellman Backup"""
     def update_values(self, stack, V, p):
         actions = {'NN', 'SS', 'EE', 'OO', 'NE', 'NO', 'SE', 'SO', '-'}
         best_action = None
@@ -111,12 +103,3 @@ class Graph:
                             best_action = a
                 V[s] = minimum
                 p[s] = best_action
-
-    @staticmethod
-    def best_predecessor(predecessors, V):
-        min_value = float('inf')
-        for pred in predecessors:
-            if V[pred] < min_value:
-                min_value = V[pred]
-                best_pred = pred
-        return best_pred

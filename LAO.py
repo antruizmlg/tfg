@@ -23,23 +23,21 @@ class LAO:
         # Instanciación objeto algoritmo para su posterior ejecución en cada iteración
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        it = 0
-        Z_percents = []
-
         while True: # Mientras queden estados por expandir
             while bpsg_states & F:
+                # Estado s a expandir
                 s = (bpsg_states & F).pop()
+                # Eliminamos s de fringe
                 F.remove(s)
                 I.add(s) # Introducimos s en el conjunto I
+                # Introducimos en F sucesores de s que no sean interiores
                 F = F | set(filter(lambda s: s not in I, self.hg.get_successors(s)))
                 explicit_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
                 Z = self.hg.set_Z(explicit_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
                 algorithm.run(Z) # Aplicamos VI sobre estados en Z
-                bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
+                bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0) # Obtenemos estados del grafo solución parcial
 
-                it += 1
-                Z_percents.append(round(len(Z)/len(self.hg.states.keys())*100, 2))
-
+            # Test de convergencia
             algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
             if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle

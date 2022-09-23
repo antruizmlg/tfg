@@ -17,15 +17,15 @@ class BLAO:
         fringe = {self.s0, self.fs}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
-        it = 0
-
         while True:
             while bpsg_states & fringe:
                 updated = set()
+                # Expansión hacia adelante
                 fringe = self.hg.expand_forward(self.s0, self.V, self.p, expanded, fringe, updated)
+                # Expansión hacia atrás
                 fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, updated)
+                # Estados del grafo solución parcial
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-                it += 1
                 
             #Test de convergencia
             algorithm.run(expanded)

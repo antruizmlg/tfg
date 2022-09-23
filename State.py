@@ -6,7 +6,7 @@ class State:
         self.final = False
         self.sink = False
 
-    """ heurístico distancia Manhattan"""
+    """ heurístico """
     def h(self, row, final_row, col, final_col):
         return max(abs(final_row - row), abs(final_col - col))
 

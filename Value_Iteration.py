@@ -9,8 +9,6 @@ class Value_Iteration:
         self.epsilon = epsilon
 
     def run(self, set):
-        it = 0
-
         while True:
             old_V = deepcopy(self.V)
 
@@ -19,10 +17,9 @@ class Value_Iteration:
                 if not self.hg.dict_state[s].final:
                     max_DIFF = self.bellman_backup(s, old_V, max_DIFF)    
 
-            it += 1
             if max_DIFF <= self.epsilon:
                 self.update_policy(set)
-                return it
+                break
 
     def bellman_backup(self, s, old_V, max_DIFF):
         min_value = float('inf') # Inicializamos menor coste encontrado

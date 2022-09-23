@@ -18,14 +18,13 @@ class RLAO:
         expanded = set()
         fringe = {self.fs, self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
-
-        it = 0
-
+        
         while True:
             while (bpsg_states & fringe):
+                # Expansión hacia atrás
                 fringe = self.hg.expand_backward(self.fs, self.V, self.p, self.problem.table, expanded, fringe, self.s0, set())
+                # Estados del grafo solución parical
                 bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-                it += 1
 
             #Test de convergencia
             algorithm.run(expanded)

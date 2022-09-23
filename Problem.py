@@ -140,30 +140,6 @@ class Problem:
                 self.get_solution(p, fil - 1, col - 1, dic)
             if action == 'SO':
                 self.get_solution(p, fil + 1, col - 1, dic)
-
-    def print_table(self, p, bpsg_states):
-        sol = ''
-        for i in range(len(self.table)):
-            for j in range(len(self.table[0])):
-                state = self.table[i][j]            
-                if state.final:
-                    sol += 'TT '
-                elif state.sink:
-                    sol += '## '
-                else:
-                    if bpsg_states is not None:
-                        if state.id in bpsg_states:
-                           sol += p[state.id] + ' '
-                        else:
-                          sol += '.. '
-                    else:
-                        action = p[state.id]
-                        if action is None:
-                            sol += '.. '
-                        else:
-                            sol += action + ' '               
-            sol += '\n'
-        return sol
         
     """Método para obtener política inicial y heurístico"""
     def get_initial_policy_and_heuristic(self, algorithm):

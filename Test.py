@@ -45,9 +45,9 @@ probs_3['SO'] = {'SO': 0.9, '--': 0.1}
 probs_3['--'] = {'--': 1}
 
 """Número de filas, número de columnas y de sumideros""" 
-rows = 30
-columns = 30
-sinks = 450
+rows = 50
+columns = 50
+sinks = 1000
 
 sys.setrecursionlimit(10 ** 9)
 def solve_problem(problem, algorithm):
@@ -67,7 +67,7 @@ def solve_problem(problem, algorithm):
         rlao_algorithm.RLAO()
     elif algorithm == 'ILAO*':
         ilao_algorithm = ILAO(hg, s0, h, p, problem)
-        ilao_algorithm.ILAO()        
+        bpsg_states = ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
         blao_algorithm.BLAO()
@@ -80,12 +80,12 @@ def solve_problem(problem, algorithm):
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    print(problem.print_table(p))
+    print(problem.print_solution(p))
     
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'ILAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio
