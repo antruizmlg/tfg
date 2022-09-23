@@ -15,7 +15,7 @@ class ILAO:
         expanded = set()
         fringe = {self.s0}
         algorithm = Value_Iteration(self.hg, self.p, self.V)
-
+        
         while True:
             while bpsg_states & fringe:
                 # Expansión hacia adelante

@@ -100,46 +100,30 @@ class Problem:
         print("Celda objetivo: [" + str(self.final_row) + ", " + str(self.final_col) + "]")
         print("-----------------------------------------------")   
 
-    """Métodos para imprimir el tablero con la solución dada la política óptima"""
-
-    def print_solution(self, p):
-        dic = {}
-        str = ""
-        self.get_solution(p, self.initial_row, self.initial_col, dic)
+    """Métodos para obtener el tablero con la solución dada la política óptima"""
+    def get_solution(self, p, bpsg_states):
+        sol = ''
         for i in range(len(self.table)):
             for j in range(len(self.table[0])):
-                if self.table[i][j].final:
-                    str += 'TT '
-                elif self.table[i][j].sink:
-                    str += '## '
-                elif self.table[i][j] in dic.keys():
-                    str += dic[self.table[i][j]] + ' '
+                state = self.table[i][j]            
+                if state.final:
+                    sol += 'TT '
+                elif state.sink:
+                    sol += '## '
                 else:
-                    str += '.. '
-            str += '\n'
-        return str
-
-    def get_solution(self, p, fil, col, dic):
-        state = self.table[fil][col]
-        if not state.final:
-            action = p[state.id]
-            dic[state] = action
-            if action == 'NN':
-                self.get_solution(p, fil - 1, col, dic)
-            if action == 'SS':
-                self.get_solution(p, fil + 1, col, dic)
-            if action == 'EE':
-                self.get_solution(p, fil, col + 1, dic)
-            if action == 'OO':
-                self.get_solution(p, fil, col - 1, dic)
-            if action == 'NE':
-                self.get_solution(p, fil - 1, col + 1, dic)
-            if action == 'SE':
-                self.get_solution(p, fil + 1, col + 1, dic)
-            if action == 'NO':
-                self.get_solution(p, fil - 1, col - 1, dic)
-            if action == 'SO':
-                self.get_solution(p, fil + 1, col - 1, dic)
+                    if bpsg_states is not None:
+                        if state.id in bpsg_states and p[state.id] is not None:
+                           sol += p[state.id] + ' '
+                        else:
+                          sol += '.. '
+                    else:
+                        action = p[state.id]
+                        if action is None:
+                            sol += '.. '
+                        else:
+                            sol += action + ' '               
+            sol += '\n'
+        return sol
         
     """Método para obtener política inicial y heurístico"""
     def get_initial_policy_and_heuristic(self, algorithm):

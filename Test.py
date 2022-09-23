@@ -47,7 +47,7 @@ probs_3['--'] = {'--': 1}
 """Número de filas, número de columnas y de sumideros""" 
 rows = 50
 columns = 50
-sinks = 1000
+sinks = 500
 
 sys.setrecursionlimit(10 ** 9)
 def solve_problem(problem, algorithm):
@@ -57,20 +57,22 @@ def solve_problem(problem, algorithm):
     p, h = problem.get_initial_policy_and_heuristic(algorithm)
     problem.print_info() # Imprimimos información del problema
 
+    bpsg_states = None
+
     t_i = time.time() # Iniciamos contador
     # Ejecutamos algoritmo seleccionado por parámetros
     if algorithm == 'LAO*':
         lao_algorithm = LAO(hg, s0, h, p, problem)
-        lao_algorithm.LAO()
+        bpsg_states = lao_algorithm.LAO()
     elif algorithm == 'RLAO*':
         rlao_algorithm = RLAO(hg, s0, fs, h, p, problem)
-        rlao_algorithm.RLAO()
+        bpsg_states = rlao_algorithm.RLAO()
     elif algorithm == 'ILAO*':
         ilao_algorithm = ILAO(hg, s0, h, p, problem)
         bpsg_states = ilao_algorithm.ILAO()        
     elif algorithm == 'BLAO*':
         blao_algorithm = BLAO(hg, s0, fs, h, p, problem)
-        blao_algorithm.BLAO()
+        bpsg_states = blao_algorithm.BLAO()
     elif algorithm == 'VI':
         vi_algorithm = Value_Iteration(hg, p, h, gamma = 0.95)
         vi_algorithm.run(hg.states.keys())
@@ -80,12 +82,12 @@ def solve_problem(problem, algorithm):
 
     #Imprimimos resultado
     print("RESULTADO: ")
-    print(problem.print_solution(p))
+    print(problem.get_solution(p, bpsg_states))
     
     # Imprimimos tiempo usado
     print("Tiempo usado (" + algorithm + "): " + str(t_f - t_i))
 
-p_1 = Problem(rows, columns, sinks, probs_2) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
+p_1 = Problem(rows, columns, sinks, probs_3) # Creamos la instancia del problema, con el número de filas, columnas, sumideros 
                                                             # y el sistema transitorio
-solve_problem(p_1, 'RLAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
+solve_problem(p_1, 'LAO*') # Ejecutamos el algoritmo sobre elegido sobre el problema instanciado
                                                         # y el sistema transitorio

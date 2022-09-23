@@ -9,6 +9,9 @@ class Value_Iteration:
         self.epsilon = epsilon
 
     def run(self, set):
+        it = 0
+        MAX_ITERATIONS = len(self.hg.states.keys())
+
         while True:
             old_V = deepcopy(self.V)
 
@@ -17,7 +20,8 @@ class Value_Iteration:
                 if not self.hg.dict_state[s].final:
                     max_DIFF = self.bellman_backup(s, old_V, max_DIFF)    
 
-            if max_DIFF <= self.epsilon:
+            it += 1
+            if max_DIFF <= self.epsilon or it > MAX_ITERATIONS:
                 self.update_policy(set)
                 break
 

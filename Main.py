@@ -77,7 +77,7 @@ def solve_problem(problem, algorithm, output):
     t_f = time.time()
 
     #Imprimimos resultado
-    sol = problem.print_table(p, bpsg_states)
+    sol = problem.get_solution(p, bpsg_states)
     print("RESULTADO: ")
     print(sol)
 
