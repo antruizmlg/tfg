@@ -46,7 +46,7 @@ probs_3['--'] = {'--': 1}
 
 probs = {'1': probs_1, '2': probs_2, '3': probs_3}
 
-sys.setrecursionlimit(1000000)
+sys.setrecursionlimit(10 ** 9)
 def solve_problem(problem, algorithm, output):
     hg, s0, fs = problem.generate_problem() # Generamos el problema y obtenemos el hipergrafo que representa el problema, el estado inicial, el heurístico y la política inicial
 

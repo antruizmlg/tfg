@@ -13,8 +13,8 @@ class LAO:
 
     def LAO(self):
         # Conjuntos de estados "fringe" e "interior"
-        F = {self.s0}
-        I = set()
+        fringe = {self.s0}
+        interior = set()
 
         # Inicialización grafo explícito
         explicit_graph = Graph({self.s0: []}, self.hg.dict_state)
@@ -24,14 +24,14 @@ class LAO:
         algorithm = Value_Iteration(self.hg, self.p, self.V)
 
         while True: # Mientras queden estados por expandir
-            while bpsg_states & F:
+            while bpsg_states & fringe:
                 # Estado s a expandir
-                s = (bpsg_states & F).pop()
+                s = (bpsg_states & fringe).pop()
                 # Eliminamos s de fringe
-                F.remove(s)
-                I.add(s) # Introducimos s en el conjunto I
+                fringe.remove(s)
+                interior.add(s) # Introducimos s en el conjunto I
                 # Introducimos en F sucesores de s que no sean interiores
-                F = F | set(filter(lambda s: s not in I, self.hg.get_successors(s)))
+                fringe = fringe | set(filter(lambda s: s not in interior, self.hg.get_successors(s)))
                 explicit_graph.states[s] = self.hg.states[s] # Actualizamos grafo explícito
                 Z = self.hg.set_Z(explicit_graph, self.table, s, self.p, {s}) # Obtenemos estados conjunto Z
                 algorithm.run(Z) # Aplicamos VI sobre estados en Z
@@ -40,5 +40,5 @@ class LAO:
             # Test de convergencia
             algorithm.run(bpsg_states)
             bpsg_states = self.hg.get_bpsg_states(self.p, set(), self.s0)
-            if not (bpsg_states & F): # Si llegamos a convergencia, salimos del bucle
+            if not (bpsg_states & fringe): # Si llegamos a convergencia, salimos del bucle
                 return bpsg_states
